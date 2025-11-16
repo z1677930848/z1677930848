@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>{$.teaTitle}</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    {$if eq .teaFaviconFileId 0}
+    <link rel="shortcut icon" href="/images/favicon.png"/>
+    {$else}
+    <link rel="shortcut icon" href="/ui/image/{$.teaFaviconFileId}"/>
+    {$end}
+
+    {$TEA.SEMANTIC}
+    {$TEA.VUE}
+    {$echo "header"}
+
+    <script type="text/javascript" src="/js/components.js"></script>
+    <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="/js/sweetalert2/dist/sweetalert2.all.min.js"></script>
+
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+        .user-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 260px;
+            background: linear-gradient(180deg, #2185d0 0%, #1678c2 100%);
+            z-index: 100;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        .user-sidebar.collapsed {
+            width: 70px;
+        }
+        .user-main {
+            margin-left: 260px;
+            padding: 2em;
+            transition: all 0.3s ease;
+        }
+        .user-main.expanded {
+            margin-left: 70px;
+        }
+        @media (max-width: 768px) {
+            .user-sidebar {
+                transform: translateX(-100%);
+            }
+            .user-sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            .user-main {
+                margin-left: 0;
+                padding: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 侧边栏 -->
+<div class="ui vertical inverted menu user-sidebar" :class="{ 'collapsed': !sidebarOpen, 'mobile-open': mobileSidebarOpen }" v-cloak="">
+    <div class="item" style="padding: 1.5em 1em; text-align: center;">
+        <h3 class="ui inverted header" v-show="sidebarOpen">
+            <i class="rocket icon"></i>
+            <div class="content">
+                {$.teaTitle}
+                <div class="sub header" style="color: rgba(255,255,255,0.8);">用户控制台</div>
+            </div>
+        </h3>
+        <i class="large rocket icon" v-show="!sidebarOpen"></i>
+    </div>
+
+    <a href="/user/dashboard" class="item" :class="{ 'active': teaMenu == 'dashboard' }">
+        <i class="home icon"></i>
+        <span v-show="sidebarOpen">仪表盘</span>
+    </a>
+
+    <a href="/user/domains" class="item" :class="{ 'active': teaMenu == 'domains' }">
+        <i class="globe icon"></i>
+        <span v-show="sidebarOpen">域名管理</span>
+    </a>
+
+    <a href="/user/stats" class="item" :class="{ 'active': teaMenu == 'stats' }">
+        <i class="chart bar icon"></i>
+        <span v-show="sidebarOpen">统计报表</span>
+    </a>
+
+    <a href="/user/profile" class="item" :class="{ 'active': teaMenu == 'profile' }">
+        <i class="user icon"></i>
+        <span v-show="sidebarOpen">个人设置</span>
+    </a>
+</div>
+
+<!-- 主内容区 -->
+<div class="user-main" :class="{ 'expanded': !sidebarOpen }" v-cloak="">
+    <!-- 顶部工具栏 -->
+    <div class="ui menu borderless" style="margin-bottom: 1.5em;">
+        <div class="item">
+            <button class="ui icon button" @click="sidebarOpen = !sidebarOpen">
+                <i class="bars icon"></i>
+            </button>
+        </div>
+
+        <div class="right menu">
+            <div class="ui dropdown item">
+                <i class="user circle icon"></i> {$.teaUsername}
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a href="/user/profile" class="item">
+                        <i class="cog icon"></i> 个人设置
+                    </a>
+                    <div class="divider"></div>
+                    <a href="/user/logout" class="item">
+                        <i class="sign out icon"></i> 退出登录
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页面内容 -->
+    <div class="ui segment">
+        {$TEA.VIEW}
+    </div>
+</div>
+
+<!-- 移动端遮罩 -->
+<div v-show="mobileSidebarOpen" @click="mobileSidebarOpen = false"
+     style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99;"
+     class="mobile-only">
+</div>
+
+{$echo "footer"}
+
+<script>
+Tea.context(function () {
+    this.sidebarOpen = true;
+    this.mobileSidebarOpen = false;
+    this.teaMenu = "{$.teaMenu}";
+    this.teaTitle = "{$.teaTitle}";
+    this.teaUsername = "{$.teaUsername}";
+
+    // 初始化 Semantic UI dropdown
+    this.$delay(function() {
+        $('.ui.dropdown').dropdown();
+    });
+});
+</script>
+
+</body>
+</html>

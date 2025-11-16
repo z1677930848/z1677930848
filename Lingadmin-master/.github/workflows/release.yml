@@ -1,0 +1,72 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Get tag
+        id: get_tag
+        run: echo "RELEASE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Install frontend deps
+        run: |
+          npm --prefix web ci || npm --prefix web install
+
+      - name: Build frontend
+        run: |
+          npm --prefix web run build
+
+      - name: Prepare EDGEAPI (optional)
+        run: |
+          if [ -n "${EDGEAPI_PATH:-}" ]; then
+            echo "Using EDGEAPI_PATH=${EDGEAPI_PATH}"
+          else
+            echo "No EDGEAPI_PATH provided; build script will attempt default location or skip edge-api build"
+          fi
+
+      - name: Run build script
+        env:
+          EDGEAPI_PATH: ${{ env.EDGEAPI_PATH }}
+        run: |
+          ./build/build.sh linux amd64 community
+
+      - name: Find dist zip
+        id: find_zip
+        run: |
+          ZIPFILE=$(ls dist/*.zip | head -n1)
+          echo "zip=$ZIPFILE" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.get_tag.outputs.RELEASE_TAG }}
+          release_name: ${{ steps.get_tag.outputs.RELEASE_TAG }}
+          draft: false
+          prerelease: false
+
+      - name: Upload release asset
+        uses: softprops/action-upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.find_zip.outputs.zip }}
+          asset_name: ${{ steps.find_zip.outputs.zip }}
+          asset_content_type: application/zip

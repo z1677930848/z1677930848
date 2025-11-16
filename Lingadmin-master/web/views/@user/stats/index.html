@@ -1,0 +1,283 @@
+{$layout}
+{$template "header"}
+<style>
+    .chart-container {
+        min-height: 300px;
+    }
+</style>
+{$end}
+
+<!-- 页面标题 -->
+<div class="ui basic segment">
+    <div class="ui grid">
+        <div class="ten wide column">
+            <h2 class="ui header">
+                <i class="chart line icon"></i>
+                <div class="content">
+                    统计报表
+                    <div class="sub header">查看详细的流量和性能数据</div>
+                </div>
+            </h2>
+        </div>
+        <div class="six wide right aligned column">
+            <select class="ui compact selection dropdown">
+                <option value="">全部域名</option>
+                {$range $domain := .domains}
+                <option value="{$domain.id}">{$domain.name}</option>
+                {$end}
+            </select>
+            <select class="ui compact selection dropdown" style="margin-left: 0.5em;">
+                <option>最近7天</option>
+                <option>最近30天</option>
+                <option>最近90天</option>
+                <option>自定义</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- 概览统计 -->
+<div class="ui four stackable statistics">
+    <div class="blue statistic">
+        <div class="value">
+            <i class="chart line icon"></i>
+            {$.totalRequests}
+        </div>
+        <div class="label">总请求数</div>
+        <div class="text" style="color: #21ba45; margin-top: 0.5em;">
+            <i class="arrow up icon"></i> 15.3% vs 上周
+        </div>
+    </div>
+
+    <div class="purple statistic">
+        <div class="value">
+            <i class="cloud download icon"></i>
+            {$.totalTraffic}
+        </div>
+        <div class="label">总流量</div>
+        <div class="text" style="color: #21ba45; margin-top: 0.5em;">
+            <i class="arrow up icon"></i> 8.7% vs 上周
+        </div>
+    </div>
+
+    <div class="green statistic">
+        <div class="value">
+            <i class="check circle icon"></i>
+            {$.avgHitRate}%
+        </div>
+        <div class="label">平均命中率</div>
+        <div class="text" style="color: #2185d0; margin-top: 0.5em;">
+            <i class="arrow up icon"></i> 2.1% vs 上周
+        </div>
+    </div>
+
+    <div class="orange statistic">
+        <div class="value">
+            <i class="clock icon"></i>
+            {$.avgResponseTime}ms
+        </div>
+        <div class="label">平均响应时间</div>
+        <div class="text" style="color: #21ba45; margin-top: 0.5em;">
+            <i class="arrow down icon"></i> 12.5% vs 上周
+        </div>
+    </div>
+</div>
+
+<!-- 图表区域 -->
+<div class="ui stackable two column grid" style="margin-top: 2em;">
+    <div class="column">
+        <!-- 请求趋势 -->
+        <div class="ui segment">
+            <div class="ui two column grid">
+                <div class="column">
+                    <h3 class="ui header">
+                        <i class="chart area icon"></i>
+                        <div class="content">请求趋势</div>
+                    </h3>
+                </div>
+                <div class="right aligned column">
+                    <div class="ui compact buttons">
+                        <button class="ui blue button">请求数</button>
+                        <button class="ui button">带宽</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+
+            <div class="chart-container">
+                <div class="ui placeholder segment" style="height: 100%;">
+                    <div class="ui icon header">
+                        <i class="chart bar icon"></i>
+                        图表数据加载中...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="column">
+        <!-- 流量分布 -->
+        <div class="ui segment">
+            <div class="ui two column grid">
+                <div class="column">
+                    <h3 class="ui header">
+                        <i class="pie chart icon"></i>
+                        <div class="content">流量分布</div>
+                    </h3>
+                </div>
+                <div class="right aligned column">
+                    <a href="#" class="ui basic compact button">
+                        查看详情 <i class="right arrow icon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+
+            <div class="chart-container">
+                <div class="ui placeholder segment" style="height: 100%;">
+                    <div class="ui icon header">
+                        <i class="pie chart icon"></i>
+                        图表数据加载中...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 地域分布和状态码 -->
+<div class="ui stackable two column grid" style="margin-top: 1em;">
+    <div class="column">
+        <!-- 地域分布 -->
+        <div class="ui segment">
+            <h3 class="ui header">
+                <i class="world icon"></i>
+                <div class="content">地域分布 TOP 10</div>
+            </h3>
+
+            <div class="ui divider"></div>
+
+            <div class="ui relaxed list">
+                {$range $index, $region := .topRegions}
+                <div class="item">
+                    <div class="ui grid">
+                        <div class="three wide column">
+                            <div class="ui small circular blue label">{$add $index 1}</div>
+                            <strong>{$region.name}</strong>
+                        </div>
+                        <div class="ten wide column">
+                            <div class="ui blue progress" style="margin-bottom: 0;">
+                                <div class="bar" style="width: {$region.percentage}%;"></div>
+                            </div>
+                        </div>
+                        <div class="three wide right aligned column">
+                            <strong>{$region.requests}</strong>
+                        </div>
+                    </div>
+                </div>
+                {$end}
+            </div>
+        </div>
+    </div>
+
+    <div class="column">
+        <!-- HTTP状态码 -->
+        <div class="ui segment">
+            <h3 class="ui header">
+                <i class="tasks icon"></i>
+                <div class="content">HTTP 状态码分布</div>
+            </h3>
+
+            <div class="ui divider"></div>
+
+            <div class="ui four statistics">
+                <div class="green statistic">
+                    <div class="value">2xx</div>
+                    <div class="label">成功响应</div>
+                    <div class="text">{$.status2xx}</div>
+                    <div class="text" style="color: #21ba45;">{$.status2xxPercent}%</div>
+                </div>
+
+                <div class="blue statistic">
+                    <div class="value">3xx</div>
+                    <div class="label">重定向</div>
+                    <div class="text">{$.status3xx}</div>
+                    <div class="text" style="color: #2185d0;">{$.status3xxPercent}%</div>
+                </div>
+
+                <div class="orange statistic">
+                    <div class="value">4xx</div>
+                    <div class="label">客户端错误</div>
+                    <div class="text">{$.status4xx}</div>
+                    <div class="text" style="color: #f2711c;">{$.status4xxPercent}%</div>
+                </div>
+
+                <div class="red statistic">
+                    <div class="value">5xx</div>
+                    <div class="label">服务器错误</div>
+                    <div class="text">{$.status5xx}</div>
+                    <div class="text" style="color: #db2828;">{$.status5xxPercent}%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 热门URL -->
+<div class="ui segment" style="margin-top: 1em;">
+    <h3 class="ui header">
+        <i class="fire icon"></i>
+        <div class="content">热门 URL TOP 20</div>
+    </h3>
+
+    <div class="ui divider"></div>
+
+    <table class="ui very basic table">
+        <thead>
+            <tr>
+                <th width="50px">排名</th>
+                <th>URL</th>
+                <th class="right aligned">请求数</th>
+                <th class="right aligned">流量</th>
+                <th class="right aligned">命中率</th>
+            </tr>
+        </thead>
+        <tbody>
+            {$range $index, $url := .topUrls}
+            <tr>
+                <td>
+                    <div class="ui small circular label">{$add $index 1}</div>
+                </td>
+                <td>
+                    <code style="font-size: 0.9em;">{$url.path}</code>
+                </td>
+                <td class="right aligned">{$url.requests}</td>
+                <td class="right aligned">{$url.traffic}</td>
+                <td class="right aligned">
+                    {$if gt $url.hitRate 80}
+                    <span class="ui green label">{$url.hitRate}%</span>
+                    {$else}
+                    <span class="ui orange label">{$url.hitRate}%</span>
+                    {$end}
+                </td>
+            </tr>
+            {$end}
+        </tbody>
+    </table>
+</div>
+
+{$template "footer"}
+<script>
+Tea.context(function() {
+    // 初始化下拉菜单
+    this.$delay(function() {
+        $('.ui.dropdown').dropdown();
+    });
+
+    // TODO: 使用 ECharts 初始化图表
+    // 需要加载 ECharts 库后实现
+});
+</script>
+{$end}

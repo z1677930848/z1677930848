@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo:*)",
+      "Bash(powershell -Command \"[System.Environment]::GetEnvironmentVariable(''ANTHROPIC_BASE_URL'', ''User'')\")",
+      "Bash(powershell:*)",
+      "Bash(dir:*)",
+      "Bash(go version)",
+      "Bash(go run:*)",
+      "Bash(wsl:*)",
+      "Bash(docker:*)",
+      "Bash(git init)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

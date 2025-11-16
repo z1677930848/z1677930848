@@ -1,0 +1,52 @@
+{$layout}
+{$template "reporter_menu"}
+{$template "/datepicker"}
+
+<div class="margin"></div>
+
+<form method="get" :action="Tea.url('$')" class="space-y-4" autocomplete="off">
+    <input type="hidden" name="reporterId" :value="reporter.id"/>
+    <div class="flex flex-wrap items-center gap-4">
+        <div class="mb-4">
+            <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em" id="day-from-picker"/>
+        </div>
+        <div class="mb-4">
+            <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em" id="day-to-picker"/>
+        </div>
+        <div class="mb-4">
+            <select class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white text-gray-900 cursor-pointer" name="level" v-model="level">
+                <option value="">[级别]</option>
+                <option value="error">错误</option>
+                <option value="warning">警告</option>
+                <option value="info">信息</option>
+                <option value="success">成功</option>
+            </select>
+        </div>
+        <div class="mb-4">
+            <input type="text" name="keyword" style="width:10em" v-model="keyword" placeholder="关键词"/>
+        </div>
+        <div class="mb-4">
+            <button type="submit" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">查询</button>
+        </div>
+        <div class="mb-4" v-if="dayFrom.length > 0 || dayTo.length > 0 || keyword.length > 0 || level.length > 0">
+            <a :href="Tea.url('.logs', { reporterId:reporter.id })">[清除条件]</a>
+        </div>
+    </div>
+</form>
+
+<p class="text-sm text-gray-500" v-if="logs.length == 0">暂时还没有日志。</p>
+
+<table class="w-full border-collapse bg-white shadow-sm rounded-lg overflow-hidden" v-if="logs.length > 0">
+    <thead>
+        <tr>
+
+        </tr>
+    </thead>
+    <tr v-for="log in logs">
+        <td>
+            <node-log-row :v-log="log" :v-keyword="keyword"></node-log-row>
+        </td>
+    </tr>
+</table>
+
+<div class="page" v-html="page"></div>

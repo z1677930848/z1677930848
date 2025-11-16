@@ -1,0 +1,315 @@
+{$layout}
+{$template "header"}
+{$end}
+
+<!-- 页面标题 -->
+<div class="ui basic segment">
+    <h2 class="ui header">
+        <i class="user icon"></i>
+        <div class="content">
+            个人设置
+            <div class="sub header">管理您的账户信息和偏好设置</div>
+        </div>
+    </h2>
+</div>
+
+<div class="ui stackable grid">
+    <!-- 侧边栏导航 -->
+    <div class="five wide column">
+        <div class="ui vertical fluid tabular menu">
+            <a href="#profile" class="active item">
+                <i class="user icon"></i>
+                基本信息
+            </a>
+            <a href="#security" class="item">
+                <i class="lock icon"></i>
+                安全设置
+            </a>
+            <a href="#notifications" class="item">
+                <i class="bell icon"></i>
+                通知设置
+            </a>
+            <a href="#account" class="item">
+                <i class="info circle icon"></i>
+                账户信息
+            </a>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="eleven wide column">
+        <!-- 基本信息 -->
+        <div id="profile" class="ui segment">
+            <h3 class="ui header">
+                <i class="user icon"></i>
+                <div class="content">基本信息</div>
+            </h3>
+
+            <div class="ui divider"></div>
+
+            <form class="ui form" method="post" data-tea-action="/user/profile/update" data-tea-success="updateSuccess">
+                <csrf-token></csrf-token>
+
+                <div class="field">
+                    <label>用户名</label>
+                    <input type="text" name="username" value="{$.username}" readonly>
+                    <div class="ui pointing label" style="margin-top: 0.5em;">
+                        用户名不可修改
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>邮箱地址</label>
+                    <div class="ui left icon input">
+                        <i class="mail icon"></i>
+                        <input type="email" name="email" value="{$.email}" placeholder="请输入邮箱地址">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>手机号码</label>
+                    <div class="ui left icon input">
+                        <i class="phone icon"></i>
+                        <input type="tel" name="mobile" value="{$.mobile}" placeholder="请输入手机号码">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>公司名称</label>
+                    <div class="ui left icon input">
+                        <i class="building icon"></i>
+                        <input type="text" name="company" value="{$.company}" placeholder="请输入公司名称">
+                    </div>
+                </div>
+
+                <div class="field" style="text-align: right;">
+                    <button type="submit" class="ui primary button">
+                        <i class="save icon"></i>
+                        保存更改
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 修改密码 -->
+        <div id="security" class="ui segment" style="margin-top: 1.5em;">
+            <h3 class="ui header">
+                <i class="lock icon"></i>
+                <div class="content">修改密码</div>
+            </h3>
+
+            <div class="ui divider"></div>
+
+            <form class="ui form" method="post" data-tea-action="/user/profile/changePassword" data-tea-success="passwordSuccess">
+                <csrf-token></csrf-token>
+                <input type="hidden" name="oldPassword" v-model="oldPasswordMd5"/>
+                <input type="hidden" name="newPassword" v-model="newPasswordMd5"/>
+
+                <div class="field">
+                    <label>当前密码</label>
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <input type="password" v-model="oldPassword" @input="updateOldPassword" placeholder="请输入当前密码" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>新密码</label>
+                    <div class="ui left icon input">
+                        <i class="key icon"></i>
+                        <input type="password" v-model="newPassword" @input="updateNewPassword" placeholder="请输入新密码" required>
+                    </div>
+                    <div class="ui pointing label" style="margin-top: 0.5em;">
+                        密码长度至少8位，建议包含字母、数字和特殊字符
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>确认新密码</label>
+                    <div class="ui left icon input">
+                        <i class="key icon"></i>
+                        <input type="password" v-model="confirmPassword" placeholder="请再次输入新密码" required>
+                    </div>
+                </div>
+
+                <div class="field" style="text-align: right;">
+                    <button type="submit" class="ui primary button">
+                        <i class="save icon"></i>
+                        修改密码
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 通知设置 -->
+        <div id="notifications" class="ui segment" style="margin-top: 1.5em;">
+            <h3 class="ui header">
+                <i class="bell icon"></i>
+                <div class="content">通知设置</div>
+            </h3>
+
+            <div class="ui divider"></div>
+
+            <div class="ui form">
+                <div class="field">
+                    <div class="ui grid">
+                        <div class="twelve wide column">
+                            <strong>邮件通知</strong>
+                            <div style="color: #999; font-size: 0.9em; margin-top: 0.3em;">
+                                接收系统通知和告警邮件
+                            </div>
+                        </div>
+                        <div class="four wide right aligned column">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" checked>
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui divider"></div>
+
+                <div class="field">
+                    <div class="ui grid">
+                        <div class="twelve wide column">
+                            <strong>短信通知</strong>
+                            <div style="color: #999; font-size: 0.9em; margin-top: 0.3em;">
+                                接收重要告警短信
+                            </div>
+                        </div>
+                        <div class="four wide right aligned column">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui divider"></div>
+
+                <div class="field">
+                    <div class="ui grid">
+                        <div class="twelve wide column">
+                            <strong>流量告警</strong>
+                            <div style="color: #999; font-size: 0.9em; margin-top: 0.3em;">
+                                流量超过阈值时通知
+                            </div>
+                        </div>
+                        <div class="four wide right aligned column">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" checked>
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui divider"></div>
+
+                <div class="field">
+                    <div class="ui grid">
+                        <div class="twelve wide column">
+                            <strong>证书过期提醒</strong>
+                            <div style="color: #999; font-size: 0.9em; margin-top: 0.3em;">
+                                SSL证书即将过期时提醒
+                            </div>
+                        </div>
+                        <div class="four wide right aligned column">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" checked>
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 账户信息 -->
+        <div id="account" class="ui segment" style="margin-top: 1.5em;">
+            <h3 class="ui header">
+                <i class="info circle icon"></i>
+                <div class="content">账户信息</div>
+            </h3>
+
+            <div class="ui divider"></div>
+
+            <table class="ui very basic table">
+                <tbody>
+                    <tr>
+                        <td class="collapsing"><strong>账户ID</strong></td>
+                        <td>{$.userId}</td>
+                    </tr>
+                    <tr>
+                        <td class="collapsing"><strong>注册时间</strong></td>
+                        <td>{$.createdAt}</td>
+                    </tr>
+                    <tr>
+                        <td class="collapsing"><strong>账户状态</strong></td>
+                        <td>
+                            <span class="ui green label">
+                                <i class="check circle icon"></i>
+                                正常
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="collapsing"><strong>套餐类型</strong></td>
+                        <td>{$.planName}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{$template "footer"}
+<script>
+Tea.context(function() {
+    this.oldPassword = "";
+    this.newPassword = "";
+    this.confirmPassword = "";
+    this.oldPasswordMd5 = "";
+    this.newPasswordMd5 = "";
+
+    this.updateOldPassword = function() {
+        this.oldPasswordMd5 = md5(this.oldPassword.trim());
+    };
+
+    this.updateNewPassword = function() {
+        this.newPasswordMd5 = md5(this.newPassword.trim());
+    };
+
+    this.updateSuccess = function() {
+        teaweb.success("保存成功");
+    };
+
+    this.passwordSuccess = function() {
+        teaweb.success("密码修改成功，请重新登录", function() {
+            window.location = "/user/logout";
+        });
+    };
+
+    // 初始化 toggle checkbox
+    this.$delay(function() {
+        $('.ui.checkbox').checkbox();
+    });
+
+    // 平滑滚动到锚点
+    $('a[href^="#"]').click(function(e) {
+        e.preventDefault();
+        var target = $(this).attr('href');
+        if ($(target).length) {
+            $('html, body').animate({
+                scrollTop: $(target).offset().top - 20
+            }, 500);
+            // 更新激活状态
+            $('.ui.vertical.menu .item').removeClass('active');
+            $(this).addClass('active');
+        }
+    });
+});
+</script>
+{$end}

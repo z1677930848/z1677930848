@@ -1,0 +1,19 @@
+# environment code
+env: prod
+
+# http - 双端口配置
+http:
+  "on": true
+  listen:
+    - "0.0.0.0:8080"    # 用户端界面（改为8080避免与Nginx冲突）
+    - "0.0.0.0:7788"    # 管理端界面
+
+# https
+https:
+  "on": false
+  listen: [ "0.0.0.0:443"]
+  cert: ""
+  key: ""
+
+# 可选：运行时 secret（建议不要将真实密钥写入此文件）
+# secret: "REPLACE_WITH_RANDOM_32_BYTES_OR_LEAVE_EMPTY"

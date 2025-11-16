@@ -1,0 +1,432 @@
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  padding: 2em 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.install-box {
+  width: 56em;
+  max-width: 95%;
+  margin: 0 auto;
+  padding: 2.5em;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 0.6s ease-out;
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.install-box .install-header {
+  text-align: center;
+  margin-bottom: 2.5em;
+}
+.install-box .install-header .logo {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 1em;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3em;
+  color: white;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+.install-box .install-header h1 {
+  font-size: 2.2em;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.4em;
+  letter-spacing: -0.5px;
+}
+.install-box .install-header .subtitle {
+  color: #666;
+  font-size: 1.15em;
+  font-weight: 400;
+}
+.install-box .welcome-text {
+  font-size: 1.1em;
+  line-height: 1.8;
+  margin-bottom: 1.5em;
+  color: #333;
+}
+.install-box .welcome-text strong {
+  color: #667eea;
+  font-weight: 600;
+}
+.install-box .disclaimer {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 1.2em 1.5em;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+  margin: 1.2em 0;
+  line-height: 1.7;
+  color: #495057;
+}
+.install-box .disclaimer .disclaimer-title {
+  font-weight: 600;
+  color: #667eea;
+  margin-bottom: 0.5em;
+  font-size: 1.05em;
+}
+.install-box .start-button {
+  width: 100%;
+  max-width: 300px;
+  display: block !important;
+  margin: 3em auto 0 !important;
+  padding: 1.2em 2.5em !important;
+  font-size: 1.1em !important;
+  font-weight: 600 !important;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3) !important;
+}
+.install-box .start-button:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4) !important;
+}
+.install-box .start-button i.icon {
+  margin-right: 0.5em !important;
+}
+.install-box .ui.steps {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  border-radius: 15px;
+  padding: 1.5em;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2.5em;
+}
+.install-box .ui.steps .step {
+  background: white;
+  border-radius: 12px;
+  padding: 1.1em;
+  margin: 0.3em;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+.install-box .ui.steps .step.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
+  transform: translateY(-3px);
+}
+.install-box .ui.steps .step.active .title {
+  color: white !important;
+  font-weight: 600;
+}
+.install-box .ui.steps .step:hover:not(.active) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.install-box .info-message {
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+  background: linear-gradient(135deg, #f0f7ff 0%, #e8f4ff 100%);
+  padding: 1.2em 1.5em;
+  box-shadow: 0 3px 12px rgba(33, 133, 208, 0.12);
+  margin-bottom: 1.8em;
+  display: flex;
+  align-items: flex-start;
+}
+.install-box .info-message strong {
+  color: #667eea;
+  font-weight: 600;
+}
+.install-box .ui.form .ui.table {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 18px rgba(0, 0, 0, 0.06);
+  border: none;
+}
+.install-box .ui.form .ui.table tr {
+  transition: all 0.2s ease;
+}
+.install-box .ui.form .ui.table tr:hover {
+  background: linear-gradient(135deg, #f8f9ff 0%, #f5f7ff 100%);
+}
+.install-box .ui.form .ui.table td {
+  border-color: #e8ecf1;
+  padding: 1.3em 1.2em;
+}
+.install-box .ui.form .ui.table td.title {
+  width: 12em;
+  font-weight: 600;
+  color: #495057;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+.install-box .ui.form .ui.table input[type="text"],
+.install-box .ui.form .ui.table input[type="password"],
+.install-box .ui.form .ui.table input[type="number"],
+.install-box .ui.form .ui.table select {
+  border-radius: 8px;
+  border: 2px solid #e1e8ed;
+  padding: 0.75em 1.1em;
+  transition: all 0.3s ease;
+  font-size: 1em;
+}
+.install-box .ui.form .ui.table input[type="text"]:focus,
+.install-box .ui.form .ui.table input[type="password"]:focus,
+.install-box .ui.form .ui.table input[type="number"]:focus,
+.install-box .ui.form .ui.table select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12);
+  outline: none;
+  background: #fff;
+}
+.install-box .ui.form .ui.table input[type="text"]::placeholder,
+.install-box .ui.form .ui.table input[type="password"]::placeholder,
+.install-box .ui.form .ui.table input[type="number"]::placeholder,
+.install-box .ui.form .ui.table select::placeholder {
+  color: #adb5bd;
+}
+.install-box .ui.form .ui.table .comment {
+  color: #6c757d;
+  font-size: 0.9em;
+  margin-top: 0.6em;
+  line-height: 1.6;
+}
+.install-box .ui.form .ui.table .comment .success-text {
+  color: #21ba45;
+  font-weight: 500;
+}
+.install-box .ui.form .ui.table .comment .warning-text {
+  color: #f39c12;
+  font-weight: 500;
+}
+.install-box .radio.checkbox {
+  margin-right: 2em;
+  margin-bottom: 0.8em;
+  display: inline-flex;
+  align-items: center;
+}
+.install-box .radio.checkbox input[type="radio"]:checked ~ label {
+  color: #667eea;
+  font-weight: 600;
+}
+.install-box .radio.checkbox label {
+  cursor: pointer !important;
+  font-size: 1em !important;
+  transition: color 0.2s ease;
+  padding-left: 0.4em;
+}
+.install-box .radio.checkbox label:hover {
+  color: #667eea;
+}
+.install-box .button {
+  border-radius: 10px;
+  padding: 0.9em 2em;
+  font-size: 1em;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.install-box .button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+.install-box .button.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+.install-box .button.primary:hover {
+  background: linear-gradient(135deg, #5568d3 0%, #6a3f92 100%);
+}
+.install-box .button.disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+.install-box .button.disabled:hover {
+  transform: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.install-box .button.margin {
+  margin-top: 1.5em;
+}
+.install-box .button i.icon {
+  margin: 0 0.3em;
+}
+.install-box .button-group-simple {
+  margin-top: 2em;
+  padding-top: 1.5em;
+  border-top: 2px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.install-box h3 {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-top: 2em;
+  margin-bottom: 1.2em;
+  padding-bottom: 0.6em;
+  border-bottom: 2px solid #e9ecef;
+  font-size: 1.35em;
+  display: flex;
+  align-items: center;
+}
+.install-box h3:first-child {
+  margin-top: 0;
+}
+.install-box .content-box {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 15px;
+  padding: 2em;
+  margin-bottom: 2em;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+.install-box .content-box h3 {
+  margin-top: 1.5em;
+  font-size: 1.25em;
+  color: #667eea;
+}
+.install-box .content-box h3:first-child {
+  margin-top: 0;
+}
+.install-box .content-box .ui.table {
+  background: white;
+  margin-top: 1.2em;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+.install-box .badge {
+  display: inline-block;
+  padding: 0.4em 1em;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+.install-box .badge.badge-success {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  color: #155724;
+}
+.install-box .badge.badge-info {
+  background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+  color: #0c5460;
+}
+.install-box .button-group {
+  margin-top: 2em;
+  padding-top: 2em;
+  border-top: 2px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+}
+.install-box .button-group .status-box {
+  flex: 1;
+  text-align: center;
+  padding: 0 2em;
+}
+.install-box .button-group .status-box .status-text {
+  font-size: 1.1em;
+  color: #667eea;
+  font-weight: 600;
+  animation: pulse-text 2s ease-in-out infinite;
+}
+@keyframes pulse-text {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+.install-box .button-group .install-btn {
+  font-size: 1.1em !important;
+  padding: 1em 2.5em !important;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3) !important;
+}
+.install-box .button-group .install-btn:hover {
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+@media screen and (max-width: 768px) {
+  .install-box {
+    width: 95%;
+    padding: 1.5em;
+  }
+  .install-box .install-header .logo {
+    width: 70px;
+    height: 70px;
+    font-size: 2.5em;
+  }
+  .install-box .install-header h1 {
+    font-size: 1.8em;
+  }
+  .install-box .install-header .subtitle {
+    font-size: 1em;
+  }
+  .install-box .ui.steps .step {
+    font-size: 0.85em;
+    padding: 0.8em;
+  }
+  .install-box .ui.form .ui.table td.title {
+    width: 100%;
+    display: block;
+  }
+  .install-box .ui.form .ui.table input[type="text"],
+  .install-box .ui.form .ui.table input[type="password"],
+  .install-box .ui.form .ui.table input[type="number"] {
+    width: 100% !important;
+  }
+  .install-box .button-group {
+    flex-direction: column;
+  }
+  .install-box .button-group .status-box {
+    order: -1;
+    margin-bottom: 1em;
+  }
+}
+.install-box::-webkit-scrollbar,
+.content-box::-webkit-scrollbar {
+  width: 8px;
+}
+.install-box::-webkit-scrollbar-track,
+.content-box::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+.install-box::-webkit-scrollbar-thumb,
+.content-box::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+}
+.install-box::-webkit-scrollbar-thumb:hover,
+.content-box::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5568d3 0%, #6a3f92 100%);
+}
+code-label {
+  background: #f4f5f7;
+  padding: 0.3em 0.7em;
+  border-radius: 5px;
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 0.9em;
+  color: #c7254e;
+  border: 1px solid #e1e4e8;
+  display: inline-block;
+}

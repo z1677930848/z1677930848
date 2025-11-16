@@ -1,0 +1,12 @@
+{
+  "name": "lingadmin-web",
+  "version": "1.0.11",
+  "private": true,
+  "scripts": {
+    "build:js": "terser public/js/components.src.js -c -m -o public/js/components.js",
+    "build": "npm run build:js"
+  },
+  "devDependencies": {
+    "terser": "^5.18.0"
+  }
+}

@@ -1,0 +1,63 @@
+{$layout}
+
+<div class="flex border-b border-gray-200 text-xs">
+    <a href="" class="item" :class="{active: tab == 'domainAuditing'}" @click.prevent="selectTab('domainAuditing')">域名审核配置</a>
+    <a href="" class="item" :class="{active: tab == 'tcpPorts'}" @click.prevent="selectTab('tcpPorts')">TCP/TLS端口</a>
+</div>
+
+<form method="post" class="space-y-4" data-tea-action="$" data-tea-success="success">
+    <input type="hidden" name="globalConfigJSON" :value="JSON.stringify(globalConfig)"/>
+
+    <!-- 域名审核相关配置 -->
+    <div v-show="tab == 'domainAuditing'">
+        <table class="w-full border-collapse bg-white shadow-sm rounded-lg overflow-hidden">
+            <tr>
+                <td class="title">域名变更时是否需要审核</td>
+                <td>
+                    <checkbox v-model="globalConfig.httpAll.domainAuditingIsOn"></checkbox>
+                    <p class="text-sm text-gray-500">选中后，用户在修改域名时需要管理员审核通过才能生效。</p>
+                </td>
+            </tr>
+            <tr v-show="globalConfig.httpAll.domainAuditingIsOn">
+                <td>审核提示</td>
+                <td>
+                    <input type="text" v-model="globalConfig.httpAll.domainAuditingPrompt" maxlength="200"/>
+                    <p class="text-sm text-gray-500">提示用户需要审核的文字说明。</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- TCP 相关 -->
+    <div v-show="tab == 'tcpPorts'">
+        <table class="w-full border-collapse bg-white shadow-sm rounded-lg overflow-hidden">
+            <tr>
+                <td class="title">允许的端口范围</td>
+                <td>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <div class="mb-4">
+                            <input type="text" name="tcpAllPortRangeMin" maxlength="5" size="6" v-model="tcpAllPortRangeMin"/>
+                        </div>
+                        <div class="mb-4">
+                            -
+                        </div>
+                        <div class="mb-4">
+                            <input type="text" name="tcpAllPortRangeMax" maxlength="5" size="6" v-model="tcpAllPortRangeMax"/>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500">用户创建TCP/TLS负载均衡服务时可以随机选择的端口范围，最小不能小于1024，最大不能大于65534。</p>
+                </td>
+            </tr>
+            <tr>
+                <td>排除的端口</td>
+                <td>
+                    <values-box placeholder="端口" size="6" name="tcpAllDenyPorts" :values="tcpAllDenyPorts"></values-box>
+                    <p class="text-sm text-gray-500">当为用户随机分配端口时要排除的端口。</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="margin"></div>
+    <submit-btn v-show="tab != 'domainMatch'">保存</submit-btn>
+</form>

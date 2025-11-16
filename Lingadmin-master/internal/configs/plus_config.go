@@ -1,0 +1,42 @@
+// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
+
+package configs
+
+import (
+	"encoding/json"
+	"github.com/iwind/TeaGo/Tea"
+	"os"
+)
+
+var plusConfigFile = "plus.cache.json"
+
+type PlusConfig struct {
+	IsPlus     bool     `json:"isPlus"`
+	Components []string `json:"components"`
+	DayTo      string   `json:"dayTo"`
+}
+
+func ReadPlusConfig() *PlusConfig {
+	data, err := os.ReadFile(Tea.ConfigFile(plusConfigFile))
+	if err != nil {
+		return &PlusConfig{IsPlus: true}
+	}
+	var config = &PlusConfig{IsPlus: true}
+	err = json.Unmarshal(data, config)
+	if err != nil {
+		return config
+	}
+	return config
+}
+
+func WritePlusConfig(config *PlusConfig) error {
+	configJSON, err := json.Marshal(config)
+	if err != nil {
+		return err
+	}
+	err = os.WriteFile(Tea.ConfigFile(plusConfigFile), configJSON, 0777)
+	if err != nil {
+		return err
+	}
+	return nil
+}

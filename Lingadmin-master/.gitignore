@@ -1,0 +1,79 @@
+# 编译产物
+ling-admin
+edge-admin
+lingcdnadmin
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# 构建目录
+build/
+dist/
+releases/*.tar.gz
+releases/*.zip
+releases/ling-admin*
+releases/edge-admin*
+bin/
+
+# 日志文件
+logs/
+*.log
+
+# 临时文件
+*.tmp
+*.swp
+*.swo
+*~
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# IDE 配置
+.idea/
+.vscode/
+*.iml
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# 用户特定文件
+*_plus.go
+*-plus.sh
+*_plus.html
+*_plus.js
+*@plus.js
+*_plus.less
+*_plus.css
+*_plus.css.map
+
+# 配置文件(可能包含敏感信息)
+configs/server.yaml
+!configs/server.template.yaml
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# 备份文件
+*.bak
+*.backup
+
+# 压缩文件
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# Tailwind CSS (已移除)
+web/tailwind.config.js
+web/node_modules/@tailwindcss/
+web/public/css/tailwind*.css

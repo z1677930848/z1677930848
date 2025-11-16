@@ -1,0 +1,60 @@
+{$layout}
+{$template "menu"}
+
+<div class="margin"></div>
+
+<form class="space-y-4" method="get" action="/clusters/monitors">
+    <div class="flex flex-wrap items-center gap-4">
+        <div class="mb-4">
+            集群:
+        </div>
+        <div class="mb-4">
+            <select class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white text-gray-900 cursor-pointer" name="clusterId" v-model="clusterId">
+                <option v-for="cluster in clusters" :value="cluster.id">{{cluster.name}}</option>
+            </select>
+        </div>
+        <div class="mb-4">
+            <button class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50" type="submit">查看</button>
+        </div>
+    </div>
+</form>
+
+<p class="text-sm text-gray-500" v-if="tasks.length == 0">暂时还没有任务。</p>
+
+<table class="w-full border-collapse bg-white shadow-sm rounded-lg overflow-hidden" v-if="tasks.length > 0">
+    <thead>
+        <tr>
+            <th>节点</th>
+            <th>IP</th>
+            <th class="one wide">端口</th>
+            <th>综合延时</th>
+            <th>综合级别</th>
+            <th>综合连通率</th>
+        </tr>
+    </thead>
+    <tr v-for="task in tasks">
+        <td>
+            <span v-if="task.node.id > 0">{{task.node.name}}<link-icon :href="'/clusters/cluster/node?nodeId=' + task.node.id + '&clusterId=' + clusterId"></link-icon></span>
+        </td>
+        <td>
+            {{task.ip}}<link-icon :href="'/clusters/ip-addrs/addr?addrId=' + task.addr.id"></link-icon>
+        </td>
+        <td>
+            <span v-if="task.port > 0">{{task.port}}</span>
+            <span v-else class="disabled">-</span>
+        </td>
+        <td>
+            <span v-if="task.costMs > 0" :class="task.color">{{task.costMs}}ms</span>
+            <span v-else class="disabled">-</span>
+        </td>
+        <td>
+            <span :class="task.color">{{task.levelName}}</span>
+        </td>
+        <td>
+            <span v-if="task.connectivity > 0" :class="task.color">{{task.connectivity}}%</span>
+            <span v-else class="disabled">-</span>
+        </td>
+    </tr>
+</table>
+
+<div class="page" v-html="page"></div>

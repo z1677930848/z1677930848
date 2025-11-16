@@ -1,0 +1,102 @@
+{$layout}
+
+<div class="p-6 bg-white rounded-lg border border-gray-200 shadow-sm">
+	<h3>授权管理</h3>
+	
+	<div class="p-4 rounded-lg border bg-blue-50 border-blue-200 text-blue-800" :class="{positive: isValid, warning: !isValid}">
+		<div class="header" v-if="isValid">
+			<i class="icon check circle"></i> 授权已激活
+		</div>
+		<div class="header" v-else>
+			<i class="icon exclamation triangle"></i> 未激活或授权已过期
+		</div>
+	</div>
+
+	<table class="w-full border-collapse bg-white shadow-sm rounded-lg overflow-hidden" v-if="license != null && license.code != null">
+		<tr>
+			<td class="title">授权码</td>
+			<td><code>{{license.code}}</code></td>
+		</tr>
+		<tr>
+			<td>授权类型</td>
+			<td>
+				<span v-if="license.type == 'trial'" class="inline-flex items-center px-2.5 py-1.5 rounded-md text-sm font-medium bg-orange-100 text-orange-800">试用版（最多10节点）</span>
+				<span v-if="license.type == 'standard'" class="inline-flex items-center px-2.5 py-1.5 rounded-md text-sm font-medium bg-blue-100 text-blue-800">标准版（最多30节点）</span>
+				<span v-if="license.type == 'professional'" class="inline-flex items-center px-2.5 py-1.5 rounded-md text-sm font-medium bg-teal-100 text-teal-800">专业版（最多60节点）</span>
+				<span v-if="license.type == 'enterprise'" class="inline-flex items-center px-2.5 py-1.5 rounded-md text-sm font-medium bg-purple-100 text-purple-800">企业版（最多100节点）</span>
+				<span v-if="license.type == 'offline'" class="inline-flex items-center px-2.5 py-1.5 rounded-md text-sm font-medium bg-gray-900 text-white">离线版（无限节点）</span>
+			</td>
+		</tr>
+		<tr>
+			<td>授权公司</td>
+			<td>{{license.company}}</td>
+		</tr>
+		<tr>
+			<td>授权邮箱</td>
+			<td>{{license.email}}</td>
+		</tr>
+		<tr>
+			<td>最大节点数</td>
+			<td>
+				<span v-if="license.maxNodes > 0">{{license.maxNodes}} 个</span>
+				<span v-else class="text-green-600">无限制</span>
+			</td>
+		</tr>
+		<tr>
+			<td>过期时间</td>
+			<td>{{license.expireAt}}</td>
+		</tr>
+		<tr>
+			<td>创建时间</td>
+			<td>{{license.createdAt}}</td>
+		</tr>
+		<tr>
+			<td>授权状态</td>
+			<td>
+				<span v-if="isValid" class="inline-flex items-center px-2.5 py-1.5 rounded-md text-sm font-medium bg-green-100 text-green-800">有效</span>
+				<span v-else class="inline-flex items-center px-2.5 py-1.5 rounded-md text-sm font-medium bg-red-100 text-red-800">已过期</span>
+			</td>
+		</tr>
+	</table>
+
+	<div class="border-t border-gray-200 my-4"></div>
+
+	<h4>激活新授权</h4>
+	<form method="post" class="space-y-4" data-tea-action="$" data-tea-success="activateSuccess">
+		<csrf-token></csrf-token>
+		<div class="mb-4">
+			<label>授权码</label>
+			<input type="text" name="licenseCode" placeholder="请输入授权码，例如：LINGCDN-TRIAL-2024" maxlength="100"/>
+		</div>
+		<submit-btn></submit-btn>
+	</form>
+</div>
+
+<script>
+Tea.View.scope.activateSuccess = function(resp) {
+	let message = "授权激活成功"
+
+	// 如果返回了授权数据，显示详细信息
+	if (resp.data && resp.data.license) {
+		let license = resp.data.license
+		let typeNames = {
+			'trial': '试用版',
+			'standard': '标准版',
+			'professional': '专业版',
+			'enterprise': '企业版',
+			'offline': '离线版'
+		}
+		let typeName = typeNames[license.type] || license.type
+		let nodes = license.maxNodes > 0 ? license.maxNodes + '个节点' : '无限节点'
+
+		message = "授权激活成功！<br/><br/>" +
+			"授权类型：" + typeName + "<br/>" +
+			"最大节点数：" + nodes + "<br/>" +
+			"过期时间：" + license.expireAt
+	}
+
+	teaweb.success(message, function() {
+		window.location.reload()
+	})
+}
+</script>
