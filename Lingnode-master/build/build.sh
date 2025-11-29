@@ -2,7 +2,7 @@
 
 function build() {
 	ROOT=$(dirname $0)
-	NAME="edge-node"
+	NAME="ling-node"
 	VERSION=$(lookup-version "$ROOT"/../internal/const/const.go)
 	DIST=$ROOT/"../dist/${NAME}"
 	MUSL_DIR="/opt/homebrew/bin"
@@ -36,7 +36,7 @@ function build() {
 	fi
 
 	echo "building v${VERSION}/${OS}/${ARCH}/${TAG} ..."
-	ZIP="${NAME}-${OS}-${ARCH}-${TAG}-v${VERSION}.zip"
+	ZIP="${NAME}-${OS}-${ARCH}-v${VERSION}.zip"
 
 	echo "copying ..."
 	if [ ! -d "$DIST" ]; then
@@ -103,13 +103,27 @@ function build() {
 		 GOARCH="${ARCH}" CGO_ENABLED=1 \
 		 CGO_LDFLAGS="${CGO_LDFLAGS}" \
 		 CGO_CFLAGS="${CGO_CFLAGS}" \
-		 go build -trimpath -tags $BUILD_TAG -o "$DIST"/bin/${NAME} -ldflags "-linkmode external -extldflags -static -s -w" "$ROOT"/../cmd/edge-node/main.go
+		 go build -trimpath -tags $BUILD_TAG -o "$DIST"/bin/${NAME} -ldflags "-linkmode external -extldflags -static -s -w" "$ROOT"/../cmd/ling-node/main.go
 	else
 		if [[ `uname` == *"Linux"* ]] && [ "$OS" == "linux" ] && [[ "$ARCH" == "amd64" || "$ARCH" == "arm64" ]] &&  [ "$TAG" == "plus" ]; then
 			BUILD_TAG="plus,script,packet"
 		fi
 
-		env GOOS="${OS}" GOARCH="${ARCH}" CGO_ENABLED=1  CGO_LDFLAGS="${CGO_LDFLAGS}" CGO_CFLAGS="${CGO_CFLAGS}" go build -trimpath -tags $BUILD_TAG -o "$DIST"/bin/${NAME} -ldflags="-s -w" "$ROOT"/../cmd/edge-node/main.go
+		# 检测是否为交叉编译（目标架构与当前架构不同）
+		CURRENT_ARCH=$(uname -m)
+		if [ "$CURRENT_ARCH" == "x86_64" ]; then
+			CURRENT_ARCH="amd64"
+		elif [ "$CURRENT_ARCH" == "aarch64" ]; then
+			CURRENT_ARCH="arm64"
+		fi
+
+		# 交叉编译时禁用 CGO，除非有对应的交叉编译工具链
+		if [ "$ARCH" != "$CURRENT_ARCH" ]; then
+			echo "Cross-compiling for ${ARCH}, disabling CGO..."
+			env GOOS="${OS}" GOARCH="${ARCH}" CGO_ENABLED=0 go build -trimpath -tags $BUILD_TAG -o "$DIST"/bin/${NAME} -ldflags="-s -w" "$ROOT"/../cmd/ling-node/main.go
+		else
+			env GOOS="${OS}" GOARCH="${ARCH}" CGO_ENABLED=1 CGO_LDFLAGS="${CGO_LDFLAGS}" CGO_CFLAGS="${CGO_CFLAGS}" go build -trimpath -tags $BUILD_TAG -o "$DIST"/bin/${NAME} -ldflags="-s -w" "$ROOT"/../cmd/ling-node/main.go
+		fi
 	fi
 
 	if [ ! -f "${DIST}/bin/${NAME}" ]; then

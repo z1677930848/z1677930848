@@ -11,12 +11,9 @@ env:
   DL_SERVER_URL: 'http://dl.lingcdn.cloud'
 
 jobs:
-  build:
+  # AMD64 构建 - 在 x86_64 runner 上原生编译
+  build-amd64:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        arch: [amd64, arm64]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,11 +30,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y zip unzip
 
-      - name: Install cross-compile toolchain
-        if: matrix.arch == 'arm64'
-        run: |
-          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
-
       - name: Extract version from tag
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
@@ -50,7 +42,7 @@ jobs:
         working-directory: Lingnode-master/build
         run: |
           chmod +x build.sh
-          ./build.sh linux ${{ matrix.arch }} community
+          ./build.sh linux amd64 community
 
       - name: Build Lingapi
         working-directory: Lingapi-master/build
@@ -58,7 +50,7 @@ jobs:
           EDGENODE_PATH: ${{ github.workspace }}/Lingnode-master
         run: |
           chmod +x build.sh
-          ./build.sh linux ${{ matrix.arch }} community
+          ./build.sh linux amd64 community
 
       - name: Build Lingadmin
         working-directory: Lingadmin-master/build
@@ -66,7 +58,7 @@ jobs:
           EDGEAPI_PATH: ${{ github.workspace }}/Lingapi-master
         run: |
           chmod +x build.sh
-          ./build.sh linux ${{ matrix.arch }} community
+          ./build.sh linux amd64 community
 
       - name: List built artifacts
         run: |
@@ -81,33 +73,23 @@ jobs:
         id: rename
         run: |
           VERSION=${{ steps.version.outputs.VERSION }}
-          ARCH=${{ matrix.arch }}
+          ARCH=amd64
 
-          # 创建统一的输出目录
           mkdir -p dist
 
-          # Lingnode - 重命名为标准格式
           if ls Lingnode-master/dist/*.zip 1> /dev/null 2>&1; then
             NODE_FILE=$(ls Lingnode-master/dist/*.zip | head -1)
-            NODE_NEW="dist/ling-node-v${VERSION}-linux-${ARCH}.zip"
-            cp "$NODE_FILE" "$NODE_NEW"
-            echo "node_file=$NODE_NEW" >> $GITHUB_OUTPUT
+            cp "$NODE_FILE" "dist/ling-node-v${VERSION}-linux-${ARCH}.zip"
           fi
 
-          # Lingapi - 重命名为标准格式
           if ls Lingapi-master/dist/*.zip 1> /dev/null 2>&1; then
             API_FILE=$(ls Lingapi-master/dist/*.zip | head -1)
-            API_NEW="dist/ling-api-v${VERSION}-linux-${ARCH}.zip"
-            cp "$API_FILE" "$API_NEW"
-            echo "api_file=$API_NEW" >> $GITHUB_OUTPUT
+            cp "$API_FILE" "dist/ling-api-v${VERSION}-linux-${ARCH}.zip"
           fi
 
-          # Lingadmin - 重命名为标准格式
           if ls Lingadmin-master/dist/*.zip 1> /dev/null 2>&1; then
             ADMIN_FILE=$(ls Lingadmin-master/dist/*.zip | head -1)
-            ADMIN_NEW="dist/ling-admin-v${VERSION}-linux-${ARCH}.zip"
-            cp "$ADMIN_FILE" "$ADMIN_NEW"
-            echo "admin_file=$ADMIN_NEW" >> $GITHUB_OUTPUT
+            cp "$ADMIN_FILE" "dist/ling-admin-v${VERSION}-linux-${ARCH}.zip"
           fi
 
           echo "=== Renamed files ==="
@@ -116,12 +98,104 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: release-linux-${{ matrix.arch }}
+          name: release-linux-amd64
           path: dist/*.zip
           if-no-files-found: warn
 
+  # ARM64 构建 - 在 ARM64 runner 上原生编译
+  build-arm64:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zip unzip
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Build EdgeCommon
+        working-directory: EdgeCommon
+        run: go mod tidy
+
+      - name: Build Lingnode
+        working-directory: Lingnode-master/build
+        run: |
+          chmod +x build.sh
+          ./build.sh linux arm64 community
+
+      - name: Build Lingapi
+        working-directory: Lingapi-master/build
+        env:
+          EDGENODE_PATH: ${{ github.workspace }}/Lingnode-master
+        run: |
+          chmod +x build.sh
+          ./build.sh linux arm64 community
+
+      - name: Build Lingadmin
+        working-directory: Lingadmin-master/build
+        env:
+          EDGEAPI_PATH: ${{ github.workspace }}/Lingapi-master
+        run: |
+          chmod +x build.sh
+          ./build.sh linux arm64 community
+
+      - name: List built artifacts
+        run: |
+          echo "=== Lingnode ==="
+          ls -la Lingnode-master/dist/ || true
+          echo "=== Lingapi ==="
+          ls -la Lingapi-master/dist/ || true
+          echo "=== Lingadmin ==="
+          ls -la Lingadmin-master/dist/ || true
+
+      - name: Rename artifacts for upload
+        id: rename
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          ARCH=arm64
+
+          mkdir -p dist
+
+          if ls Lingnode-master/dist/*.zip 1> /dev/null 2>&1; then
+            NODE_FILE=$(ls Lingnode-master/dist/*.zip | head -1)
+            cp "$NODE_FILE" "dist/ling-node-v${VERSION}-linux-${ARCH}.zip"
+          fi
+
+          if ls Lingapi-master/dist/*.zip 1> /dev/null 2>&1; then
+            API_FILE=$(ls Lingapi-master/dist/*.zip | head -1)
+            cp "$API_FILE" "dist/ling-api-v${VERSION}-linux-${ARCH}.zip"
+          fi
+
+          if ls Lingadmin-master/dist/*.zip 1> /dev/null 2>&1; then
+            ADMIN_FILE=$(ls Lingadmin-master/dist/*.zip | head -1)
+            cp "$ADMIN_FILE" "dist/ling-admin-v${VERSION}-linux-${ARCH}.zip"
+          fi
+
+          echo "=== Renamed files ==="
+          ls -la dist/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-linux-arm64
+          path: dist/*.zip
+          if-no-files-found: warn
+
+  # 发布 - 合并所有构建产物并发布
   release:
-    needs: build
+    needs: [build-amd64, build-arm64]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -201,7 +275,6 @@ jobs:
 
               if [ "$http_code" != "200" ]; then
                 echo "  ERROR: Upload failed!"
-                # 不退出，继续上传其他文件
               else
                 echo "  SUCCESS: File uploaded"
               fi
