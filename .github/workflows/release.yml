@@ -56,6 +56,7 @@ jobs:
         working-directory: Lingadmin-master/build
         env:
           EDGEAPI_PATH: ${{ github.workspace }}/Lingapi-master
+          EDGENODE_PATH: ${{ github.workspace }}/Lingnode-master
         run: |
           chmod +x build.sh
           ./build.sh linux amd64 community
@@ -147,6 +148,7 @@ jobs:
         working-directory: Lingadmin-master/build
         env:
           EDGEAPI_PATH: ${{ github.workspace }}/Lingapi-master
+          EDGENODE_PATH: ${{ github.workspace }}/Lingnode-master
         run: |
           chmod +x build.sh
           ./build.sh linux arm64 community
