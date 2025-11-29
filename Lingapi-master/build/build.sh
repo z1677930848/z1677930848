@@ -130,7 +130,7 @@ function build() {
 	if [ -f $CC_PATH ]; then
 		env CC=$CC_PATH CXX=$CXX_PATH CGO_ENABLED=1 GOOS="$OS" GOARCH="$ARCH" go build -trimpath -tags $TAG --ldflags="-linkmode external -extldflags -static -s -w" -o "$DIST/bin/$NAME" "$ROOT"/../cmd/edge-api/main.go
 	else
-		env GOOS="$OS" GOARCH="$ARCH" CGO_ENABLED=0 go build -trimpath -tags $TAG --ldflags="-s -w" -o "$DIST/bin/$NAME" "$ROOT"/../cmd/edge-api/main.go
+		env GOOS="$OS" GOARCH="$ARCH" CGO_ENABLED=1 go build -trimpath -tags $TAG --ldflags="-s -w" -o "$DIST/bin/$NAME" "$ROOT"/../cmd/edge-api/main.go
 	fi
 
 	if [ ! -f "${DIST}/bin/${NAME}" ]; then
