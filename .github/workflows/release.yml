@@ -7,6 +7,8 @@ on:
 
 env:
   GO_VERSION: '1.21'
+  # 下载站地址
+  DL_SERVER_URL: 'http://dl.lingcdn.cloud'
 
 jobs:
   build:
@@ -75,25 +77,47 @@ jobs:
           echo "=== Lingadmin ==="
           ls -la Lingadmin-master/dist/ || true
 
-      - name: Upload Lingnode artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: lingnode-linux-${{ matrix.arch }}
-          path: Lingnode-master/dist/*.zip
-          if-no-files-found: warn
+      - name: Rename artifacts for upload
+        id: rename
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          ARCH=${{ matrix.arch }}
 
-      - name: Upload Lingapi artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: lingapi-linux-${{ matrix.arch }}
-          path: Lingapi-master/dist/*.zip
-          if-no-files-found: warn
+          # 创建统一的输出目录
+          mkdir -p dist
 
-      - name: Upload Lingadmin artifact
+          # Lingnode - 重命名为标准格式
+          if ls Lingnode-master/dist/*.zip 1> /dev/null 2>&1; then
+            NODE_FILE=$(ls Lingnode-master/dist/*.zip | head -1)
+            NODE_NEW="dist/ling-node-v${VERSION}-linux-${ARCH}.zip"
+            cp "$NODE_FILE" "$NODE_NEW"
+            echo "node_file=$NODE_NEW" >> $GITHUB_OUTPUT
+          fi
+
+          # Lingapi - 重命名为标准格式
+          if ls Lingapi-master/dist/*.zip 1> /dev/null 2>&1; then
+            API_FILE=$(ls Lingapi-master/dist/*.zip | head -1)
+            API_NEW="dist/ling-api-v${VERSION}-linux-${ARCH}.zip"
+            cp "$API_FILE" "$API_NEW"
+            echo "api_file=$API_NEW" >> $GITHUB_OUTPUT
+          fi
+
+          # Lingadmin - 重命名为标准格式
+          if ls Lingadmin-master/dist/*.zip 1> /dev/null 2>&1; then
+            ADMIN_FILE=$(ls Lingadmin-master/dist/*.zip | head -1)
+            ADMIN_NEW="dist/ling-admin-v${VERSION}-linux-${ARCH}.zip"
+            cp "$ADMIN_FILE" "$ADMIN_NEW"
+            echo "admin_file=$ADMIN_NEW" >> $GITHUB_OUTPUT
+          fi
+
+          echo "=== Renamed files ==="
+          ls -la dist/
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: lingadmin-linux-${{ matrix.arch }}
-          path: Lingadmin-master/dist/*.zip
+          name: release-linux-${{ matrix.arch }}
+          path: dist/*.zip
           if-no-files-found: warn
 
   release:
@@ -103,15 +127,21 @@ jobs:
       contents: write
 
     steps:
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
       - name: List downloaded artifacts
-        run: find artifacts -type f -name "*.zip"
+        run: |
+          echo "=== All artifacts ==="
+          find artifacts -type f -name "*.zip" | sort
 
-      - name: Create Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: artifacts/**/*.zip
@@ -120,3 +150,58 @@ jobs:
           prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-beta') || contains(github.ref, '-alpha') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 上传到下载站
+      - name: Upload to Download Server
+        env:
+          DL_ADMIN_TOKEN: ${{ secrets.DL_ADMIN_TOKEN }}
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+
+          echo "=== Uploading to download server ==="
+
+          # 遍历所有 zip 文件并上传
+          for file in $(find artifacts -type f -name "*.zip" | sort); do
+            filename=$(basename "$file")
+            echo "Processing: $filename"
+
+            # 解析组件类型和架构
+            # 文件名格式: ling-{component}-v{version}-linux-{arch}.zip
+            if [[ "$filename" =~ ling-([a-z]+)-v[0-9.]+-linux-(amd64|arm64)\.zip ]]; then
+              component="${BASH_REMATCH[1]}"
+              arch="${BASH_REMATCH[2]}"
+
+              echo "  Component: $component"
+              echo "  Arch: $arch"
+              echo "  Uploading to: ${{ env.DL_SERVER_URL }}/api/admin/upload.php"
+
+              # 上传文件到下载站
+              response=$(curl -s -w "\n%{http_code}" \
+                -X POST \
+                -H "X-Admin-Token: ${DL_ADMIN_TOKEN}" \
+                -F "file=@${file}" \
+                -F "component=${component}" \
+                -F "os=linux" \
+                -F "arch=${arch}" \
+                -F "overwrite=true" \
+                "${{ env.DL_SERVER_URL }}/api/admin/upload.php")
+
+              http_code=$(echo "$response" | tail -1)
+              body=$(echo "$response" | sed '$d')
+
+              echo "  HTTP Status: $http_code"
+              echo "  Response: $body"
+
+              if [ "$http_code" != "200" ]; then
+                echo "  WARNING: Upload may have failed"
+              else
+                echo "  SUCCESS: File uploaded"
+              fi
+
+              echo ""
+            else
+              echo "  Skipping: filename doesn't match expected pattern"
+            fi
+          done
+
+          echo "=== Upload complete ==="
