@@ -5719,7 +5719,7 @@ Vue.component("http-cache-config-box", {
 			return ((!this.vIsLocation && !this.vIsGroup) || this.cacheConfig.isPrior) && this.cacheConfig.isOn
 		},
 		isPlus: function () {
-			return Tea.Vue.teaIsPlus
+			return false
 		},
 		generatePurgeKey: function () {
 			let r = Math.random().toString() + Math.random().toString()

@@ -20,7 +20,7 @@ func NewLoginSessionDAO() *LoginSessionDAO {
 	return dbs.NewDAO(&LoginSessionDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingLoginSessions",
+			Table:  "edgeLoginSessions",
 			Model:  new(LoginSession),
 			PkName: "id",
 		},

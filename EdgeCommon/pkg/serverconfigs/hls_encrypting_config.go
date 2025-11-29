@@ -1,15 +1,15 @@
-// Copyright 2024 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2024 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package serverconfigs
 
 import "github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 
-// HLSEncryptingConfig HLS加密配置
+// HLSEncryptingConfig HLS鍔犲瘑閰嶇疆
 type HLSEncryptingConfig struct {
-	IsOn bool `yaml:"isOn" json:"isOn"` // 是否启用
+	IsOn bool `yaml:"isOn" json:"isOn"` // 鏄惁鍚敤
 
-	OnlyURLPatterns   []*shared.URLPattern `yaml:"onlyURLPatterns" json:"onlyURLPatterns"`     // 仅限的URL
-	ExceptURLPatterns []*shared.URLPattern `yaml:"exceptURLPatterns" json:"exceptURLPatterns"` // 排除的URL
+	OnlyURLPatterns   []*shared.URLPattern `yaml:"onlyURLPatterns" json:"onlyURLPatterns"`     // 浠呴檺鐨刄RL
+	ExceptURLPatterns []*shared.URLPattern `yaml:"exceptURLPatterns" json:"exceptURLPatterns"` // 鎺掗櫎鐨刄RL
 }
 
 func (this *HLSEncryptingConfig) Init() error {

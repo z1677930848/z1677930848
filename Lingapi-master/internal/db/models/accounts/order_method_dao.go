@@ -17,7 +17,7 @@ func NewOrderMethodDAO() *OrderMethodDAO {
 	return dbs.NewDAO(&OrderMethodDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingOrderMethods",
+			Table:  "edgeOrderMethods",
 			Model:  new(OrderMethod),
 			PkName: "id",
 		},

@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package iplibrary_test
 
@@ -13,7 +13,7 @@ import (
 
 func TestNewFileWriter(t *testing.T) {
 	writer, err := iplibrary.NewFileWriter("./internal-ip-library-test.db", &iplibrary.Meta{
-		Author: "GoEdge",
+		Author: "Lingcdn",
 	}, stringutil.Md5("123456"))
 	if err != nil {
 		t.Fatal(err)

@@ -22,7 +22,7 @@ func NewHTTPHeaderPolicyDAO() *HTTPHeaderPolicyDAO {
 	return dbs.NewDAO(&HTTPHeaderPolicyDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPHeaderPolicies",
+			Table:  "edgeHTTPHeaderPolicies",
 			Model:  new(HTTPHeaderPolicy),
 			PkName: "id",
 		},

@@ -21,7 +21,7 @@ func NewIPLibraryArtifactDAO() *IPLibraryArtifactDAO {
 	return dbs.NewDAO(&IPLibraryArtifactDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingIPLibraryArtifacts",
+			Table:  "edgeIPLibraryArtifacts",
 			Model:  new(IPLibraryArtifact),
 			PkName: "id",
 		},

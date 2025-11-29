@@ -1,4 +1,4 @@
-{$layout}
+﻿{$layout}
 {$template "menu"}
 
 <div class="margin"></div>
@@ -34,7 +34,7 @@
                 <option value="2">未安装</option>
             </select>
         </div>
-        <div class="ui field" v-if="teaIsPlus && levels.length > 0">
+        <div class="ui field" v-if="levels.length > 0">
             <select class="ui dropdown" name="level" v-model="level">
                 <option value="0">[级别]</option>
                 <option v-for="levelInfo in levels" :value="levelInfo.code">{{levelInfo.name}}</option>

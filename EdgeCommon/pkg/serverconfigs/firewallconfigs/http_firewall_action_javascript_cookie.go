@@ -1,13 +1,13 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package firewallconfigs
 
 type HTTPFirewallJavascriptCookieAction struct {
 	IsPrior bool `yaml:"isPrior" json:"isPrior"`
 
-	Life              int32  `yaml:"life" json:"life"`                         // 有效期
-	MaxFails          int    `yaml:"maxFails" json:"maxFails"`                 // 最大失败次数
-	FailBlockTimeout  int    `yaml:"failBlockTimeout" json:"failBlockTimeout"` // 失败拦截时间
+	Life              int32  `yaml:"life" json:"life"`                         // 鏈夋晥鏈?
+	MaxFails          int    `yaml:"maxFails" json:"maxFails"`                 // 鏈€澶уけ璐ユ鏁?
+	FailBlockTimeout  int    `yaml:"failBlockTimeout" json:"failBlockTimeout"` // 澶辫触鎷︽埅鏃堕棿
 	Scope             string `yaml:"scope" json:"scope"`
 	FailBlockScopeAll bool   `yaml:"failBlockScopeAll" json:"failBlockScopeAll"`
 }

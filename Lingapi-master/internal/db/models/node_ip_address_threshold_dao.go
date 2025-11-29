@@ -22,7 +22,7 @@ func NewNodeIPAddressThresholdDAO() *NodeIPAddressThresholdDAO {
 	return dbs.NewDAO(&NodeIPAddressThresholdDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeIPAddressThresholds",
+			Table:  "edgeNodeIPAddressThresholds",
 			Model:  new(NodeIPAddressThreshold),
 			PkName: "id",
 		},

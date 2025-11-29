@@ -12,7 +12,7 @@ func NewADPackagePriceDAO() *ADPackagePriceDAO {
 	return dbs.NewDAO(&ADPackagePriceDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingADPackagePrices",
+			Table:  "edgeADPackagePrices",
 			Model:  new(ADPackagePrice),
 			PkName: "id",
 		},

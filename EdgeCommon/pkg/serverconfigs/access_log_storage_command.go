@@ -1,8 +1,8 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
-// AccessLogCommandStorageConfig 通过命令行存储
+// AccessLogCommandStorageConfig 閫氳繃鍛戒护琛屽瓨鍌?
 type AccessLogCommandStorageConfig struct {
 	Command string   `yaml:"command" json:"command"`
 	Args    []string `yaml:"args" json:"args"`

@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package serverconfigs
 
@@ -9,8 +9,8 @@ import (
 )
 
 type HTTPBaseOptimizationConfig struct {
-	OnlyURLPatterns   []*shared.URLPattern `yaml:"onlyURLPatterns" json:"onlyURLPatterns"`     // 仅限的URL
-	ExceptURLPatterns []*shared.URLPattern `yaml:"exceptURLPatterns" json:"exceptURLPatterns"` // 排除的URL
+	OnlyURLPatterns   []*shared.URLPattern `yaml:"onlyURLPatterns" json:"onlyURLPatterns"`     // 浠呴檺鐨刄RL
+	ExceptURLPatterns []*shared.URLPattern `yaml:"exceptURLPatterns" json:"exceptURLPatterns"` // 鎺掗櫎鐨刄RL
 }
 
 func (this *HTTPBaseOptimizationConfig) Init() error {
@@ -34,7 +34,7 @@ func (this *HTTPBaseOptimizationConfig) Init() error {
 }
 
 func (this *HTTPBaseOptimizationConfig) MatchURL(url string) bool {
-	// 去除问号
+	// 鍘婚櫎闂彿
 	var index = strings.Index(url, "?")
 	if index >= 0 {
 		url = url[:index]

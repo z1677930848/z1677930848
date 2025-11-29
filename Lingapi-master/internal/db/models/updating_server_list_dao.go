@@ -35,7 +35,7 @@ func NewUpdatingServerListDAO() *UpdatingServerListDAO {
 	return dbs.NewDAO(&UpdatingServerListDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUpdatingServerLists",
+			Table:  "edgeUpdatingServerLists",
 			Model:  new(UpdatingServerList),
 			PkName: "id",
 		},

@@ -19,7 +19,7 @@ func NewNSRecordDAO() *NSRecordDAO {
 	return dbs.NewDAO(&NSRecordDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNSRecords",
+			Table:  "edgeNSRecords",
 			Model:  new(NSRecord),
 			PkName: "id",
 		},

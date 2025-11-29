@@ -1,0 +1,80 @@
+{$layout}
+{$template "/echarts"}
+
+{$template "stat_menu"}
+
+<div class="left-right-box-container">
+    {$template "/left_menu"}
+    <div class="right-box">
+    <div class="config-section">
+        <div class="section-title">
+            IP排行
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>IP</th>
+                    <th>访问次数</th>
+                    <th>访问流量</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-if="ipAccessStats.length > 0" v-for="item in ipAccessStats">
+                    <td>{{item.ip}}</td>
+                    <td>{{item.requestCount}}</td>
+                    <td>{{item.sentBodyBytes}}</td>
+                    
+                </tr>
+                <tr v-else><td colspan="3">没有数据</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="config-section">
+    <div class="section-title">
+        路径排行
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>路径</th>
+                <th>访问次数</th>
+                <th>访问流量</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-if="pathAccessStats.length > 0" v-for="item in pathAccessStats">
+                <td>{{item.path}}</td>
+                <td>{{item.requestCount}}</td>
+                <td>{{item.sentBodyBytes}}</td>
+                
+            </tr>
+            <tr v-else><td colspan="3">没有数据</td></tr>
+        </tbody>
+    </table>
+</div>
+<div class="config-section">
+    <div class="section-title">
+        域名排行
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>域名</th>
+                <th>访问次数</th>
+                <th>访问流量</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-if="domainAccessStats.length > 0" v-for="item in domainAccessStats">
+                <td>{{item.domain}}</td>
+                <td>{{item.requestCount}}</td>
+                <td>{{item.sentBodyBytes}}</td>
+                
+            </tr>
+            <tr v-else><td colspan="3">没有数据</td></tr>
+        </tbody>
+    </table>
+</div>
+</div>
+</div>

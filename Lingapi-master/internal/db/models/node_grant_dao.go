@@ -21,7 +21,7 @@ func NewNodeGrantDAO() *NodeGrantDAO {
 	return dbs.NewDAO(&NodeGrantDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeGrants",
+			Table:  "edgeNodeGrants",
 			Model:  new(NodeGrant),
 			PkName: "id",
 		},

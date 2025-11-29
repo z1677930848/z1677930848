@@ -14,7 +14,7 @@ require (
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/iwind/TeaGo v0.0.0-20240508072741-7647e70b7070
 	github.com/iwind/gosock v0.0.0-20220505115348-f88412125a62
-	github.com/miekg/dns v1.1.61
+	github.com/miekg/dns v1.1.59
 	github.com/mozillazg/go-pinyin v0.18.0
 	github.com/pkg/sftp v1.12.0
 	github.com/shirou/gopsutil/v3 v3.24.2
@@ -45,10 +45,10 @@ require (
 	github.com/tklauser/go-sysconf v0.3.13 // indirect
 	github.com/tklauser/numcpus v0.7.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
-	golang.org/x/mod v0.18.0 // indirect
+	golang.org/x/mod v0.17.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
-	golang.org/x/tools v0.22.0 // indirect
+	golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240415180920-8c6c420018be // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect

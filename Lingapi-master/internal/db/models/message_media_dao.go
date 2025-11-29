@@ -17,7 +17,7 @@ func NewMessageMediaDAO() *MessageMediaDAO {
 	return dbs.NewDAO(&MessageMediaDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingMessageMedias",
+			Table:  "edgeMessageMedias",
 			Model:  new(MessageMedia),
 			PkName: "id",
 		},

@@ -1,0 +1,82 @@
+{$layout}
+{$template "header"}
+<style>
+    .plan-card {
+        transition: all 0.3s ease;
+    }
+    .plan-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+    }
+    .plan-status {
+        font-size: 0.9em;
+    }
+</style>
+{$end}
+
+<div class="ui basic segment">
+    <div class="ui grid">
+        <div class="twelve wide column">
+            <h2 class="ui header">
+                <i class="boxes icon"></i>
+                <div class="content">
+                    套餐信息
+                    <div class="sub header">查看当前已分配的套餐与到期时间</div>
+                </div>
+            </h2>
+        </div>
+        <div class="four wide right aligned column">
+            <a href="/user/profile" class="ui basic button">
+                <i class="user icon"></i>
+                返回个人设置
+            </a>
+        </div>
+    </div>
+</div>
+
+{$if eq (len .plans) 0}
+<div class="ui placeholder segment" style="padding: 3em;">
+    <div class="ui icon header">
+        <i class="inbox icon"></i>
+        暂无套餐
+        <div class="sub header">请联系管理员为你分配套餐或开通自助购买</div>
+    </div>
+</div>
+{$else}
+<div class="ui three stackable cards">
+    {$range $plan := .plans}
+    <div class="ui card plan-card">
+        <div class="content">
+            <div class="header">
+                {$if $plan.name}{$plan.name}{$else}未命名套餐{$end}
+            </div>
+            {$if $plan.customName}
+            <div class="meta" style="margin-top: 0.3em;">备注：{$plan.customName}</div>
+            {$end}
+            <div class="description" style="margin-top: 1em;">
+                <p><strong>到期时间：</strong>{$if $plan.dayTo}{$plan.dayTo}{$else}未设置{$end}</p>
+                <p class="plan-status">
+                    {$if $plan.isExpired}
+                    <span class="ui red label"><i class="clock outline icon"></i> 已到期</span>
+                    {$else}
+                    <span class="ui green label"><i class="check icon"></i> 正常</span>
+                    {$end}
+                    {$if not $plan.isOn}
+                    <span class="ui orange label" style="margin-left: 0.3em;">未启用</span>
+                    {$end}
+                </p>
+            </div>
+        </div>
+        <div class="extra content">
+            <div class="ui two buttons">
+                <a class="ui basic button disabled">续费（暂未开放）</a>
+                <a class="ui primary button disabled">升级（暂未开放）</a>
+            </div>
+        </div>
+    </div>
+    {$end}
+</div>
+{$end}
+
+{$template "footer"}
+{$end}

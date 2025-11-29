@@ -12,7 +12,7 @@ func NewClientAgentDAO() *ClientAgentDAO {
 	return dbs.NewDAO(&ClientAgentDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingClientAgents",
+			Table:  "edgeClientAgents",
 			Model:  new(ClientAgent),
 			PkName: "id",
 		},

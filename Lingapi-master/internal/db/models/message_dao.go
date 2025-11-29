@@ -66,7 +66,7 @@ func NewMessageDAO() *MessageDAO {
 	return dbs.NewDAO(&MessageDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingMessages",
+			Table:  "edgeMessages",
 			Model:  new(Message),
 			PkName: "id",
 		},

@@ -12,7 +12,7 @@ func NewUserVerifyCodeDAO() *UserVerifyCodeDAO {
 	return dbs.NewDAO(&UserVerifyCodeDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserVerifyCodes",
+			Table:  "edgeUserVerifyCodes",
 			Model:  new(UserVerifyCode),
 			PkName: "id",
 		},

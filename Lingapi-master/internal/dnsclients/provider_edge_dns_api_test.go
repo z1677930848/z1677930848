@@ -11,7 +11,7 @@ import (
 	"github.com/iwind/TeaGo/maps"
 )
 
-const skDNSAPIDomainName = "hello2.com"
+const edgeDNSAPIDomainName = "hello2.com"
 
 func TestEdgeDNSAPIProvider_GetDomains(t *testing.T) {
 	provider, err := testEdgeDNSAPIProvider()
@@ -32,7 +32,7 @@ func TestEdgeDNSAPIProvider_GetRecords(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	records, err := provider.GetRecords(skDNSAPIDomainName)
+	records, err := provider.GetRecords(edgeDNSAPIDomainName)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -45,7 +45,7 @@ func TestEdgeDNSAPIProvider_GetRoutes(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	routes, err := provider.GetRoutes(skDNSAPIDomainName)
+	routes, err := provider.GetRoutes(edgeDNSAPIDomainName)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -57,7 +57,7 @@ func TestEdgeDNSAPIProvider_QueryRecord(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	record, err := provider.QueryRecord(skDNSAPIDomainName, "cdn", dnstypes.RecordTypeA)
+	record, err := provider.QueryRecord(edgeDNSAPIDomainName, "cdn", dnstypes.RecordTypeA)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -69,7 +69,7 @@ func TestEdgeDNSAPIProvider_QueryRecords(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	record, err := provider.QueryRecords(skDNSAPIDomainName, "cdn", dnstypes.RecordTypeA)
+	record, err := provider.QueryRecords(edgeDNSAPIDomainName, "cdn", dnstypes.RecordTypeA)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -81,7 +81,7 @@ func TestEdgeDNSAPIProvider_AddRecord(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = provider.AddRecord(skDNSAPIDomainName, &dnstypes.Record{
+	err = provider.AddRecord(edgeDNSAPIDomainName, &dnstypes.Record{
 		Id:    "",
 		Name:  "example",
 		Type:  dnstypes.RecordTypeA,
@@ -100,7 +100,7 @@ func TestEdgeDNSAPIProvider_UpdateRecord(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	record, err := provider.QueryRecord(skDNSAPIDomainName, "cdn", dnstypes.RecordTypeA)
+	record, err := provider.QueryRecord(edgeDNSAPIDomainName, "cdn", dnstypes.RecordTypeA)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -110,7 +110,7 @@ func TestEdgeDNSAPIProvider_UpdateRecord(t *testing.T) {
 	}
 
 	//record.Id = ""
-	err = provider.UpdateRecord(skDNSAPIDomainName, record, &dnstypes.Record{
+	err = provider.UpdateRecord(edgeDNSAPIDomainName, record, &dnstypes.Record{
 		Id:    "",
 		Name:  record.Name,
 		Type:  record.Type,
@@ -130,7 +130,7 @@ func TestEdgeDNSAPIProvider_DeleteRecord(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	record, err := provider.QueryRecord(skDNSAPIDomainName, "example", "A")
+	record, err := provider.QueryRecord(edgeDNSAPIDomainName, "example", "A")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -139,7 +139,7 @@ func TestEdgeDNSAPIProvider_DeleteRecord(t *testing.T) {
 		return
 	}
 
-	err = provider.DeleteRecord(skDNSAPIDomainName, &dnstypes.Record{
+	err = provider.DeleteRecord(edgeDNSAPIDomainName, &dnstypes.Record{
 		Id:    record.Id,
 		Name:  "example",
 		Type:  "A",

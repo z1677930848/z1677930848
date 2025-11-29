@@ -22,7 +22,7 @@ func NewLatestItemDAO() *LatestItemDAO {
 	return dbs.NewDAO(&LatestItemDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingLatestItems",
+			Table:  "edgeLatestItems",
 			Model:  new(LatestItem),
 			PkName: "id",
 		},

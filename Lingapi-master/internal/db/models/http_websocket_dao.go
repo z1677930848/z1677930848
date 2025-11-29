@@ -23,7 +23,7 @@ func NewHTTPWebsocketDAO() *HTTPWebsocketDAO {
 	return dbs.NewDAO(&HTTPWebsocketDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPWebsockets",
+			Table:  "edgeHTTPWebsockets",
 			Model:  new(HTTPWebsocket),
 			PkName: "id",
 		},

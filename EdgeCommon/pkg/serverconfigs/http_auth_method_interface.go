@@ -1,23 +1,23 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
 import "net/http"
 
-// HTTPAuthMethodInterface HTTP认证接口定义
+// HTTPAuthMethodInterface HTTP璁よ瘉鎺ュ彛瀹氫箟
 type HTTPAuthMethodInterface interface {
-	// Init 初始化
+	// Init 鍒濆鍖?
 	Init(params map[string]any) error
 
-	// MatchRequest 是否匹配请求
+	// MatchRequest 鏄惁鍖归厤璇锋眰
 	MatchRequest(req *http.Request) bool
 
-	// Filter 过滤
+	// Filter 杩囨护
 	Filter(req *http.Request, subReqFunc func(subReq *http.Request) (status int, err error), formatter func(string) string) (ok bool, newURI string, uriChanged bool, err error)
 
-	// SetExts 设置扩展名
+	// SetExts 璁剧疆鎵╁睍鍚?
 	SetExts(exts []string)
 
-	// SetDomains 设置域名
+	// SetDomains 璁剧疆鍩熷悕
 	SetDomains(domains []string)
 }

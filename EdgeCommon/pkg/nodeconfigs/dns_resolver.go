@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package nodeconfigs
 
@@ -17,7 +17,7 @@ func DefaultDNSResolverConfig() *DNSResolverConfig {
 }
 
 type DNSResolverConfig struct {
-	Type string `yaml:"type" json:"type"` // 使用Go语言内置的DNS解析器
+	Type string `yaml:"type" json:"type"` // 浣跨敤Go璇█鍐呯疆鐨凞NS瑙ｆ瀽鍣?
 }
 
 func (this *DNSResolverConfig) Init() error {

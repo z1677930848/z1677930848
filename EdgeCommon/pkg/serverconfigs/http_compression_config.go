@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -16,15 +16,15 @@ type HTTPCompressionRef struct {
 	IsOn bool  `yaml:"isOn" json:"isOn"`
 }
 
-// HTTPCompressionConfig 内容压缩配置
+// HTTPCompressionConfig 鍐呭鍘嬬缉閰嶇疆
 type HTTPCompressionConfig struct {
 	IsPrior bool `yaml:"isPrior" json:"isPrior"`
 	IsOn    bool `yaml:"isOn" json:"isOn"`
 
-	UseDefaultTypes bool                  `yaml:"useDefaultTypes" json:"useDefaultTypes"` // 是否使用默认的类型
-	Types           []HTTPCompressionType `yaml:"types" json:"types"`                     // 支持的类型，如果为空表示默认顺序
-	Level           int8                  `yaml:"level" json:"level"`                     // 级别：1-12
-	DecompressData  bool                  `yaml:"decompressData" json:"decompressData"`   // 是否解压已压缩内容
+	UseDefaultTypes bool                  `yaml:"useDefaultTypes" json:"useDefaultTypes"` // 鏄惁浣跨敤榛樿鐨勭被鍨?
+	Types           []HTTPCompressionType `yaml:"types" json:"types"`                     // 鏀寔鐨勭被鍨嬶紝濡傛灉涓虹┖琛ㄧず榛樿椤哄簭
+	Level           int8                  `yaml:"level" json:"level"`                     // 绾у埆锛?-12
+	DecompressData  bool                  `yaml:"decompressData" json:"decompressData"`   // 鏄惁瑙ｅ帇宸插帇缂╁唴瀹?
 
 	GzipRef    *HTTPCompressionRef `yaml:"gzipRef" json:"gzipRef"`
 	DeflateRef *HTTPCompressionRef `yaml:"deflateRef" json:"deflateRef"`
@@ -34,16 +34,16 @@ type HTTPCompressionConfig struct {
 	Deflate *HTTPDeflateCompressionConfig `yaml:"deflate" json:"deflate"`
 	Brotli  *HTTPBrotliCompressionConfig  `yaml:"brotli" json:"brotli"`
 
-	MinLength            *shared.SizeCapacity           `yaml:"minLength" json:"minLength"`                       // 最小压缩对象比如4m, 24k
-	MaxLength            *shared.SizeCapacity           `yaml:"maxLength" json:"maxLength"`                       // 最大压缩对象
-	MimeTypes            []string                       `yaml:"mimeTypes" json:"mimeTypes"`                       // 支持的MimeType，支持image/*这样的通配符使用
-	Extensions           []string                       `yaml:"extensions" json:"extensions"`                     // 文件扩展名，包含点符号，不区分大小写
-	ExceptExtensions     []string                       `yaml:"exceptExtensions" json:"exceptExtensions"`         // 例外扩展名
-	Conds                *shared.HTTPRequestCondsConfig `yaml:"conds" json:"conds"`                               // 匹配条件
-	EnablePartialContent bool                           `yaml:"enablePartialContent" json:"enablePartialContent"` // 支持PartialContent压缩
+	MinLength            *shared.SizeCapacity           `yaml:"minLength" json:"minLength"`                       // 鏈€灏忓帇缂╁璞℃瘮濡?m, 24k
+	MaxLength            *shared.SizeCapacity           `yaml:"maxLength" json:"maxLength"`                       // 鏈€澶у帇缂╁璞?
+	MimeTypes            []string                       `yaml:"mimeTypes" json:"mimeTypes"`                       // 鏀寔鐨凪imeType锛屾敮鎸乮mage/*杩欐牱鐨勯€氶厤绗︿娇鐢?
+	Extensions           []string                       `yaml:"extensions" json:"extensions"`                     // 鏂囦欢鎵╁睍鍚嶏紝鍖呭惈鐐圭鍙凤紝涓嶅尯鍒嗗ぇ灏忓啓
+	ExceptExtensions     []string                       `yaml:"exceptExtensions" json:"exceptExtensions"`         // 渚嬪鎵╁睍鍚?
+	Conds                *shared.HTTPRequestCondsConfig `yaml:"conds" json:"conds"`                               // 鍖归厤鏉′欢
+	EnablePartialContent bool                           `yaml:"enablePartialContent" json:"enablePartialContent"` // 鏀寔PartialContent鍘嬬缉
 
-	OnlyURLPatterns   []*shared.URLPattern `yaml:"onlyURLPatterns" json:"onlyURLPatterns"`     // 仅限的URL
-	ExceptURLPatterns []*shared.URLPattern `yaml:"exceptURLPatterns" json:"exceptURLPatterns"` // 排除的URL
+	OnlyURLPatterns   []*shared.URLPattern `yaml:"onlyURLPatterns" json:"onlyURLPatterns"`     // 浠呴檺鐨刄RL
+	ExceptURLPatterns []*shared.URLPattern `yaml:"exceptURLPatterns" json:"exceptURLPatterns"` // 鎺掗櫎鐨刄RL
 
 	minLength        int64
 	maxLength        int64
@@ -59,7 +59,7 @@ type HTTPCompressionConfig struct {
 	supportZSTD    bool
 }
 
-// Init 初始化
+// Init 鍒濆鍖?
 func (this *HTTPCompressionConfig) Init() error {
 	if this.MinLength != nil {
 		this.minLength = this.MinLength.Bytes()
@@ -173,17 +173,17 @@ func (this *HTTPCompressionConfig) Init() error {
 	return nil
 }
 
-// MinBytes 可压缩最小尺寸
+// MinBytes 鍙帇缂╂渶灏忓昂瀵?
 func (this *HTTPCompressionConfig) MinBytes() int64 {
 	return this.minLength
 }
 
-// MaxBytes 可压缩最大尺寸
+// MaxBytes 鍙帇缂╂渶澶у昂瀵?
 func (this *HTTPCompressionConfig) MaxBytes() int64 {
 	return this.maxLength
 }
 
-// MatchResponse 是否匹配响应
+// MatchResponse 鏄惁鍖归厤鍝嶅簲
 func (this *HTTPCompressionConfig) MatchResponse(mimeType string, contentLength int64, requestExt string, formatter shared.Formatter) bool {
 	if this.Conds != nil && formatter != nil {
 		if !this.Conds.MatchRequest(formatter) {
@@ -241,7 +241,7 @@ func (this *HTTPCompressionConfig) MatchResponse(mimeType string, contentLength 
 		}
 	}
 
-	// 如果没有指定条件，则所有的都能压缩
+	// 濡傛灉娌℃湁鎸囧畾鏉′欢锛屽垯鎵€鏈夌殑閮借兘鍘嬬缉
 	if len(this.extensions) == 0 && len(this.mimeTypeRules) == 0 {
 		return true
 	}
@@ -249,7 +249,7 @@ func (this *HTTPCompressionConfig) MatchResponse(mimeType string, contentLength 
 	return false
 }
 
-// MatchAcceptEncoding 根据Accept-Encoding选择优先的压缩方式
+// MatchAcceptEncoding 鏍规嵁Accept-Encoding閫夋嫨浼樺厛鐨勫帇缂╂柟寮?
 func (this *HTTPCompressionConfig) MatchAcceptEncoding(acceptEncodings string) (compressionType HTTPCompressionType, compressionEncoding string, ok bool) {
 	if len(acceptEncodings) == 0 {
 		return
@@ -264,7 +264,7 @@ func (this *HTTPCompressionConfig) MatchAcceptEncoding(acceptEncodings string) (
 	for _, piece := range pieces {
 		var qualityIndex = strings.Index(piece, ";")
 		if qualityIndex >= 0 {
-			// TODO 实现优先级
+			// TODO 瀹炵幇浼樺厛绾?
 			piece = piece[:qualityIndex]
 		}
 

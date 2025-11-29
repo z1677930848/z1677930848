@@ -22,7 +22,7 @@ func NewHTTPDeflatePolicyDAO() *HTTPDeflatePolicyDAO {
 	return dbs.NewDAO(&HTTPDeflatePolicyDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPDeflatePolicies",
+			Table:  "edgeHTTPDeflatePolicies",
 			Model:  new(HTTPDeflatePolicy),
 			PkName: "id",
 		},

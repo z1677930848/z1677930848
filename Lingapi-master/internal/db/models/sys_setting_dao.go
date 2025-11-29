@@ -24,7 +24,7 @@ func NewSysSettingDAO() *SysSettingDAO {
 	return dbs.NewDAO(&SysSettingDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingSysSettings",
+			Table:  "edgeSysSettings",
 			Model:  new(SysSetting),
 			PkName: "id",
 		},

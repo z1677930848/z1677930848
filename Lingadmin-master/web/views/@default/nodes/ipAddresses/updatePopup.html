@@ -52,7 +52,7 @@
                     </select>
                 </td>
             </tr>
-            <tr v-if="teaIsPlus && supportThresholds">
+            <tr v-if="supportThresholds">
                 <td>阈值设置</td>
                 <td>
                     <node-ip-address-thresholds-box :v-thresholds="address.thresholds"></node-ip-address-thresholds-box>

@@ -1,36 +1,36 @@
-{$layout "layout_popup"}
+﻿{$layout "layout_popup"}
 
-<h3>添加DNS服务商账号</h3>
+<h3>娣诲姞DNS鏈嶅姟鍟嗚处鍙?/h3>
 <form class="ui form" data-tea-action="$" data-tea-success="success">
 	<csrf-token></csrf-token>
 	<table class="ui table definition selectable">
 		<tr>
-			<td class="title">账号说明 *</td>
+			<td class="title">璐﹀彿璇存槑 *</td>
 			<td>
 				<input type="text" name="name" maxlength="50" ref="focus"/>
-				<p class="comment">用来方便区分不同的账号。</p>
+				<p class="comment">鐢ㄦ潵鏂逛究鍖哄垎涓嶅悓鐨勮处鍙枫€?/p>
 			</td>
 		</tr>
 		<tr>
-			<td>服务商厂家 *</td>
+			<td>鏈嶅姟鍟嗗巶瀹?*</td>
 			<td>
 				<select class="ui dropdown auto-width" name="type" v-model="type" @change="changeType">
 					<option v-for="type in types" :value="type.code">{{type.name}}</option>
 				</select>
-                <p class="comment" v-if="typeDescription.length > 0">{{typeDescription}} 系统会保留原有域名下的域名解析，请放心使用。<span v-if="!teaIsPlus">购买商业版可获得更多厂商支持。</span></p>
+                <p class="comment" v-if="typeDescription.length > 0">{{typeDescription}} 系统会保留原有域名下的域名解析，请放心使用。</p>
 			</td>
 		</tr>
 		<tr v-show="type.length > 0">
-			<td colspan="2">API参数</td>
+			<td colspan="2">API鍙傛暟</td>
 		</tr>
 
 		<!-- DNSPod -->
 		<tbody v-if="type == 'dnspod'">
             <tr>
-                <td>密钥类型 *</td>
+                <td>瀵嗛挜绫诲瀷 *</td>
                 <td>
                     <select class="ui dropdown auto-width" name="paramDNSPodAPIType" v-model="paramDNSPodAPIType">
-                        <option value="tencentDNS">腾讯云API密钥</option>
+                        <option value="tencentDNS">鑵捐浜慉PI瀵嗛挜</option>
                         <option value="dnsPodToken">DNSPod Token</option>
                     </select>
                 </td>
@@ -39,36 +39,36 @@
                 <td>SecretId *</td>
                 <td>
                     <input type="text" name="paramDNSPodAccessKeyId" maxlength="100"/>
-                    <p class="comment">在DNSPod控制台“账号中心--API密钥”中获取。</p>
+                    <p class="comment">鍦―NSPod鎺у埗鍙扳€滆处鍙蜂腑蹇?-API瀵嗛挜鈥濅腑鑾峰彇銆?/p>
                 </td>
             </tr>
             <tr v-show="paramDNSPodAPIType == 'tencentDNS'">
                 <td>SecretKey *</td>
                 <td>
                     <input type="text" name="paramDNSPodAccessKeySecret" maxlength="100"/>
-                    <p class="comment">在DNSPod控制台“账号中心--API密钥”中获取。<mask-warning></mask-warning></p>
+                    <p class="comment">鍦―NSPod鎺у埗鍙扳€滆处鍙蜂腑蹇?-API瀵嗛挜鈥濅腑鑾峰彇銆?mask-warning></mask-warning></p>
                 </td>
             </tr>
 			<tr v-show="paramDNSPodAPIType == 'dnsPodToken'">
-				<td>密钥ID *</td>
+				<td>瀵嗛挜ID *</td>
 				<td>
 					<input type="text" name="paramDNSPodId" maxlength="100" spellcheck="false"/>
-                    <p class="comment">在DNSPod控制台“账号中心--API密钥--DNSPod Token”中获取。</p>
+                    <p class="comment">鍦―NSPod鎺у埗鍙扳€滆处鍙蜂腑蹇?-API瀵嗛挜--DNSPod Token鈥濅腑鑾峰彇銆?/p>
 				</td>
 			</tr>
 			<tr v-show="paramDNSPodAPIType == 'dnsPodToken'">
-				<td>密钥Token *</td>
+				<td>瀵嗛挜Token *</td>
 				<td>
 					<input type="text" name="paramDNSPodToken" maxlength="100" spellcheck="false"/>
-                    <p class="comment">在DNSPod控制台“账号中心--API密钥--DNSPod Token”中获取。<mask-warning></mask-warning></p>
+                    <p class="comment">鍦―NSPod鎺у埗鍙扳€滆处鍙蜂腑蹇?-API瀵嗛挜--DNSPod Token鈥濅腑鑾峰彇銆?mask-warning></mask-warning></p>
 				</td>
 			</tr>
             <tr v-if="paramDNSPodAPIType == 'dnsPodToken'">
-                <td>区域</td>
+                <td>鍖哄煙</td>
                 <td>
                     <select class="ui dropdown auto-width" name="paramDNSPodRegion">
-                        <option value="">中国站</option>
-                        <option value="international">国际站</option>
+                        <option value="">涓浗绔?/option>
+                        <option value="international">鍥介檯绔?/option>
                     </select>
                 </td>
             </tr>
@@ -80,46 +80,46 @@
 				<td>AccessKeyId *</td>
 				<td>
 					<input type="text" name="paramAliDNSAccessKeyId" maxlength="100" spellcheck="false"/>
-					<p class="comment">登录阿里云控制台 -- 在"访问控制"中创建和获取。</p>
+					<p class="comment">鐧诲綍闃块噷浜戞帶鍒跺彴 -- 鍦?璁块棶鎺у埗"涓垱寤哄拰鑾峰彇銆?/p>
 				</td>
 			</tr>
 			<tr>
 				<td>AccessKeySecret *</td>
 				<td>
 					<input type="text" name="paramAliDNSAccessKeySecret" maxlength="100" spellcheck="false"/>
-					<p class="comment">登录阿里云控制台 -- 在"访问控制"中创建和获取。<mask-warning></mask-warning></p>
+					<p class="comment">鐧诲綍闃块噷浜戞帶鍒跺彴 -- 鍦?璁块棶鎺у埗"涓垱寤哄拰鑾峰彇銆?mask-warning></mask-warning></p>
 				</td>
 			</tr>
             <tr>
-                <td>区域ID<optional-label></optional-label></td>
+                <td>鍖哄煙ID<optional-label></optional-label></td>
                 <td>
                     <input type="text" name="paramAliDNSRegionId" maxlength="100" spellcheck="false"/>
-                    <p class="comment">阿里云产品所在区域代号，通常不需要填写。</p>
+                    <p class="comment">闃块噷浜戜骇鍝佹墍鍦ㄥ尯鍩熶唬鍙凤紝閫氬父涓嶉渶瑕佸～鍐欍€?/p>
                 </td>
             </tr>
 		</tbody>
 
-        <!-- 华为云 -->
+        <!-- 鍗庝负浜?-->
         <tbody v-if="type == 'huaweiDNS'">
             <tr>
                 <td>AccessKeyId *</td>
                 <td>
                     <input type="text" name="paramHuaweiAccessKeyId" maxlength="100" spellcheck="false"/>
-                    <p class="comment">登录华为云控制台 -- 在"我的凭证 -- 访问密钥"中创建和获取。</p>
+                    <p class="comment">鐧诲綍鍗庝负浜戞帶鍒跺彴 -- 鍦?鎴戠殑鍑瘉 -- 璁块棶瀵嗛挜"涓垱寤哄拰鑾峰彇銆?/p>
                 </td>
             </tr>
             <tr>
                 <td>AccessKeySecret *</td>
                 <td>
                     <input type="text" name="paramHuaweiAccessKeySecret" maxlength="100" spellcheck="false"/>
-                    <p class="comment">登录华为云控制台 -- 在"我的凭证 -- 访问密钥"中创建和获取。<mask-warning></mask-warning></p>
+                    <p class="comment">鐧诲綍鍗庝负浜戞帶鍒跺彴 -- 鍦?鎴戠殑鍑瘉 -- 璁块棶瀵嗛挜"涓垱寤哄拰鑾峰彇銆?mask-warning></mask-warning></p>
                 </td>
             </tr>
             <tr>
-                <td>终端节点</td>
+                <td>缁堢鑺傜偣</td>
                 <td>
                     <input type="text" name="paramHuaweiEndpoint" maxlength="100" spellcheck="false"/>
-                    <p class="comment">选填项。可以填写终端节点（Endpoint）区域代号或者域名，参考 <a href="https://developer.huaweicloud.com/endpoint?DNS" target="_blank">https://developer.huaweicloud.com/endpoint?DNS</a>（如果此链接失效，请到华为云开发者中心自行查找）。</p>
+                    <p class="comment">閫夊～椤广€傚彲浠ュ～鍐欑粓绔妭鐐癸紙Endpoint锛夊尯鍩熶唬鍙锋垨鑰呭煙鍚嶏紝鍙傝€?<a href="https://developer.huaweicloud.com/endpoint?DNS" target="_blank">https://developer.huaweicloud.com/endpoint?DNS</a>锛堝鏋滄閾炬帴澶辨晥锛岃鍒板崕涓轰簯寮€鍙戣€呬腑蹇冭嚜琛屾煡鎵撅級銆?/p>
                 </td>
             </tr>
         </tbody>
@@ -127,17 +127,17 @@
         <!-- CloudFlare -->
         <tbody v-if="type == 'cloudFlare'">
             <tr>
-                <td>API密钥 *</td>
+                <td>API瀵嗛挜 *</td>
                 <td>
                     <input type="text" name="paramCloudFlareAPIKey" maxlength="100" spellcheck="false"/>
-                    <p class="comment">在个人资料中的"API令牌"--"API密钥"--"Global API Key"中获取。<mask-warning></mask-warning></p>
+                    <p class="comment">鍦ㄤ釜浜鸿祫鏂欎腑鐨?API浠ょ墝"--"API瀵嗛挜"--"Global API Key"涓幏鍙栥€?mask-warning></mask-warning></p>
                 </td>
             </tr>
             <tr>
-                <td>账号邮箱 *</td>
+                <td>璐﹀彿閭 *</td>
                 <td>
                     <input type="text" name="paramCloudFlareEmail" maxlength="100" spellcheck="false"/>
-                    <p class="comment">登录账号使用的邮箱。</p>
+                    <p class="comment">鐧诲綍璐﹀彿浣跨敤鐨勯偖绠便€?/p>
                 </td>
             </tr>
         </tbody>
@@ -148,7 +148,7 @@
                 <td>Key *</td>
                 <td>
                     <input type="text" name="paramGoDaddyKey" maxlength="100" spellcheck="false"/>
-                    <p class="comment">可以在GoDaddy<a href="https://developer.godaddy.com/keys" target="_blank">开发者中心</a>创建，创建时Environment选择Production。</p>
+                    <p class="comment">鍙互鍦℅oDaddy<a href="https://developer.godaddy.com/keys" target="_blank">寮€鍙戣€呬腑蹇?/a>鍒涘缓锛屽垱寤烘椂Environment閫夋嫨Production銆?/p>
                 </td>
             </tr>
             <tr>
@@ -163,24 +163,24 @@
         <!-- ClouDNS -->
         <tbody v-if="type == 'cloudns'">
             <tr>
-                <td>用户认证ID<em>（auth-id）</em></td>
+                <td>鐢ㄦ埛璁よ瘉ID<em>锛坅uth-id锛?/em></td>
                 <td>
                     <input type="text" name="paramClouDNSAuthId" maxlength="20" spellcheck="false"/>
-                    <p class="comment">和子用户认证ID二选一。可以在ClouDNS<a href="https://www.cloudns.net/api-settings/" target="_blank">API设置页面</a>添加。</p>
+                    <p class="comment">鍜屽瓙鐢ㄦ埛璁よ瘉ID浜岄€変竴銆傚彲浠ュ湪ClouDNS<a href="https://www.cloudns.net/api-settings/" target="_blank">API璁剧疆椤甸潰</a>娣诲姞銆?/p>
                 </td>
             </tr>
             <tr>
-                <td>子用户认证ID<em>（sub-auth-id）</em></td>
+                <td>瀛愮敤鎴疯璇両D<em>锛坰ub-auth-id锛?/em></td>
                 <td>
                     <input type="text" name="paramClouDNSSubAuthId" maxlength="20" spellcheck="false"/>
-                    <p class="comment">和用户认证ID二选一。可以在ClouDNS<a href="https://www.cloudns.net/api-settings/" target="_blank">API设置页面</a>添加。</p>
+                    <p class="comment">鍜岀敤鎴疯璇両D浜岄€変竴銆傚彲浠ュ湪ClouDNS<a href="https://www.cloudns.net/api-settings/" target="_blank">API璁剧疆椤甸潰</a>娣诲姞銆?/p>
                 </td>
             </tr>
             <tr>
-                <td>认证密码 *<em>（auth-password）</em></td>
+                <td>璁よ瘉瀵嗙爜 *<em>锛坅uth-password锛?/em></td>
                 <td>
                     <input type="password" name="paramClouDNSAuthPassword" maxlength="100" spellcheck="false"/>
-                    <p class="comment">用户或者子用户的认证密码。<mask-warning></mask-warning></p>
+                    <p class="comment">鐢ㄦ埛鎴栬€呭瓙鐢ㄦ埛鐨勮璇佸瘑鐮併€?mask-warning></mask-warning></p>
                 </td>
             </tr>
         </tbody>
@@ -191,14 +191,14 @@
                 <td>API Key *</td>
                 <td>
                     <input type="text" name="paramDNSComKey" maxlength="100" spellcheck="false"/>
-                    <p class="comment">在DNS.COM控制台账号中心--API设置中创建和查看。</p>
+                    <p class="comment">鍦―NS.COM鎺у埗鍙拌处鍙蜂腑蹇?-API璁剧疆涓垱寤哄拰鏌ョ湅銆?/p>
                 </td>
             </tr>
             <tr>
                 <td>API Secret *</td>
                 <td>
                     <input type="text" name="paramDNSComSecret" maxlength="100" spellcheck="false"/>
-                    <p class="comment">在DNS.COM控制台账号中心--API设置中创建和查看。<mask-warning></mask-warning></p>
+                    <p class="comment">鍦―NS.COM鎺у埗鍙拌处鍙蜂腑蹇?-API璁剧疆涓垱寤哄拰鏌ョ湅銆?mask-warning></mask-warning></p>
                 </td>
             </tr>
         </tbody>
@@ -209,14 +209,14 @@
                 <td>API ID *</td>
                 <td>
                     <input type="text" name="paramDNSLaAPIId" maxlength="100"/>
-                    <p class="comment">在DNS.LA控制台--账户信息中查看。</p>
+                    <p class="comment">鍦―NS.LA鎺у埗鍙?-璐︽埛淇℃伅涓煡鐪嬨€?/p>
                 </td>
             </tr>
             <tr>
-                <td>API密钥 *</td>
+                <td>API瀵嗛挜 *</td>
                 <td>
                     <input type="text" name="paramDNSLaSecret" maxlength="100" spellcheck="false"/>
-                    <p class="comment">在DNS.LA控制台--账户信息中查看。<mask-warning></mask-warning></p>
+                    <p class="comment">鍦―NS.LA鎺у埗鍙?-璐︽埛淇℃伅涓煡鐪嬨€?mask-warning></mask-warning></p>
                 </td>
             </tr>
         </tbody>
@@ -227,7 +227,7 @@
                 <td>Access Key ID *</td>
                 <td>
                     <input type="text" name="paramVolcEngineAccessKeyId" maxlength="100" spellcheck="false"/>
-                    <p class="comment">在火山引擎“访问控制--API访问密钥”中获取。</p>
+                    <p class="comment">鍦ㄧ伀灞卞紩鎿庘€滆闂帶鍒?-API璁块棶瀵嗛挜鈥濅腑鑾峰彇銆?/p>
                 </td>
             </tr>
             <tr>
@@ -255,10 +255,10 @@
                 </td>
             </tr>
             <tr>
-                <td>API区域</td>
+                <td>API鍖哄煙</td>
                 <td>
                     <input type="text" name="paramAmazonRoute53Region" maxlength="100"  spellcheck="false"/>
-                    <p class="comment">通常不需要填写。</p>
+                    <p class="comment">閫氬父涓嶉渶瑕佸～鍐欍€?/p>
                 </td>
             </tr>
         </tbody>
@@ -266,36 +266,36 @@
         <!-- Microsoft Azure DNS -->
         <tbody v-if="type == 'azureDNS'">
             <tr>
-                <td>订阅ID <br/><em>(Subscription ID)</em> *</td>
+                <td>璁㈤槄ID <br/><em>(Subscription ID)</em> *</td>
                 <td>
                     <input type="text" name="paramAzureDNSSubscriptionId" maxlength="100" spellcheck="false"/>
-                    <p class="comment">可以在订阅（Subscriptions）服务中查看。</p>
+                    <p class="comment">鍙互鍦ㄨ闃咃紙Subscriptions锛夋湇鍔′腑鏌ョ湅銆?/p>
                 </td>
             </tr>
             <tr>
-                <td>目录(租户) ID <br/><em>(Directory Tenant ID)</em> *</td>
+                <td>鐩綍(绉熸埛) ID <br/><em>(Directory Tenant ID)</em> *</td>
                 <td>
                     <input type="text" name="paramAzureDNSTenantId" maxlength="100" spellcheck="false"/>
-                    <p class="comment">可以在应用注册（App registrations）中对应应用概述（Overview）中查看。</p>
+                    <p class="comment">鍙互鍦ㄥ簲鐢ㄦ敞鍐岋紙App registrations锛変腑瀵瑰簲搴旂敤姒傝堪锛圤verview锛変腑鏌ョ湅銆?/p>
                 </td>
             </tr>
             <tr>
-                <td>应用程序(客户端) ID <br/><em>(Client ID)</em> *</td>
+                <td>搴旂敤绋嬪簭(瀹㈡埛绔? ID <br/><em>(Client ID)</em> *</td>
                 <td><input type="text" name="paramAzureDNSClientId" maxlength="100" spellcheck="false"/>
-                    <p class="comment">需要在应用注册（App registrations）中新注册应用程序获得。</p>
+                    <p class="comment">闇€瑕佸湪搴旂敤娉ㄥ唽锛圓pp registrations锛変腑鏂版敞鍐屽簲鐢ㄧ▼搴忚幏寰椼€?/p>
                 </td>
             </tr>
             <tr>
-                <td>客户端密码值 <br/><em>(Client Secret Value)</em> *</td>
+                <td>瀹㈡埛绔瘑鐮佸€?<br/><em>(Client Secret Value)</em> *</td>
                 <td><input type="text" name="paramAzureDNSClientSecret" maxlength="100" spellcheck="false"/>
-                    <p class="comment">可以在应用注册（App registrations）中对应应用的“证书和密码（Certificates &amp; secrets）”--“客户端密码（Client secrets）”中创建和查看。<mask-warning></mask-warning></p>
+                    <p class="comment">鍙互鍦ㄥ簲鐢ㄦ敞鍐岋紙App registrations锛変腑瀵瑰簲搴旂敤鐨勨€滆瘉涔﹀拰瀵嗙爜锛圕ertificates &amp; secrets锛夆€?-鈥滃鎴风瀵嗙爜锛圕lient secrets锛夆€濅腑鍒涘缓鍜屾煡鐪嬨€?mask-warning></mask-warning></p>
                 </td>
             </tr>
             <tr>
-                <td>资源组 <br/><em>(Resource Group Name)</em> *</td>
+                <td>璧勬簮缁?<br/><em>(Resource Group Name)</em> *</td>
                 <td>
                     <input type="text" name="paramAzureDNSResourceGroupName" maxlength="100" spellcheck="false"/>
-                    <p class="comment">权限设置帮助：你需要在对应资源组（Resource group）-- 访问控制（Access control (IAM)）-- 角色分配（Role assignments）中添加一个角色分配（Role assignment），其中作业职能角色（Job function roles）为"DNS 区域参与者(DNS Zone Contributor)"，成员（Members）为应用注册（App registrations）中的应用程序（application）（有时需要在选择成员（select members）界面搜索应用程序（application）名称才能看到）。</p>
+                    <p class="comment">鏉冮檺璁剧疆甯姪锛氫綘闇€瑕佸湪瀵瑰簲璧勬簮缁勶紙Resource group锛?- 璁块棶鎺у埗锛圓ccess control (IAM)锛?- 瑙掕壊鍒嗛厤锛圧ole assignments锛変腑娣诲姞涓€涓鑹插垎閰嶏紙Role assignment锛夛紝鍏朵腑浣滀笟鑱岃兘瑙掕壊锛圝ob function roles锛変负"DNS 鍖哄煙鍙備笌鑰?DNS Zone Contributor)"锛屾垚鍛橈紙Members锛変负搴旂敤娉ㄥ唽锛圓pp registrations锛変腑鐨勫簲鐢ㄧ▼搴忥紙application锛夛紙鏈夋椂闇€瑕佸湪閫夋嫨鎴愬憳锛坰elect members锛夌晫闈㈡悳绱㈠簲鐢ㄧ▼搴忥紙application锛夊悕绉版墠鑳界湅鍒帮級銆?/p>
                 </td>
             </tr>
         </tbody>
@@ -303,10 +303,10 @@
         <!-- bunny.net -->
         <tbody v-if="type == 'bunnyNet'">
             <tr>
-                <td>API密钥 *</td>
+                <td>API瀵嗛挜 *</td>
                 <td>
                     <input type="text" name="paramBunnyNetAPIKey" maxlength="100" spellcheck="false"/>
-                    <p class="comment">在“Edit account details" -- "API Key"中获取。<mask-warning></mask-warning></p>
+                    <p class="comment">鍦ㄢ€淓dit account details" -- "API Key"涓幏鍙栥€?mask-warning></mask-warning></p>
                 </td>
             </tr>
         </tbody>
@@ -314,10 +314,10 @@
         <!-- EdgeDNS -->
         <tbody v-if="type == 'localEdgeDNS'">
             <tr>
-                <td>选择域名服务集群 *</td>
+                <td>閫夋嫨鍩熷悕鏈嶅姟闆嗙兢 *</td>
                 <td>
                     <select class="ui dropdown auto-width" name="paramLocalEdgeDNSClusterId">
-                        <option value="0">[选择域名服务集群]</option>
+                        <option value="0">[閫夋嫨鍩熷悕鏈嶅姟闆嗙兢]</option>
                         <option v-for="cluster in nsClusters" :value="cluster.id">{{cluster.name}}</option>
                     </select>
                 </td>
@@ -327,17 +327,17 @@
         <!-- EdgeDNS API -->
         <tbody v-if="type == 'edgeDNSAPI'">
             <tr>
-                <td>API地址 *</td>
+                <td>API鍦板潃 *</td>
                 <td>
                     <input type="text" name="paramEdgeDNSAPIHost" maxlength="100"/>
                 </td>
             </tr>
             <tr>
-                <td>AccessKey类型 *</td>
+                <td>AccessKey绫诲瀷 *</td>
                 <td>
                     <select class="ui dropdown auto-width" name="paramEdgeDNSAPIRole">
-                        <option value="user">平台用户</option>
-                        <option value="admin">管理员</option>
+                        <option value="user">骞冲彴鐢ㄦ埛</option>
+                        <option value="admin">绠＄悊鍛?/option>
                     </select>
                 </td>
             </tr>
@@ -348,7 +348,7 @@
                 </td>
             </tr>
             <tr>
-                <td>AccessKey密钥 *</td>
+                <td>AccessKey瀵嗛挜 *</td>
                 <td>
                     <input type="text" name="paramEdgeDNSAPIAccessKeySecret" maxlength="64"/>
                     <p class="comment"><mask-warning></mask-warning></p>
@@ -356,38 +356,38 @@
             </tr>
         </tbody>
 
-        <!-- 自定义HTTP-->
+        <!-- 鑷畾涔塇TTP-->
         <tbody v-if="type == 'customHTTP'">
             <tr>
                 <td>HTTP URL *</td>
                 <td>
                     <input type="text" name="paramCustomHTTPURL" maxlength="200"/>
-                    <p class="comment">HTTP URL完整地址，DNS所有操作都会以POST的方式转发到此地址。</p>
+                    <p class="comment">HTTP URL瀹屾暣鍦板潃锛孌NS鎵€鏈夋搷浣滈兘浼氫互POST鐨勬柟寮忚浆鍙戝埌姝ゅ湴鍧€銆?/p>
                 </td>
             </tr>
             <tr>
-                <td>私钥 *</td>
+                <td>绉侀挜 *</td>
                 <td>
                     <input type="text" name="paramCustomHTTPSecret" maxlength="64" v-model="paramCustomHTTPSecret"/>
-                    <p class="comment">通讯用的私钥，转发请求时会在Header中加入相关信息，方便开发者校验请求是否合法。</p>
+                    <p class="comment">閫氳鐢ㄧ殑绉侀挜锛岃浆鍙戣姹傛椂浼氬湪Header涓姞鍏ョ浉鍏充俊鎭紝鏂逛究寮€鍙戣€呮牎楠岃姹傛槸鍚﹀悎娉曘€?/p>
                 </td>
             </tr>
         </tbody>
 
-        <!-- 更多选项 -->
+        <!-- 鏇村閫夐」 -->
         <tr>
             <td colspan="2"><more-options-indicator></more-options-indicator></td>
         </tr>
 
         <tbody v-show="moreOptionsVisible">
             <tr>
-                <td>最小TTL</td>
+                <td>鏈€灏廡TL</td>
                 <td>
                     <div class="ui right labeled input">
                         <input type="text" name="minTTL" size="4" maxlength="6" style="width: 6em"/>
-                        <span class="ui label">秒</span>
+                        <span class="ui label">绉?/span>
                     </div>
-                    <p class="comment">生成的DNS时可以使用的最小TTL，请根据你选择的服务商和你在服务商中的账号等级进行填写；不填写或者0表示默认。</p>
+                    <p class="comment">鐢熸垚鐨凞NS鏃跺彲浠ヤ娇鐢ㄧ殑鏈€灏廡TL锛岃鏍规嵁浣犻€夋嫨鐨勬湇鍔″晢鍜屼綘鍦ㄦ湇鍔″晢涓殑璐﹀彿绛夌骇杩涜濉啓锛涗笉濉啓鎴栬€?琛ㄧず榛樿銆?/p>
                 </td>
             </tr>
         </tbody>
@@ -395,3 +395,7 @@
 
 	<submit-btn></submit-btn>
 </form>
+
+
+
+

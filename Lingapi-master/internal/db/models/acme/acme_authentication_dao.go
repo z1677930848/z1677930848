@@ -12,7 +12,7 @@ func NewACMEAuthenticationDAO() *ACMEAuthenticationDAO {
 	return dbs.NewDAO(&ACMEAuthenticationDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingACMEAuthentications",
+			Table:  "edgeACMEAuthentications",
 			Model:  new(ACMEAuthentication),
 			PkName: "id",
 		},

@@ -124,7 +124,7 @@ func NewHTTPAccessLogDAO() *HTTPAccessLogDAO {
 	return dbs.NewDAO(&HTTPAccessLogDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPAccessLogs",
+			Table:  "edgeHTTPAccessLogs",
 			Model:  new(HTTPAccessLog),
 			PkName: "id",
 		},

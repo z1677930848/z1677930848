@@ -21,7 +21,7 @@ func NewAdminDAO() *AdminDAO {
 	return dbs.NewDAO(&AdminDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingAdmins",
+			Table:  "edgeAdmins",
 			Model:  new(Admin),
 			PkName: "id",
 		},

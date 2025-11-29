@@ -21,7 +21,7 @@ import (
 	"github.com/iwind/TeaGo/types"
 )
 
-var skDNSHTTPClient = &http.Client{
+var edgeDNSHTTPClient = &http.Client{
 	Timeout: 10 * time.Second,
 	Transport: &http.Transport{
 		TLSClientConfig: &tls.Config{
@@ -441,7 +441,7 @@ func (this *EdgeDNSAPIProvider) doAPI(path string, params map[string]any, respPt
 	req.Header.Set("User-Agent", teaconst.ProductName+"/"+teaconst.Version)
 	req.Header.Set("X-Edge-Access-Token", accessToken)
 
-	resp, err := skDNSHTTPClient.Do(req)
+	resp, err := edgeDNSHTTPClient.Do(req)
 	if err != nil {
 		return err
 	}
@@ -491,7 +491,7 @@ func (this *EdgeDNSAPIProvider) getToken() (string, error) {
 		return "", err
 	}
 	req.Header.Set("User-Agent", teaconst.ProductName+"/"+teaconst.Version)
-	resp, err := skDNSHTTPClient.Do(req)
+	resp, err := edgeDNSHTTPClient.Do(req)
 	if err != nil {
 		return "", err
 	}

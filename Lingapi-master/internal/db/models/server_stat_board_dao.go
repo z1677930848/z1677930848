@@ -17,7 +17,7 @@ func NewServerStatBoardDAO() *ServerStatBoardDAO {
 	return dbs.NewDAO(&ServerStatBoardDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingServerStatBoards",
+			Table:  "edgeServerStatBoards",
 			Model:  new(ServerStatBoard),
 			PkName: "id",
 		},

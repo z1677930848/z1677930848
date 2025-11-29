@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package shared
 
@@ -12,11 +12,11 @@ import (
 type URLPatternType = string
 
 const (
-	URLPatternTypeWildcard URLPatternType = "wildcard" // 通配符
-	URLPatternTypeRegexp   URLPatternType = "regexp"   // 正则表达式
-	URLPatternTypeImages   URLPatternType = "images"   // 常见图片
-	URLPatternTypeAudios   URLPatternType = "audios"   // 常见音频
-	URLPatternTypeVideos   URLPatternType = "videos"   // 常见视频
+	URLPatternTypeWildcard URLPatternType = "wildcard" // 閫氶厤绗?
+	URLPatternTypeRegexp   URLPatternType = "regexp"   // 姝ｅ垯琛ㄨ揪寮?
+	URLPatternTypeImages   URLPatternType = "images"   // 甯歌鍥剧墖
+	URLPatternTypeAudios   URLPatternType = "audios"   // 甯歌闊抽
+	URLPatternTypeVideos   URLPatternType = "videos"   // 甯歌瑙嗛
 )
 
 var commonImageExtensions = []string{".apng", ".avif", ".gif", ".jpg", ".jpeg", ".jfif", ".pjpeg", ".pjp", ".png", ".svg", ".webp", ".bmp", ".ico", ".cur", ".tif", ".tiff"}
@@ -34,7 +34,7 @@ func (this *URLPattern) Init() error {
 	switch this.Type {
 	case URLPatternTypeWildcard:
 		if len(this.Pattern) > 0 {
-			// 只支持星号
+			// 鍙敮鎸佹槦鍙?
 			var pieces = strings.Split(this.Pattern, "*")
 			for index, piece := range pieces {
 				pieces[index] = regexp.QuoteMeta(piece)
@@ -43,7 +43,7 @@ func (this *URLPattern) Init() error {
 			if len(pattern) > 0 && pattern[0] == '/' {
 				pattern = "(http|https)://[\\w.-]+" + pattern
 			}
-			reg, err := regexp.Compile("(?i)" /** 大小写不敏感 **/ + "^" + pattern + "$")
+			reg, err := regexp.Compile("(?i)" /** 澶у皬鍐欎笉鏁忔劅 **/ + "^" + pattern + "$")
 			if err != nil {
 				return err
 			}
@@ -52,7 +52,7 @@ func (this *URLPattern) Init() error {
 	case URLPatternTypeRegexp:
 		if len(this.Pattern) > 0 {
 			var pattern = this.Pattern
-			if !strings.HasPrefix(pattern, "(?i)") { // 大小写不敏感
+			if !strings.HasPrefix(pattern, "(?i)") { // 澶у皬鍐欎笉鏁忔劅
 				pattern = "(?i)" + pattern
 			}
 			reg, err := regexp.Compile(pattern)

@@ -118,7 +118,7 @@ func (this *Instance) SetupDB() error {
 		}
 
 		var shouldExecute bool
-		version, err := db.FindCol(0, "SELECT version FROM LingVersions")
+		version, err := db.FindCol(0, "SELECT version FROM edgeVersions")
 		if err != nil {
 			shouldExecute = true
 		} else {
@@ -151,7 +151,7 @@ func (this *Instance) SetupDB() error {
 	// 创建Admin Token
 	var tx *dbs.Tx
 	{
-		one, err := db.FindOne("SELECT * FROM skAPITokens WHERE role='admin'")
+		one, err := db.FindOne("SELECT * FROM edgeAPITokens WHERE role='admin'")
 		if err != nil {
 			return err
 		}
@@ -167,7 +167,7 @@ func (this *Instance) SetupDB() error {
 
 	// 创建Admin
 	{
-		one, err := db.FindOne("SELECT * FROM skAdmins")
+		one, err := db.FindOne("SELECT * FROM edgeAdmins")
 		if err != nil {
 			return err
 		}
@@ -196,7 +196,7 @@ func (this *Instance) SetupDB() error {
 
 	// 创建API Node
 	{
-		one, findErr := db.FindOne("SELECT * FROM skAPINodes")
+		one, findErr := db.FindOne("SELECT * FROM edgeAPINodes")
 		if findErr != nil {
 			return findErr
 		}
@@ -273,7 +273,7 @@ func (this *Instance) SetupDB() error {
 	{
 		{
 			// check cluster
-			clusterIdCol, err := db.FindCol(0, "SELECT id FROM skNodeClusters WHERE state=1")
+			clusterIdCol, err := db.FindCol(0, "SELECT id FROM edgeNodeClusters WHERE state=1")
 			if err != nil {
 				return err
 			}
@@ -283,7 +283,7 @@ func (this *Instance) SetupDB() error {
 			}
 		}
 
-		one, findErr := db.FindOne("SELECT * FROM skNodes")
+		one, findErr := db.FindOne("SELECT * FROM edgeNodes")
 		if findErr != nil {
 			return findErr
 		}
@@ -298,7 +298,7 @@ func (this *Instance) SetupDB() error {
 	// 检查User
 	var userId int64
 	{
-		one, findErr := db.FindOne("SELECT id FROM skUsers WHERE state=1")
+		one, findErr := db.FindOne("SELECT id FROM edgeUsers WHERE state=1")
 		if findErr != nil {
 			return findErr
 		}
@@ -310,7 +310,7 @@ func (this *Instance) SetupDB() error {
 
 	// 创建用户节点
 	{
-		one, findErr := db.FindOne("SELECT * FROM skUserNodes")
+		one, findErr := db.FindOne("SELECT * FROM edgeUserNodes")
 		if findErr != nil {
 			return findErr
 		}
@@ -351,7 +351,7 @@ func (this *Instance) SetupDB() error {
 
 	// 创建网站
 	{
-		one, findErr := db.FindOne("SELECT id FROM skServers WHERE state=1")
+		one, findErr := db.FindOne("SELECT id FROM edgeServers WHERE state=1")
 		if findErr != nil {
 			return findErr
 		}
@@ -551,7 +551,7 @@ func (this *Instance) SetupAdminNode() error {
 
 	var apiYAMLData []byte
 	{
-		node, err := db.FindOne("SELECT nodeId,secret FROM skAPITokens WHERE state=1 AND role='admin'")
+		node, err := db.FindOne("SELECT nodeId,secret FROM edgeAPITokens WHERE state=1 AND role='admin'")
 		if err != nil {
 			return err
 		}
@@ -650,7 +650,7 @@ func (this *Instance) SetupAPINode() error {
 	}
 
 	{
-		node, err := db.FindOne("SELECT uniqueId,secret FROM skAPINodes WHERE state=1")
+		node, err := db.FindOne("SELECT uniqueId,secret FROM edgeAPINodes WHERE state=1")
 		if err != nil {
 			return err
 		}
@@ -715,7 +715,7 @@ func (this *Instance) SetupNode() error {
 		if err != nil {
 			return err
 		}
-		node, err := db.FindOne("SELECT uniqueId,secret FROM skNodes WHERE state=1")
+		node, err := db.FindOne("SELECT uniqueId,secret FROM edgeNodes WHERE state=1")
 		if err != nil {
 			return err
 		}
@@ -764,7 +764,7 @@ func (this *Instance) SetupUserNode() error {
 		if err != nil {
 			return err
 		}
-		node, err := db.FindOne("SELECT uniqueId,secret FROM skUserNodes WHERE state=1")
+		node, err := db.FindOne("SELECT uniqueId,secret FROM edgeUserNodes WHERE state=1")
 		if err != nil {
 			return err
 		}

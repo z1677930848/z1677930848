@@ -112,7 +112,7 @@ var upgradeFuncs = []*upgradeVersion{
 
 // UpgradeSQLData 升级SQL数据
 func UpgradeSQLData(db *dbs.DB) error {
-	version, err := db.FindCol(0, "SELECT version FROM LingVersions")
+	version, err := db.FindCol(0, "SELECT version FROM edgeVersions")
 	if err != nil {
 		return err
 	}
@@ -134,47 +134,47 @@ func UpgradeSQLData(db *dbs.DB) error {
 // v0.0.3
 func upgradeV0_0_3(db *dbs.DB) error {
 	// 获取第一个管理员
-	adminIdCol, err := db.FindCol(0, "SELECT id FROM LingAdmins ORDER BY id ASC LIMIT 1")
+	adminIdCol, err := db.FindCol(0, "SELECT id FROM edgeAdmins ORDER BY id ASC LIMIT 1")
 	if err != nil {
 		return err
 	}
 	adminId := types.Int64(adminIdCol)
 	if adminId <= 0 {
-		return errors.New("'LingAdmins' table should not be empty")
+		return errors.New("'edgeAdmins' table should not be empty")
 	}
 
 	// 升级edgeDNSProviders
-	_, err = db.Exec("UPDATE LingDNSProviders SET adminId=? WHERE adminId=0 AND userId=0", adminId)
+	_, err = db.Exec("UPDATE edgeDNSProviders SET adminId=? WHERE adminId=0 AND userId=0", adminId)
 	if err != nil {
 		return err
 	}
 
 	// 升级edgeDNSDomains
-	_, err = db.Exec("UPDATE LingDNSDomains SET adminId=? WHERE adminId=0 AND userId=0", adminId)
+	_, err = db.Exec("UPDATE edgeDNSDomains SET adminId=? WHERE adminId=0 AND userId=0", adminId)
 	if err != nil {
 		return err
 	}
 
 	// 升级edgeSSLCerts
-	_, err = db.Exec("UPDATE LingSSLCerts SET adminId=? WHERE adminId=0 AND userId=0", adminId)
+	_, err = db.Exec("UPDATE edgeSSLCerts SET adminId=? WHERE adminId=0 AND userId=0", adminId)
 	if err != nil {
 		return err
 	}
 
 	// 升级edgeNodeClusters
-	_, err = db.Exec("UPDATE LingNodeClusters SET adminId=? WHERE adminId=0 AND userId=0", adminId)
+	_, err = db.Exec("UPDATE edgeNodeClusters SET adminId=? WHERE adminId=0 AND userId=0", adminId)
 	if err != nil {
 		return err
 	}
 
 	// 升级edgeNodes
-	_, err = db.Exec("UPDATE LingNodes SET adminId=? WHERE adminId=0 AND userId=0", adminId)
+	_, err = db.Exec("UPDATE edgeNodes SET adminId=? WHERE adminId=0 AND userId=0", adminId)
 	if err != nil {
 		return err
 	}
 
 	// 升级edgeNodeGrants
-	_, err = db.Exec("UPDATE LingNodeGrants SET adminId=? WHERE adminId=0", adminId)
+	_, err = db.Exec("UPDATE edgeNodeGrants SET adminId=? WHERE adminId=0", adminId)
 	if err != nil {
 		return err
 	}
@@ -185,7 +185,7 @@ func upgradeV0_0_3(db *dbs.DB) error {
 // v0.0.5
 func upgradeV0_0_5(db *dbs.DB) error {
 	// 升级edgeACMETasks
-	_, err := db.Exec("UPDATE LingACMETasks SET authType=? WHERE authType IS NULL OR LENGTH(authType)=0", acme.AuthTypeDNS)
+	_, err := db.Exec("UPDATE edgeACMETasks SET authType=? WHERE authType IS NULL OR LENGTH(authType)=0", acme.AuthTypeDNS)
 	if err != nil {
 		return err
 	}
@@ -195,7 +195,7 @@ func upgradeV0_0_5(db *dbs.DB) error {
 
 // v0.0.6
 func upgradeV0_0_6(db *dbs.DB) error {
-	stmt, err := db.Prepare("SELECT COUNT(*) FROM LingAPITokens WHERE role='user'")
+	stmt, err := db.Prepare("SELECT COUNT(*) FROM edgeAPITokens WHERE role='user'")
 	if err != nil {
 		return err
 	}
@@ -213,7 +213,7 @@ func upgradeV0_0_6(db *dbs.DB) error {
 
 	nodeId := rands.HexString(32)
 	secret := rands.String(32)
-	_, err = db.Exec("INSERT INTO LingAPITokens (nodeId, secret, role) VALUES (?, ?, ?)", nodeId, secret, "user")
+	_, err = db.Exec("INSERT INTO edgeAPITokens (nodeId, secret, role) VALUES (?, ?, ?)", nodeId, secret, "user")
 	if err != nil {
 		return err
 	}
@@ -268,13 +268,13 @@ func upgradeV0_0_10(db *dbs.DB) error {
 // v0.2.5
 func upgradeV0_2_5(db *dbs.DB) error {
 	// 更新用户
-	_, err := db.Exec("UPDATE LingUsers SET day=FROM_UNIXTIME(createdAt,'%Y%m%d') WHERE day IS NULL OR LENGTH(day)=0")
+	_, err := db.Exec("UPDATE edgeUsers SET day=FROM_UNIXTIME(createdAt,'%Y%m%d') WHERE day IS NULL OR LENGTH(day)=0")
 	if err != nil {
 		return err
 	}
 
 	// 更新防火墙规则
-	ones, _, err := db.FindOnes("SELECT id, actions, action, actionOptions FROM LingHTTPFirewallRuleSets WHERE actions IS NULL OR LENGTH(actions)=0")
+	ones, _, err := db.FindOnes("SELECT id, actions, action, actionOptions FROM edgeHTTPFirewallRuleSets WHERE actions IS NULL OR LENGTH(actions)=0")
 	if err != nil {
 		return err
 	}
@@ -296,7 +296,7 @@ func upgradeV0_2_5(db *dbs.DB) error {
 		if err != nil {
 			return err
 		}
-		_, err = db.Exec("UPDATE LingHTTPFirewallRuleSets SET actions=? WHERE id=?", string(actionsJSON), oneId)
+		_, err = db.Exec("UPDATE edgeHTTPFirewallRuleSets SET actions=? WHERE id=?", string(actionsJSON), oneId)
 		if err != nil {
 			return err
 		}
@@ -308,7 +308,7 @@ func upgradeV0_2_5(db *dbs.DB) error {
 // v0.3.0
 func upgradeV0_3_0(db *dbs.DB) error {
 	// 升级健康检查
-	ones, _, err := db.FindOnes("SELECT id,healthCheck FROM LingNodeClusters WHERE state=1")
+	ones, _, err := db.FindOnes("SELECT id,healthCheck FROM edgeNodeClusters WHERE state=1")
 	if err != nil {
 		return err
 	}
@@ -329,7 +329,7 @@ func upgradeV0_3_0(db *dbs.DB) error {
 			if err != nil {
 				continue
 			}
-			_, err = db.Exec("UPDATE LingNodeClusters SET healthCheck=? WHERE id=?", string(configJSON), clusterId)
+			_, err = db.Exec("UPDATE edgeNodeClusters SET healthCheck=? WHERE id=?", string(configJSON), clusterId)
 			if err != nil {
 				return err
 			}
@@ -342,22 +342,22 @@ func upgradeV0_3_0(db *dbs.DB) error {
 func upgradeV0_3_1(db *dbs.DB) error {
 	// 清空域名统计，已使用分表代替
 	// 因为可能有权限问题，所以我们忽略错误
-	_, _ = db.Exec("TRUNCATE table LingServerDomainHourlyStats")
+	_, _ = db.Exec("TRUNCATE table edgeServerDomainHourlyStats")
 
 	// 升级APIToken
-	ones, _, err := db.FindOnes("SELECT uniqueId,secret FROM LingNodeClusters")
+	ones, _, err := db.FindOnes("SELECT uniqueId,secret FROM edgeNodeClusters")
 	if err != nil {
 		return err
 	}
 	for _, one := range ones {
 		var uniqueId = one.GetString("uniqueId")
 		var secret = one.GetString("secret")
-		tokenOne, err := db.FindOne("SELECT id FROM LingAPITokens WHERE nodeId=? LIMIT 1", uniqueId)
+		tokenOne, err := db.FindOne("SELECT id FROM edgeAPITokens WHERE nodeId=? LIMIT 1", uniqueId)
 		if err != nil {
 			return err
 		}
 		if len(tokenOne) == 0 {
-			_, err = db.Exec("INSERT INTO LingAPITokens (nodeId, secret, role, state) VALUES (?, ?, 'cluster', 1)", uniqueId, secret)
+			_, err = db.Exec("INSERT INTO edgeAPITokens (nodeId, secret, role, state) VALUES (?, ?, 'cluster', 1)", uniqueId, secret)
 			if err != nil {
 				return err
 			}
@@ -377,7 +377,7 @@ func upgradeV0_3_2(db *dbs.DB) error {
 		GzipId  int64 `yaml:"gzipId" json:"gzipId"`   // 使用的配置ID
 	}
 
-	webOnes, _, err := db.FindOnes("SELECT id, gzip FROM LingHTTPWebs WHERE gzip IS NOT NULL AND compression IS NULL")
+	webOnes, _, err := db.FindOnes("SELECT id, gzip FROM edgeHTTPWebs WHERE gzip IS NOT NULL AND compression IS NULL")
 	if err != nil {
 		return err
 	}
@@ -398,7 +398,7 @@ func upgradeV0_3_2(db *dbs.DB) error {
 		compressionConfig.IsPrior = gzipRef.IsPrior
 		compressionConfig.IsOn = gzipRef.IsOn
 
-		gzipOne, err := db.FindOne("SELECT * FROM LingHTTPGzips WHERE id=?", gzipRef.GzipId)
+		gzipOne, err := db.FindOne("SELECT * FROM edgeHTTPGzips WHERE id=?", gzipRef.GzipId)
 		if err != nil {
 			return err
 		}
@@ -450,7 +450,7 @@ func upgradeV0_3_2(db *dbs.DB) error {
 		if err != nil {
 			return err
 		}
-		_, err = db.Exec("UPDATE LingHTTPWebs SET compression=? WHERE id=?", string(configJSON), webId)
+		_, err = db.Exec("UPDATE edgeHTTPWebs SET compression=? WHERE id=?", string(configJSON), webId)
 		if err != nil {
 			return err
 		}
@@ -478,7 +478,7 @@ func upgradeV0_3_2(db *dbs.DB) error {
 // v0.3.3
 func upgradeV0_3_3(db *dbs.DB) error {
 	// 升级CC请求数Code
-	_, err := db.Exec("UPDATE LingHTTPFirewallRuleSets SET code='8002' WHERE name='CC请求数' AND code='8001'")
+	_, err := db.Exec("UPDATE edgeHTTPFirewallRuleSets SET code='8002' WHERE name='CC请求数' AND code='8001'")
 	if err != nil {
 		return err
 	}
@@ -496,13 +496,13 @@ func upgradeV0_3_3(db *dbs.DB) error {
 // v0.3.7
 func upgradeV0_3_7(db *dbs.DB) error {
 	// 修改所有edgeNodeGrants中的su为0
-	_, err := db.Exec("UPDATE LingNodeGrants SET su=0 WHERE su=1")
+	_, err := db.Exec("UPDATE edgeNodeGrants SET su=0 WHERE su=1")
 	if err != nil {
 		return err
 	}
 
 	// WAF预置分组
-	_, err = db.Exec("UPDATE LingHTTPFirewallRuleGroups SET isTemplate=1 WHERE LENGTH(code)>0")
+	_, err = db.Exec("UPDATE edgeHTTPFirewallRuleGroups SET isTemplate=1 WHERE LENGTH(code)>0")
 	if err != nil {
 		return err
 	}
@@ -515,7 +515,7 @@ func upgradeV0_4_0(db *dbs.DB) error {
 	// 升级SYN Flood配置
 	synFloodJSON, err := json.Marshal(firewallconfigs.NewSYNFloodConfig())
 	if err == nil {
-		_, err := db.Exec("UPDATE LingHTTPFirewallPolicies SET synFlood=? WHERE synFlood IS NULL AND state=1", string(synFloodJSON))
+		_, err := db.Exec("UPDATE edgeHTTPFirewallPolicies SET synFlood=? WHERE synFlood IS NULL AND state=1", string(synFloodJSON))
 		if err != nil {
 			return err
 		}
@@ -527,7 +527,7 @@ func upgradeV0_4_0(db *dbs.DB) error {
 // v0.4.1
 func upgradeV0_4_1(db *dbs.DB) error {
 	// 升级 servers.lastUserPlanId
-	_, err := db.Exec("UPDATE LingServers SET lastUserPlanId=userPlanId WHERE userPlanId>0")
+	_, err := db.Exec("UPDATE edgeServers SET lastUserPlanId=userPlanId WHERE userPlanId>0")
 	if err != nil {
 		return err
 	}
@@ -569,13 +569,13 @@ func upgradeV0_4_5(db *dbs.DB) error {
 
 	// 升级一个防SQL注入规则
 	{
-		ones, _, err := db.FindOnes(`SELECT id FROM LingHTTPFirewallRules WHERE value=?`, "(updatexml|extractvalue|ascii|ord|char|chr|count|concat|rand|floor|substr|length|len|user|database|benchmark|analyse)\\s*\\(")
+		ones, _, err := db.FindOnes(`SELECT id FROM edgeHTTPFirewallRules WHERE value=?`, "(updatexml|extractvalue|ascii|ord|char|chr|count|concat|rand|floor|substr|length|len|user|database|benchmark|analyse)\\s*\\(")
 		if err != nil {
 			return err
 		}
 		for _, one := range ones {
 			var ruleId = one.GetInt64("id")
-			_, err = db.Exec(`UPDATE LingHTTPFirewallRules SET value=? WHERE id=? LIMIT 1`, `\b(updatexml|extractvalue|ascii|ord|char|chr|count|concat|rand|floor|substr|length|len|user|database|benchmark|analyse)\s*\(.*\)`, ruleId)
+			_, err = db.Exec(`UPDATE edgeHTTPFirewallRules SET value=? WHERE id=? LIMIT 1`, `\b(updatexml|extractvalue|ascii|ord|char|chr|count|concat|rand|floor|substr|length|len|user|database|benchmark|analyse)\s*\(.*\)`, ruleId)
 			if err != nil {
 				return err
 			}
@@ -587,9 +587,9 @@ func upgradeV0_4_5(db *dbs.DB) error {
 
 // v0.4.7
 func upgradeV0_4_7(db *dbs.DB) error {
-	// 升级 LingServers 中的 plainServerNames
+	// 升级 edgeServers 中的 plainServerNames
 	{
-		ones, _, err := db.FindOnes("SELECT id,serverNames FROM LingServers WHERE state=1")
+		ones, _, err := db.FindOnes("SELECT id,serverNames FROM edgeServers WHERE state=1")
 		if err != nil {
 			return err
 		}
@@ -606,7 +606,7 @@ func upgradeV0_4_7(db *dbs.DB) error {
 				if err != nil {
 					return err
 				}
-				_, err = db.Exec("UPDATE LingServers SET plainServerNames=? WHERE id=?", plainServerNamesJSON, serverId)
+				_, err = db.Exec("UPDATE edgeServers SET plainServerNames=? WHERE id=?", plainServerNamesJSON, serverId)
 				if err != nil {
 					return err
 				}
@@ -621,7 +621,7 @@ func upgradeV0_4_7(db *dbs.DB) error {
 func upgradeV0_4_8(db *dbs.DB) error {
 	// 设置edgeIPLists中的serverId
 	{
-		firewallPolicyOnes, _, err := db.FindOnes("SELECT inbound,serverId FROM LingHTTPFirewallPolicies WHERE serverId>0")
+		firewallPolicyOnes, _, err := db.FindOnes("SELECT inbound,serverId FROM edgeHTTPFirewallPolicies WHERE serverId>0")
 		if err != nil {
 			return err
 		}
@@ -651,13 +651,13 @@ func upgradeV0_4_8(db *dbs.DB) error {
 				continue
 			}
 			for _, listId := range listIds {
-				isPublicCol, err := db.FindCol(0, "SELECT isPublic FROM LingIPLists WHERE id=? LIMIT 1", listId)
+				isPublicCol, err := db.FindCol(0, "SELECT isPublic FROM edgeIPLists WHERE id=? LIMIT 1", listId)
 				if err != nil {
 					return err
 				}
 				var isPublic = types.Bool(isPublicCol)
 				if !isPublic {
-					_, err = db.Exec("UPDATE LingIPLists SET serverId=? WHERE id=?", serverId, listId)
+					_, err = db.Exec("UPDATE edgeIPLists SET serverId=? WHERE id=?", serverId, listId)
 					if err != nil {
 						return err
 					}
@@ -687,7 +687,7 @@ func upgradeV0_4_11(db *dbs.DB) error {
 			if err != nil {
 				return err
 			}
-			_, err = db.Exec("UPDATE LingNSClusters SET tcp=? WHERE tcp IS NULL", configJSON)
+			_, err = db.Exec("UPDATE edgeNSClusters SET tcp=? WHERE tcp IS NULL", configJSON)
 			if err != nil {
 				return err
 			}
@@ -707,7 +707,7 @@ func upgradeV0_4_11(db *dbs.DB) error {
 			if err != nil {
 				return err
 			}
-			_, err = db.Exec("UPDATE LingNSClusters SET udp=? WHERE udp IS NULL", configJSON)
+			_, err = db.Exec("UPDATE edgeNSClusters SET udp=? WHERE udp IS NULL", configJSON)
 			if err != nil {
 				return err
 			}
@@ -720,7 +720,7 @@ func upgradeV0_4_11(db *dbs.DB) error {
 // v1.2.1
 func upgradeV1_2_1(db *dbs.DB) error {
 	// upgrade generated USER-xxx in old versions
-	ones, _, err := db.FindOnes("SELECT id, username, clusterId FROM LingUsers WHERE username LIKE 'USER-%'")
+	ones, _, err := db.FindOnes("SELECT id, username, clusterId FROM edgeUsers WHERE username LIKE 'USER-%'")
 	if err != nil {
 		return err
 	}
@@ -729,14 +729,14 @@ func upgradeV1_2_1(db *dbs.DB) error {
 		var clusterId = one.GetInt64("clusterId")
 		var username = one.GetString("username")
 		if clusterId <= 0 {
-			defaultClusterIdValue, err := db.FindCol(0, "SELECT id FROM LingNodeClusters WHERE state=1 ORDER BY id ASC LIMIT 1")
+			defaultClusterIdValue, err := db.FindCol(0, "SELECT id FROM edgeNodeClusters WHERE state=1 ORDER BY id ASC LIMIT 1")
 			if err != nil {
 				return err
 			}
 
 			var defaultClusterId = types.Int64(defaultClusterIdValue)
 			if defaultClusterId > 0 {
-				_, err = db.Exec("UPDATE LingUsers SET username=?, clusterId=? WHERE id=?", strings.ReplaceAll(username, "-", "_"), defaultClusterId, userId)
+				_, err = db.Exec("UPDATE edgeUsers SET username=?, clusterId=? WHERE id=?", strings.ReplaceAll(username, "-", "_"), defaultClusterId, userId)
 				if err != nil {
 					return err
 				}
@@ -763,7 +763,7 @@ func upgradeV1_2_10(db *dbs.DB) error {
 			} `yaml:"tcpAll" json:"tcpAll"`
 		}
 
-		globalConfigValue, err := db.FindCol(0, "SELECT value FROM LingSysSettings WHERE code='serverGlobalConfig'")
+		globalConfigValue, err := db.FindCol(0, "SELECT value FROM edgeSysSettings WHERE code='serverGlobalConfig'")
 		if err != nil {
 			return err
 		}
@@ -772,7 +772,7 @@ func upgradeV1_2_10(db *dbs.DB) error {
 			var oldGlobalConfig = &OldGlobalConfig{}
 			err = json.Unmarshal([]byte(globalConfigString), oldGlobalConfig)
 			if err == nil { // we ignore error
-				ones, _, err := db.FindOnes("SELECT id,globalServerConfig FROM LingNodeClusters")
+				ones, _, err := db.FindOnes("SELECT id,globalServerConfig FROM edgeNodeClusters")
 				if err != nil {
 					return err
 				}
@@ -797,7 +797,7 @@ func upgradeV1_2_10(db *dbs.DB) error {
 						if err != nil {
 							return err
 						}
-						_, err = db.Exec("UPDATE LingNodeClusters SET globalServerConfig=? WHERE id=?", globalServerConfigJSON, id)
+						_, err = db.Exec("UPDATE edgeNodeClusters SET globalServerConfig=? WHERE id=?", globalServerConfigJSON, id)
 						if err != nil {
 							return err
 						}
@@ -815,7 +815,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 	// waf
 	{
 		var disableSet = func(setId int64) error {
-			_, err := db.Exec("UPDATE LingHTTPFirewallRuleSets SET state=0 WHERE id=?", setId)
+			_, err := db.Exec("UPDATE edgeHTTPFirewallRuleSets SET state=0 WHERE id=?", setId)
 			return err
 		}
 
@@ -826,7 +826,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 			}
 
 			// rule
-			ruleResult, err := db.Exec("INSERT INTO LingHTTPFirewallRules (isOn, param, operator, value, isCaseInsensitive, state) VALUES (1, ?, ?, ?, 0, 1)", ruleParam, ruleOperator, value)
+			ruleResult, err := db.Exec("INSERT INTO edgeHTTPFirewallRules (isOn, param, operator, value, isCaseInsensitive, state) VALUES (1, ?, ?, ?, 0, 1)", ruleParam, ruleOperator, value)
 			if err != nil {
 				return err
 			}
@@ -846,7 +846,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 			}
 
 			// set
-			setResult, err := db.Exec("INSERT INTO LingHTTPFirewallRuleSets (isOn, code, name, rules, connector, state, actions) VALUES (1, ?, ?, ?, 'or', 1, ?)", setCode, setName, ruleRefsJSON, actionsJSON)
+			setResult, err := db.Exec("INSERT INTO edgeHTTPFirewallRuleSets (isOn, code, name, rules, connector, state, actions) VALUES (1, ?, ?, ?, 'or', 1, ?)", setCode, setName, ruleRefsJSON, actionsJSON)
 			if err != nil {
 				return err
 			}
@@ -866,7 +866,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 			}
 
 			// group
-			_, err = db.Exec("UPDATE LingHTTPFirewallRuleGroups SET sets=? WHERE id=?", setRefsJSON, groupId)
+			_, err = db.Exec("UPDATE edgeHTTPFirewallRuleGroups SET sets=? WHERE id=?", setRefsJSON, groupId)
 			if err != nil {
 				return err
 			}
@@ -876,7 +876,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 
 		// sql injection
 		{
-			ruleGroups, _, err := db.FindOnes("SELECT id, sets FROM LingHTTPFirewallRuleGroups WHERE code='sqlInjection' AND state=1")
+			ruleGroups, _, err := db.FindOnes("SELECT id, sets FROM edgeHTTPFirewallRuleGroups WHERE code='sqlInjection' AND state=1")
 			if err != nil {
 				return err
 			}
@@ -897,7 +897,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 
 				var isChanged = false
 				for setIndex, setRef := range setRefs {
-					set, setErr := db.FindOne("SELECT id, rules, isOn, actions FROM LingHTTPFirewallRuleSets WHERE id=? AND state=1", setRef.SetId)
+					set, setErr := db.FindOne("SELECT id, rules, isOn, actions FROM edgeHTTPFirewallRuleSets WHERE id=? AND state=1", setRef.SetId)
 					if setErr != nil {
 						return setErr
 					}
@@ -937,7 +937,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 
 					var rules = []maps.Map{}
 					for _, ruleRef := range ruleRefs {
-						rule, ruleErr := db.FindOne("SELECT * FROM LingHTTPFirewallRules WHERE id=? AND state=1", ruleRef.RuleId)
+						rule, ruleErr := db.FindOne("SELECT * FROM edgeHTTPFirewallRules WHERE id=? AND state=1", ruleRef.RuleId)
 						if ruleErr != nil {
 							return ruleErr
 						}
@@ -1035,7 +1035,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 
 		// xss
 		{
-			ruleGroups, _, err := db.FindOnes("SELECT id, sets FROM LingHTTPFirewallRuleGroups WHERE code='xss' AND state=1")
+			ruleGroups, _, err := db.FindOnes("SELECT id, sets FROM edgeHTTPFirewallRuleGroups WHERE code='xss' AND state=1")
 			if err != nil {
 				return err
 			}
@@ -1056,7 +1056,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 
 				var isChanged = false
 				for setIndex, setRef := range setRefs {
-					set, setErr := db.FindOne("SELECT id, rules, isOn, actions FROM LingHTTPFirewallRuleSets WHERE id=? AND state=1", setRef.SetId)
+					set, setErr := db.FindOne("SELECT id, rules, isOn, actions FROM edgeHTTPFirewallRuleSets WHERE id=? AND state=1", setRef.SetId)
 					if setErr != nil {
 						return setErr
 					}
@@ -1094,7 +1094,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 						break
 					}
 
-					rule, ruleErr := db.FindOne("SELECT * FROM LingHTTPFirewallRules WHERE id=? AND state=1", ruleRefs[0].RuleId)
+					rule, ruleErr := db.FindOne("SELECT * FROM edgeHTTPFirewallRules WHERE id=? AND state=1", ruleRefs[0].RuleId)
 					if ruleErr != nil {
 						return ruleErr
 					}
@@ -1161,7 +1161,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 	}
 
 	{
-		value, err := db.FindCol(0, "SELECT value FROM LingSysSettings WHERE code=?", systemconfigs.SettingCodeUserRegisterConfig)
+		value, err := db.FindCol(0, "SELECT value FROM edgeSysSettings WHERE code=?", systemconfigs.SettingCodeUserRegisterConfig)
 		if err != nil {
 			return err
 		}
@@ -1190,7 +1190,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 						if err != nil {
 							return err
 						}
-						_, err = db.Exec("UPDATE LingSysSettings SET value=? WHERE code=?", registerConfigJSON, systemconfigs.SettingCodeUserRegisterConfig)
+						_, err = db.Exec("UPDATE edgeSysSettings SET value=? WHERE code=?", registerConfigJSON, systemconfigs.SettingCodeUserRegisterConfig)
 						if err != nil {
 							return err
 						}
@@ -1210,7 +1210,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 			sqlPieces = append(sqlPieces, "'$', '"+featureCode+"'")
 		}
 
-		_, err := db.Exec("UPDATE LingUsers SET features=JSON_ARRAY_APPEND(features," + strings.Join(sqlPieces, ",") + ") WHERE features IS NOT NULL AND JSON_LENGTH(features)>0 AND NOT JSON_CONTAINS(features, '" + strconv.Quote(newAddedFeatureCodes[0]) + "')")
+		_, err := db.Exec("UPDATE edgeUsers SET features=JSON_ARRAY_APPEND(features," + strings.Join(sqlPieces, ",") + ") WHERE features IS NOT NULL AND JSON_LENGTH(features)>0 AND NOT JSON_CONTAINS(features, '" + strconv.Quote(newAddedFeatureCodes[0]) + "')")
 		if err != nil {
 			return err
 		}
@@ -1221,7 +1221,7 @@ func upgradeV1_3_2(db *dbs.DB) error {
 
 // 1.3.4
 func upgradeV1_3_4(db *dbs.DB) error {
-	_, err := db.Exec("DELETE FROM LingLoginSessions WHERE adminId>0")
+	_, err := db.Exec("DELETE FROM edgeLoginSessions WHERE adminId>0")
 	if err != nil {
 		return err
 	}

@@ -25,7 +25,7 @@ func NewSSLPolicyDAO() *SSLPolicyDAO {
 	return dbs.NewDAO(&SSLPolicyDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingSSLPolicies",
+			Table:  "edgeSSLPolicies",
 			Model:  new(SSLPolicy),
 			PkName: "id",
 		},

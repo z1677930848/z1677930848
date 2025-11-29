@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package nodeconfigs
 
@@ -19,13 +19,13 @@ func NewWebPImagePolicy() *WebPImagePolicy {
 	}
 }
 
-// WebPImagePolicy WebP策略
+// WebPImagePolicy WebP绛栫暐
 type WebPImagePolicy struct {
-	IsOn         bool                 `yaml:"isOn" json:"isOn"`                 // 是否启用
-	RequireCache bool                 `yaml:"requireCache" json:"requireCache"` // 需要在缓存条件下进行
-	MinLength    *shared.SizeCapacity `yaml:"minLength" json:"minLength"`       // 最小压缩对象比如4m, 24k
-	MaxLength    *shared.SizeCapacity `yaml:"maxLength" json:"maxLength"`       // 最大压缩对象
-	Quality      int                  `yaml:"quality" json:"quality"`           // 生成的图片质量：0-100
+	IsOn         bool                 `yaml:"isOn" json:"isOn"`                 // 鏄惁鍚敤
+	RequireCache bool                 `yaml:"requireCache" json:"requireCache"` // 闇€瑕佸湪缂撳瓨鏉′欢涓嬭繘琛?
+	MinLength    *shared.SizeCapacity `yaml:"minLength" json:"minLength"`       // 鏈€灏忓帇缂╁璞℃瘮濡?m, 24k
+	MaxLength    *shared.SizeCapacity `yaml:"maxLength" json:"maxLength"`       // 鏈€澶у帇缂╁璞?
+	Quality      int                  `yaml:"quality" json:"quality"`           // 鐢熸垚鐨勫浘鐗囪川閲忥細0-100
 
 	minLength int64
 	maxLength int64

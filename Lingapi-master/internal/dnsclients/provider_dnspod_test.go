@@ -167,7 +167,7 @@ func testDNSPodProvider() (provider dnsclients.ProviderInterface, isInternationa
 	if err != nil {
 		return nil, false, err
 	}
-	one, err := db.FindOne("SELECT * FROM skDNSProviders WHERE type='dnspod' AND id='14' ORDER BY id DESC")
+	one, err := db.FindOne("SELECT * FROM edgeDNSProviders WHERE type='dnspod' AND id='14' ORDER BY id DESC")
 	if err != nil {
 		return nil, false, err
 	}

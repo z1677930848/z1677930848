@@ -12,7 +12,7 @@ func NewUserEmailNotificationDAO() *UserEmailNotificationDAO {
 	return dbs.NewDAO(&UserEmailNotificationDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserEmailNotifications",
+			Table:  "edgeUserEmailNotifications",
 			Model:  new(UserEmailNotification),
 			PkName: "id",
 		},

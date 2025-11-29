@@ -38,7 +38,7 @@ func init() {
 			task.Start()
 		})
 
-		// 启动临时文件清理任务
+		// 鍚姩涓存椂鏂囦欢娓呯悊浠诲姟
 		utils.ScheduleCleanupTask()
 	})
 }
@@ -51,10 +51,10 @@ type CheckUpdatesTask struct {
 }
 
 func NewCheckUpdatesTask() *CheckUpdatesTask {
-	// 创建多通道通知器
+	// 鍒涘缓澶氶€氶亾閫氱煡鍣?
 	multiNotifier := utils.NewMultiNotifier()
 	multiNotifier.AddNotifier(utils.NewLogNotifier())
-	// 可根据配置添加更多通知器
+	// 鍙牴鎹厤缃坊鍔犳洿澶氶€氱煡鍣?
 	// multiNotifier.AddNotifier(utils.NewWebhookNotifier("http://your-webhook-url"))
 
 	return &CheckUpdatesTask{
@@ -65,13 +65,13 @@ func NewCheckUpdatesTask() *CheckUpdatesTask {
 }
 
 func (this *CheckUpdatesTask) Start() {
-	// 启动后立即检查一次
+	// 鍚姩鍚庣珛鍗虫鏌ヤ竴娆?
 	err := this.Loop()
 	if err != nil {
 		logs.Println("[TASK][CHECK_UPDATES_TASK]" + err.Error())
 	}
 
-	// 然后每6小时检查一次
+	// 鐒跺悗姣?灏忔椂妫€鏌ヤ竴娆?
 	this.ticker = time.NewTicker(6 * time.Hour)
 	for range this.ticker.C {
 		err := this.Loop()
@@ -82,7 +82,7 @@ func (this *CheckUpdatesTask) Start() {
 }
 
 func (this *CheckUpdatesTask) Loop() error {
-	// 检查是否开启
+	// 妫€鏌ユ槸鍚﹀紑鍚?
 	rpcClient, err := rpc.SharedRPC()
 	if err != nil {
 		return err
@@ -105,14 +105,14 @@ func (this *CheckUpdatesTask) Loop() error {
 		return nil
 	}
 
-	// 开始检查
+	// 寮€濮嬫鏌?
 	type Response struct {
 		Code    int         `json:"code"`
 		Message string      `json:"message"`
 		Data    interface{} `json:"data"`
 	}
 
-	// 目前支持Linux
+	// 鐩墠鏀寔Linux
 	if runtime.GOOS != "linux" {
 		return nil
 	}
@@ -165,7 +165,7 @@ func (this *CheckUpdatesTask) Loop() error {
 					teaconst.NewVersionCode = latestVersion
 					teaconst.NewVersionDownloadURL = downloadURL
 
-					// 保存更新信息到文件
+					// 淇濆瓨鏇存柊淇℃伅鍒版枃浠?
 					updateInfo := map[string]interface{}{
 						"version":        latestVersion,
 						"currentVersion": teaconst.Version,
@@ -195,12 +195,12 @@ func (this *CheckUpdatesTask) Loop() error {
 	return nil
 }
 
-// DownloadAndInstallUpdate 下载并安装更新（改进版）
+// DownloadAndInstallUpdate 涓嬭浇骞跺畨瑁呮洿鏂帮紙鏀硅繘鐗堬級
 func DownloadAndInstallUpdate() error {
 	startTime := time.Now()
 	logs.Println("[UPDATE]starting update process...")
 
-	// 创建升级日志
+	// 鍒涘缓鍗囩骇鏃ュ織
 	logManager := utils.SharedUpgradeLogManager()
 	upgradeLog := &utils.UpgradeLog{
 		Component:  "admin",
@@ -210,7 +210,7 @@ func DownloadAndInstallUpdate() error {
 	}
 	_ = logManager.CreateLog(upgradeLog)
 
-	// 创建临时文件清理器
+	// 鍒涘缓涓存椂鏂囦欢娓呯悊鍣?
 	cleaner := utils.NewTempFileCleaner()
 	defer func() {
 		if err := cleaner.CleanupAll(); err != nil {
@@ -218,12 +218,12 @@ func DownloadAndInstallUpdate() error {
 		}
 	}()
 
-	// 创建通知器
+	// 鍒涘缓閫氱煡鍣?
 	notifier := utils.NewMultiNotifier()
 	notifier.AddNotifier(utils.NewLogNotifier())
 	notifier.AddNotifier(utils.NewConsoleNotifier())
 
-	// 读取更新信息
+	// 璇诲彇鏇存柊淇℃伅
 	updateInfoData, err := os.ReadFile(Tea.ConfigFile("update_info.json"))
 	if err != nil {
 		upgradeErr := utils.NewUpgradeError(utils.StageCheckVersion, utils.ErrCodeNetworkFailed,
@@ -249,17 +249,17 @@ func DownloadAndInstallUpdate() error {
 	upgradeLog.DownloadURL = downloadURL
 	_ = logManager.UpdateLog(upgradeLog)
 
-	// 通知开始
+	// 閫氱煡寮€濮?
 	notifier.NotifyStart("admin", version)
 
 	logs.Println("[UPDATE]downloading version:", version)
 	logs.Println("[UPDATE]download url:", downloadURL)
 
-	// 创建临时目录
+	// 鍒涘缓涓存椂鐩綍
 	tmpDir := Tea.ConfigFile("tmp")
 	_ = os.MkdirAll(tmpDir, 0755)
 
-	// 下载文件
+	// 涓嬭浇鏂囦欢
 	downloadFilePath := filepath.Join(tmpDir, fmt.Sprintf("ling-admin-v%s.zip", version))
 	cleaner.AddFile(downloadFilePath)
 
@@ -284,7 +284,7 @@ func DownloadAndInstallUpdate() error {
 	logs.Println("[UPDATE]download completed")
 	notifier.NotifyProgress("admin", 0.65, "Download complete, verifying...")
 
-	// 验证SHA256
+	// 楠岃瘉SHA256
 	upgradeLog.Status = utils.StatusVerifying
 	_ = logManager.UpdateLog(upgradeLog)
 
@@ -306,7 +306,7 @@ func DownloadAndInstallUpdate() error {
 		notifier.NotifyProgress("admin", 0.7, "Verification passed")
 	}
 
-	// 解压文件
+	// 瑙ｅ帇鏂囦欢
 	extractDir := filepath.Join(tmpDir, "extract")
 	_ = os.RemoveAll(extractDir)
 	_ = os.MkdirAll(extractDir, 0755)
@@ -324,7 +324,7 @@ func DownloadAndInstallUpdate() error {
 	logs.Println("[UPDATE]extract completed")
 	notifier.NotifyProgress("admin", 0.85, "Installing...")
 
-	// 找到二进制文件
+	// 鎵惧埌浜岃繘鍒舵枃浠?
 	binaryPath := filepath.Join(extractDir, "ling-admin")
 	if _, err := os.Stat(binaryPath); os.IsNotExist(err) {
 		upgradeErr := utils.NewUpgradeError(utils.StageInstall, utils.ErrCodeInstallFailed,
@@ -336,7 +336,7 @@ func DownloadAndInstallUpdate() error {
 	upgradeLog.Status = utils.StatusInstalling
 	_ = logManager.UpdateLog(upgradeLog)
 
-	// 备份当前版本
+	// 澶囦唤褰撳墠鐗堟湰
 	currentBinary, err := os.Executable()
 	if err != nil {
 		upgradeErr := utils.NewUpgradeError(utils.StageBackup, utils.ErrCodeBackupFailed,
@@ -353,13 +353,13 @@ func DownloadAndInstallUpdate() error {
 		logs.Println("[UPDATE]current version backed up to:", backupPath)
 		upgradeLog.BackupPath = backupPath
 		_ = logManager.UpdateLog(upgradeLog)
-		// 备份文件保留7天后清理
+		// 澶囦唤鏂囦欢淇濈暀7澶╁悗娓呯悊
 		cleaner.AddFileWithDelay(backupPath, 7*24*time.Hour)
 	}
 
 	notifier.NotifyProgress("admin", 0.9, "Replacing binary...")
 
-	// 替换二进制文件
+	// 鏇挎崲浜岃繘鍒舵枃浠?
 	err = os.Chmod(binaryPath, 0755)
 	if err != nil {
 		upgradeErr := utils.NewUpgradeError(utils.StageInstall, utils.ErrCodePermissionDenied,
@@ -368,7 +368,7 @@ func DownloadAndInstallUpdate() error {
 		return upgradeErr
 	}
 
-	// 先尝试直接覆盖
+	// 鍏堝皾璇曠洿鎺ヨ鐩?
 	err = copyFile(binaryPath, currentBinary)
 	if err != nil {
 		upgradeErr := utils.NewUpgradeError(utils.StageInstall, utils.ErrCodeInstallFailed,
@@ -379,7 +379,7 @@ func DownloadAndInstallUpdate() error {
 
 	logs.Println("[UPDATE]binary updated successfully")
 
-	// 更新web目录（如果存在）
+	// 鏇存柊web鐩綍锛堝鏋滃瓨鍦級
 	webSrcDir := filepath.Join(extractDir, "web")
 	if _, err := os.Stat(webSrcDir); err == nil {
 		webDestDir := Tea.Root + "/web"
@@ -394,7 +394,7 @@ func DownloadAndInstallUpdate() error {
 
 	notifier.NotifyProgress("admin", 0.95, "Update complete, restarting...")
 
-	// 更新成功
+	// 鏇存柊鎴愬姛
 	duration := time.Since(startTime)
 	upgradeLog.Status = utils.StatusSuccess
 	upgradeLog.EndTime = time.Now()
@@ -406,11 +406,11 @@ func DownloadAndInstallUpdate() error {
 
 	notifier.NotifySuccess("admin", version, duration)
 
-	// 重启服务
+	// 閲嶅惎鏈嶅姟
 	return restartService()
 }
 
-// handleUpgradeError 处理升级错误
+// handleUpgradeError 澶勭悊鍗囩骇閿欒
 func handleUpgradeError(log *utils.UpgradeLog, logManager *utils.UpgradeLogManager,
 	notifier utils.UpdateNotifier, err *utils.UpgradeError) {
 	log.Status = utils.StatusFailed
@@ -423,7 +423,7 @@ func handleUpgradeError(log *utils.UpgradeLog, logManager *utils.UpgradeLogManag
 	notifier.NotifyFailed(log.Component, log.NewVersion, err)
 }
 
-// downloadFileWithProgress 下载文件并显示进度
+// downloadFileWithProgress 涓嬭浇鏂囦欢骞舵樉绀鸿繘搴?
 func downloadFileWithProgress(url, dest string, progressCallback func(progress float32, speed float64)) error {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -457,7 +457,7 @@ func downloadFileWithProgress(url, dest string, progressCallback func(progress f
 
 			downloaded += int64(n)
 
-			// 每秒更新一次进度
+			// 姣忕鏇存柊涓€娆¤繘搴?
 			if time.Since(lastNotifyTime) >= time.Second {
 				progress := float32(downloaded) / float32(contentLength)
 				speed := float64(downloaded) / time.Since(startTime).Seconds() / 1024 / 1024
@@ -474,7 +474,7 @@ func downloadFileWithProgress(url, dest string, progressCallback func(progress f
 		}
 	}
 
-	// 最后一次进度更新
+	// 鏈€鍚庝竴娆¤繘搴︽洿鏂?
 	if contentLength > 0 {
 		speed := float64(downloaded) / time.Since(startTime).Seconds() / 1024 / 1024
 		progressCallback(1.0, speed)
@@ -558,7 +558,7 @@ func copyFile(src, dst string) error {
 		return err
 	}
 
-	// 同步到磁盘
+	// 鍚屾鍒扮鐩?
 	err = destFile.Sync()
 	return err
 }
@@ -592,10 +592,23 @@ func restartService() error {
 		return nil
 	}
 
-	// 如果systemctl失败，尝试直接重启进程
+	// 如果systemctl失败，则直接拉起新进程并退出当前进程
 	logs.Println("[UPDATE]systemctl restart failed, trying direct restart")
 
-	// 延迟1秒后退出，让当前请求完成
+	exePath, pathErr := os.Executable()
+	if pathErr != nil {
+		return fmt.Errorf("locate executable failed: %w", pathErr)
+	}
+
+	newCmd := exec.Command(exePath, os.Args[1:]...)
+	newCmd.Stdout = os.Stdout
+	newCmd.Stderr = os.Stderr
+	newCmd.Env = os.Environ()
+	if startErr := newCmd.Start(); startErr != nil {
+		return fmt.Errorf("start new process failed: %w", startErr)
+	}
+
+	// 延迟退出，保证当前请求完成
 	time.AfterFunc(1*time.Second, func() {
 		os.Exit(0)
 	})

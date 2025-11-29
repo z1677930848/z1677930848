@@ -19,7 +19,7 @@ func NewNodeGroupDAO() *NodeGroupDAO {
 	return dbs.NewDAO(&NodeGroupDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeGroups",
+			Table:  "edgeNodeGroups",
 			Model:  new(NodeGroup),
 			PkName: "id",
 		},

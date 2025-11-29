@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package iplibrary_test
 
@@ -19,7 +19,7 @@ func TestNewTemplate(t *testing.T) {
 		"42.0.32.0|42.0.63.255|中国|0|广东省|广州市|电信\n123",
 		"42.0.32.0|42.0.63.255|中国||广东省|广州市|电信",
 		"42.0.32.0|42.0.63.255|中国|0||广州市|电信",
-		"42.0.32.0|42.0.63.255|中国|0|广东省|广州市",
+		"42.0.32.0|42.0.63.255|中国|0|广东省|广州市|联通",
 	} {
 		values, ok := template.Extract(s, []string{})
 		t.Log(ok, s, "=>\n", values)

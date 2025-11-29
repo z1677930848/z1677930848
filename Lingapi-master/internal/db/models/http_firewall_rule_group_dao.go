@@ -23,7 +23,7 @@ func NewHTTPFirewallRuleGroupDAO() *HTTPFirewallRuleGroupDAO {
 	return dbs.NewDAO(&HTTPFirewallRuleGroupDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPFirewallRuleGroups",
+			Table:  "edgeHTTPFirewallRuleGroups",
 			Model:  new(HTTPFirewallRuleGroup),
 			PkName: "id",
 		},

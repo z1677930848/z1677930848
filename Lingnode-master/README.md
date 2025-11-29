@@ -1,1 +1,1 @@
-GoEdge边缘节点源码
+﻿Lingcdn边缘节点源码

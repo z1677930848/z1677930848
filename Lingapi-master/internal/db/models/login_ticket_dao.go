@@ -40,7 +40,7 @@ func NewLoginTicketDAO() *LoginTicketDAO {
 	return dbs.NewDAO(&LoginTicketDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingLoginTickets",
+			Table:  "edgeLoginTickets",
 			Model:  new(LoginTicket),
 			PkName: "id",
 		},

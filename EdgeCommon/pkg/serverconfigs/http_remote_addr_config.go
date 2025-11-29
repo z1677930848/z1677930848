@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -10,27 +10,27 @@ import (
 type HTTPRemoteAddrType = string
 
 const (
-	HTTPRemoteAddrTypeDefault       HTTPRemoteAddrType = "default"       // 默认（直连）
-	HTTPRemoteAddrTypeProxy         HTTPRemoteAddrType = "proxy"         // 代理
-	HTTPRemoteAddrTypeRequestHeader HTTPRemoteAddrType = "requestHeader" // 请求报头
-	HTTPRemoteAddrTypeVariable      HTTPRemoteAddrType = "variable"      // 变量
+	HTTPRemoteAddrTypeDefault       HTTPRemoteAddrType = "default"       // 榛樿锛堢洿杩烇級
+	HTTPRemoteAddrTypeProxy         HTTPRemoteAddrType = "proxy"         // 浠ｇ悊
+	HTTPRemoteAddrTypeRequestHeader HTTPRemoteAddrType = "requestHeader" // 璇锋眰鎶ュご
+	HTTPRemoteAddrTypeVariable      HTTPRemoteAddrType = "variable"      // 鍙橀噺
 )
 
-// HTTPRemoteAddrConfig HTTP获取客户端IP地址方式
+// HTTPRemoteAddrConfig HTTP鑾峰彇瀹㈡埛绔疘P鍦板潃鏂瑰紡
 type HTTPRemoteAddrConfig struct {
 	IsPrior bool               `yaml:"isPrior" json:"isPrior"`
 	IsOn    bool               `yaml:"isOn" json:"isOn"`
-	Value   string             `yaml:"value" json:"value"` // 值变量
-	Type    HTTPRemoteAddrType `yaml:"type" json:"type"`   // 类型
+	Value   string             `yaml:"value" json:"value"` // 鍊煎彉閲?
+	Type    HTTPRemoteAddrType `yaml:"type" json:"type"`   // 绫诲瀷
 
-	RequestHeaderName string `yaml:"requestHeaderName" json:"requestHeaderName"` // 请求报头名称（type = requestHeader时生效）
+	RequestHeaderName string `yaml:"requestHeaderName" json:"requestHeaderName"` // 璇锋眰鎶ュご鍚嶇О锛坱ype = requestHeader鏃剁敓鏁堬級
 
 	isEmpty   bool
 	values    []string
 	hasValues bool
 }
 
-// Init 初始化
+// Init 鍒濆鍖?
 func (this *HTTPRemoteAddrConfig) Init() error {
 	this.Value = strings.TrimSpace(this.Value)
 	this.isEmpty = false
@@ -62,17 +62,17 @@ func (this *HTTPRemoteAddrConfig) Init() error {
 	return nil
 }
 
-// IsEmpty 是否为空
+// IsEmpty 鏄惁涓虹┖
 func (this *HTTPRemoteAddrConfig) IsEmpty() bool {
 	return this.isEmpty
 }
 
-// Values 可能的值变量
+// Values 鍙兘鐨勫€煎彉閲?
 func (this *HTTPRemoteAddrConfig) Values() []string {
 	return this.values
 }
 
-// HasValues 检查是否有一组值
+// HasValues 妫€鏌ユ槸鍚︽湁涓€缁勫€?
 func (this *HTTPRemoteAddrConfig) HasValues() bool {
 	return this.hasValues
 }

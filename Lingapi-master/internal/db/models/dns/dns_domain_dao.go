@@ -26,7 +26,7 @@ func NewDNSDomainDAO() *DNSDomainDAO {
 	return dbs.NewDAO(&DNSDomainDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingDNSDomains",
+			Table:  "edgeDNSDomains",
 			Model:  new(DNSDomain),
 			PkName: "id",
 		},

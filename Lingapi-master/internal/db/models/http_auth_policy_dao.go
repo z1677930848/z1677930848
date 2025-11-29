@@ -23,7 +23,7 @@ func NewHTTPAuthPolicyDAO() *HTTPAuthPolicyDAO {
 	return dbs.NewDAO(&HTTPAuthPolicyDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPAuthPolicies",
+			Table:  "edgeHTTPAuthPolicies",
 			Model:  new(HTTPAuthPolicy),
 			PkName: "id",
 		},

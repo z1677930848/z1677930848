@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package systemconfigs
 
@@ -9,9 +9,9 @@ const (
 	BandwidthUnitBit  BandwidthUnit = "bit"
 )
 
-type BandwidthAlgo = string // 带宽算法
+type BandwidthAlgo = string // 甯﹀绠楁硶
 
 const (
-	BandwidthAlgoSecondly BandwidthAlgo = "secondly" // 按秒算
-	BandwidthAlgoAvg      BandwidthAlgo = "avg"      // N分钟平均
+	BandwidthAlgoSecondly BandwidthAlgo = "secondly" // 鎸夌绠?
+	BandwidthAlgoAvg      BandwidthAlgo = "avg"      // N鍒嗛挓骞冲潎
 )

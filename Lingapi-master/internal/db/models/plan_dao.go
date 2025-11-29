@@ -24,7 +24,7 @@ func NewPlanDAO() *PlanDAO {
 	return dbs.NewDAO(&PlanDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingPlans",
+			Table:  "edgePlans",
 			Model:  new(Plan),
 			PkName: "id",
 		},

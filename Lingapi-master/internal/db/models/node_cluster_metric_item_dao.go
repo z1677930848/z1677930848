@@ -21,7 +21,7 @@ func NewNodeClusterMetricItemDAO() *NodeClusterMetricItemDAO {
 	return dbs.NewDAO(&NodeClusterMetricItemDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeClusterMetricItems",
+			Table:  "edgeNodeClusterMetricItems",
 			Model:  new(NodeClusterMetricItem),
 			PkName: "id",
 		},

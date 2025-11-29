@@ -23,7 +23,8 @@ type License struct {
 
 var licensePath = "/opt/lingcdn/configs/license.json"
 
-// GetMaxNodesByType returns the max nodes limit for a license type
+// GetMaxNodesByType returns the max nodes limit for a license 
+type
 func GetMaxNodesByType(licenseType string) int {
 	switch licenseType {
 	case "trial":

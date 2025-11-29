@@ -44,7 +44,7 @@ func NewNodeDAO() *NodeDAO {
 	return dbs.NewDAO(&NodeDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodes",
+			Table:  "edgeNodes",
 			Model:  new(Node),
 			PkName: "id",
 		},
@@ -1466,9 +1466,9 @@ func (this *NodeDAO) FindEnabledNodeIdWithUniqueId(tx *dbs.Tx, uniqueId string) 
 func (this *NodeDAO) CountAllEnabledNodesWithGrantId(tx *dbs.Tx, grantId int64) (int64, error) {
 	return this.Query(tx).
 		State(NodeStateEnabled).
-		Where("id IN (SELECT nodeId FROM skNodeLogins WHERE type='ssh' AND JSON_CONTAINS(params, :grantParam))").
+		Where("id IN (SELECT nodeId FROM edgeNodeLogins WHERE type='ssh' AND JSON_CONTAINS(params, :grantParam))").
 		Param("grantParam", string(maps.Map{"grantId": grantId}.AsJSON())).
-		Where("clusterId IN (SELECT id FROM skNodeClusters WHERE state=1)").
+		Where("clusterId IN (SELECT id FROM edgeNodeClusters WHERE state=1)").
 		Count()
 }
 
@@ -1476,9 +1476,9 @@ func (this *NodeDAO) CountAllEnabledNodesWithGrantId(tx *dbs.Tx, grantId int64) 
 func (this *NodeDAO) FindAllEnabledNodesWithGrantId(tx *dbs.Tx, grantId int64) (result []*Node, err error) {
 	_, err = this.Query(tx).
 		State(NodeStateEnabled).
-		Where("id IN (SELECT nodeId FROM skNodeLogins WHERE type='ssh' AND JSON_CONTAINS(params, :grantParam) AND state=1)").
+		Where("id IN (SELECT nodeId FROM edgeNodeLogins WHERE type='ssh' AND JSON_CONTAINS(params, :grantParam) AND state=1)").
 		Param("grantParam", string(maps.Map{"grantId": grantId}.AsJSON())).
-		Where("clusterId IN (SELECT id FROM skNodeClusters WHERE state=1)").
+		Where("clusterId IN (SELECT id FROM edgeNodeClusters WHERE state=1)").
 		Slice(&result).
 		DescPk().
 		FindAll()

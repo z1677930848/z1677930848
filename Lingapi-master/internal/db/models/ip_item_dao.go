@@ -52,7 +52,7 @@ func NewIPItemDAO() *IPItemDAO {
 	return dbs.NewDAO(&IPItemDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingIPItems",
+			Table:  "edgeIPItems",
 			Model:  new(IPItem),
 			PkName: "id",
 		},

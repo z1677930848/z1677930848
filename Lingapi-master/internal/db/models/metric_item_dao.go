@@ -27,7 +27,7 @@ func NewMetricItemDAO() *MetricItemDAO {
 	return dbs.NewDAO(&MetricItemDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingMetricItems",
+			Table:  "edgeMetricItems",
 			Model:  new(MetricItem),
 			PkName: "id",
 		},

@@ -25,7 +25,7 @@ func NewFormalClientSystemDAO() *FormalClientSystemDAO {
 	return dbs.NewDAO(&FormalClientSystemDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingFormalClientSystems",
+			Table:  "edgeFormalClientSystems",
 			Model:  new(FormalClientSystem),
 			PkName: "id",
 		},

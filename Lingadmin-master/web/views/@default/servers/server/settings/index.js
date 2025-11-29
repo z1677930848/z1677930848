@@ -13,6 +13,7 @@ Tea.context(function () {
 	this.userId = 0
 	this.plans = []
 	this.userPlanId = 0
+	this.userPlans = []
 	this.oldClusterId = this.server.clusterId
 
 	if (this.userPlan != null) {
@@ -34,6 +35,7 @@ Tea.context(function () {
 			})
 			.success(function (resp) {
 				this.plans = resp.data.plans
+				this.userPlans = resp.data.userPlans
 			})
 	}
 

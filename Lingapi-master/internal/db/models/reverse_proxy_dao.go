@@ -26,7 +26,7 @@ func NewReverseProxyDAO() *ReverseProxyDAO {
 	return dbs.NewDAO(&ReverseProxyDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingReverseProxies",
+			Table:  "edgeReverseProxies",
 			Model:  new(ReverseProxy),
 			PkName: "id",
 		},

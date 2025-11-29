@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package main
 
@@ -90,7 +90,7 @@ func removeDuplicates(s []string) []string {
 	return result
 }
 
-// 生成JSON格式API列表
+// 鐢熸垚JSON鏍煎紡API鍒楄〃
 func main() {
 	var quiet = false
 	flag.BoolVar(&quiet, "quiet", false, "")
@@ -113,7 +113,7 @@ func main() {
 			}
 		}
 
-		// 排序以保证输出内容的稳定性
+		// 鎺掑簭浠ヤ繚璇佽緭鍑哄唴瀹圭殑绋冲畾鎬?
 		sort.Strings(rootDirs)
 
 		for _, rootDir := range rootDirs {
@@ -123,7 +123,7 @@ func main() {
 				return
 			}
 
-			// 排序以保证输出内容的稳定性
+			// 鎺掑簭浠ヤ繚璇佽緭鍑哄唴瀹圭殑绋冲畾鎬?
 			sort.Strings(files)
 
 			var methodNameReg = regexp.MustCompile(`func\s*\(\w+\s+\*\s*(\w+Service)\)\s*(\w+)\s*\(`) // $1: serviceName, $2 methodName
@@ -144,7 +144,7 @@ func main() {
 						methodSource = sourceCode[loc[0]:locList[index+1][0]]
 					}
 
-					// 方法名
+					// 鏂规硶鍚?
 					var submatch = methodNameReg.FindStringSubmatch(methodSource)
 					if len(submatch) == 0 {
 						continue
@@ -242,7 +242,7 @@ func main() {
 					return
 				}
 
-				// 排序以保持稳定性
+				// 鎺掑簭浠ヤ繚鎸佺ǔ瀹氭€?
 				sort.Strings(files)
 
 				for _, path := range files {
@@ -258,7 +258,7 @@ func main() {
 							return
 						}
 
-						// 先将rpc代码替换成临时代码
+						// 鍏堝皢rpc浠ｇ爜鏇挎崲鎴愪复鏃朵唬鐮?
 						var methodCodeMap = map[string][]byte{} // code => method
 						var methodIndex = 0
 						var methodReg = regexp.MustCompile(`(?s)rpc\s+(\w+)\s*\(\s*(\w+)\s*\)\s*returns\s*\(\s*(\w+)\s*\)\s*(\{.+})?\s*;`)
@@ -269,8 +269,8 @@ func main() {
 							return []byte("\n" + code)
 						})
 
-						// 服务列表
-						// TODO 这里需要改进一下，当前实现方法如果方法注释里有括号（}），就会导致部分方法解析不到
+						// 鏈嶅姟鍒楄〃
+						// TODO 杩欓噷闇€瑕佹敼杩涗竴涓嬶紝褰撳墠瀹炵幇鏂规硶濡傛灉鏂规硶娉ㄩ噴閲屾湁鎷彿锛坿锛夛紝灏变細瀵艰嚧閮ㄥ垎鏂规硶瑙ｆ瀽涓嶅埌
 						var serviceNameReg = regexp.MustCompile(`(?sU)\n\s*service\s+(\w+)\s*\{(.+)}`)
 						var serviceMatches = serviceNameReg.FindAllSubmatch(data, -1)
 						var serviceNamePositions = serviceNameReg.FindAllIndex(data, -1)
@@ -279,7 +279,7 @@ func main() {
 							var serviceNamePosition = serviceNamePositions[serviceMatchIndex][0]
 							var comment = readComments(data[:serviceNamePosition])
 
-							// 方法列表
+							// 鏂规硶鍒楄〃
 							var methods = []*MethodInfo{}
 							var serviceData = serviceMatch[2]
 							var methodCodeReg = regexp.MustCompile(`\b(METHOD\d+)\b`)
@@ -315,7 +315,7 @@ func main() {
 							})
 						}
 
-						// 消息列表
+						// 娑堟伅鍒楄〃
 						var topMessageCodeMap = map[string][]byte{} // code => message
 						var allMessageCodeMap = map[string][]byte{}
 						var messageCodeIndex = 0
@@ -329,7 +329,7 @@ func main() {
 								messageCodeIndex++
 								hasMessage = true
 
-								// 是否包含子Message
+								// 鏄惁鍖呭惈瀛怣essage
 								var subMatches = messageCodeREG.FindAllSubmatch(messageData, -1)
 								for _, subMatch := range subMatches {
 									var subMatchCode = string(subMatch[0])
@@ -347,7 +347,7 @@ func main() {
 						}
 
 						for messageCode, messageData := range topMessageCodeMap {
-							// 替换其中的子Message
+							// 鏇挎崲鍏朵腑鐨勫瓙Message
 							for {
 								if messageCodeREG.Match(messageData) {
 									messageData = messageCodeREG.ReplaceAllFunc(messageData, func(messageCodeData []byte) []byte {
@@ -358,7 +358,7 @@ func main() {
 								}
 							}
 
-							// 注释
+							// 娉ㄩ噴
 							var index = bytes.Index(data, []byte(messageCode))
 							var messageName = string(firstMessagesReg.FindSubmatch(messageData)[1])
 							messages = append(messages, &MessageInfo{
@@ -380,7 +380,7 @@ func main() {
 		countMethods += len(service.Methods)
 	}
 
-	// 链接
+	// 閾炬帴
 	var links = []*LinkInfo{}
 
 	// json links
@@ -396,7 +396,7 @@ func main() {
 					return
 				}
 
-				// 排序以保持稳定性
+				// 鎺掑簭浠ヤ繚鎸佺ǔ瀹氭€?
 				sort.Strings(files)
 
 				for _, path := range files {
@@ -418,7 +418,7 @@ func main() {
 		}
 	}
 
-	// 对消息进行排序，以保持稳定性
+	// 瀵规秷鎭繘琛屾帓搴忥紝浠ヤ繚鎸佺ǔ瀹氭€?
 	sort.Slice(messages, func(i, j int) bool {
 		return messages[i].Name < messages[j].Name
 	})

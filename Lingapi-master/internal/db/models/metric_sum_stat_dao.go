@@ -39,7 +39,7 @@ func NewMetricSumStatDAO() *MetricSumStatDAO {
 	return dbs.NewDAO(&MetricSumStatDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingMetricSumStats",
+			Table:  "edgeMetricSumStats",
 			Model:  new(MetricSumStat),
 			PkName: "id",
 		},

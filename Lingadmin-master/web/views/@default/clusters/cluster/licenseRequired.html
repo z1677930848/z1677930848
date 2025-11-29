@@ -1,0 +1,31 @@
+{$layout}
+{$template "/clusters/cluster/menu"}
+
+<div class="ui segment" style="max-width: 600px; margin: 100px auto;">
+    <div class="ui icon message warning">
+        <i class="exclamation triangle icon"></i>
+        <div class="content">
+            <div class="header" style="font-size: 18px; margin-bottom: 10px;">
+                授权验证失败
+            </div>
+            <p style="font-size: 14px;">{{.message}}</p>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{{.redirectUrl}}" class="ui button primary large">
+            <i class="key icon"></i>
+            前往授权页面
+        </a>
+        <a href="javascript:history.back()" class="ui button" style="margin-left: 10px;">
+            返回上一页
+        </a>
+    </div>
+</div>
+
+<script>
+// 3秒后自动跳转
+setTimeout(function() {
+    window.location.href = '{{.redirectUrl}}';
+}, 3000);
+</script>

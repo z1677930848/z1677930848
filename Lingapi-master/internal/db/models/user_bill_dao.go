@@ -12,7 +12,7 @@ func NewUserBillDAO() *UserBillDAO {
 	return dbs.NewDAO(&UserBillDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserBills",
+			Table:  "edgeUserBills",
 			Model:  new(UserBill),
 			PkName: "id",
 		},

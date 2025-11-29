@@ -1,11 +1,11 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package systemconfigs
 
-// CheckUpdatesConfig 检查更新配置
+// CheckUpdatesConfig 妫€鏌ユ洿鏂伴厤缃?
 type CheckUpdatesConfig struct {
-	AutoCheck      bool   `yaml:"autoCheck" json:"autoCheck"`           // 是否开启自动检查
-	IgnoredVersion string `yaml:"ignoredVersion" json:"ignoredVersion"` // 上次忽略的版本
+	AutoCheck      bool   `yaml:"autoCheck" json:"autoCheck"`           // 鏄惁寮€鍚嚜鍔ㄦ鏌?
+	IgnoredVersion string `yaml:"ignoredVersion" json:"ignoredVersion"` // 涓婃蹇界暐鐨勭増鏈?
 }
 
 func NewCheckUpdatesConfig() *CheckUpdatesConfig {

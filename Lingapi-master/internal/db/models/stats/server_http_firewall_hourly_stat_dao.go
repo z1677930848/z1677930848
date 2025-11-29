@@ -36,7 +36,7 @@ func NewServerHTTPFirewallHourlyStatDAO() *ServerHTTPFirewallHourlyStatDAO {
 	return dbs.NewDAO(&ServerHTTPFirewallHourlyStatDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingServerHTTPFirewallHourlyStats",
+			Table:  "edgeServerHTTPFirewallHourlyStats",
 			Model:  new(ServerHTTPFirewallHourlyStat),
 			PkName: "id",
 		},

@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package ddosconfigs
 
@@ -8,11 +8,11 @@ type TCPConfig struct {
 	MaxConnections      int32 `json:"maxConnections"`
 	MaxConnectionsPerIP int32 `json:"maxConnectionsPerIP"`
 
-	// 分钟级速率
-	NewConnectionsMinutelyRate             int32 `json:"newConnectionsRate"`             // 分钟
-	NewConnectionsMinutelyRateBlockTimeout int32 `json:"newConnectionsRateBlockTimeout"` // 拦截时间
+	// 鍒嗛挓绾ч€熺巼
+	NewConnectionsMinutelyRate             int32 `json:"newConnectionsRate"`             // 鍒嗛挓
+	NewConnectionsMinutelyRateBlockTimeout int32 `json:"newConnectionsRateBlockTimeout"` // 鎷︽埅鏃堕棿
 
-	// 秒级速率
+	// 绉掔骇閫熺巼
 	NewConnectionsSecondlyRate             int32 `json:"newConnectionsSecondlyRate"`
 	NewConnectionsSecondlyRateBlockTimeout int32 `json:"newConnectionsSecondlyRateBlockTimeout"`
 

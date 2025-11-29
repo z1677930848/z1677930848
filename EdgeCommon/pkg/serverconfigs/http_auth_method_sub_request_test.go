@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -13,7 +13,8 @@ import (
 func TestHTTPAuthRequestMethod_Filter(t *testing.T) {
 	method := &HTTPAuthSubRequestMethod{}
 	err := method.Init(map[string]interface{}{
-		"url":    "http://127.0.0.1:2345/",
+		// 使用相对路径避免真实外部请求
+		"url":    "/hello",
 		"method": http.MethodPost,
 	})
 	if err != nil {
@@ -24,9 +25,9 @@ func TestHTTPAuthRequestMethod_Filter(t *testing.T) {
 		t.Fatal(err)
 	}
 	req.Header.Set("Hello", "World")
-	req.Header.Set("User-Agent", "GoEdge/1.0")
+	req.Header.Set("User-Agent", "Lingcdn/1.0")
 	b, uri, uriChanged, err := method.Filter(req, func(subReq *http.Request) (status int, err error) {
-		return
+		return http.StatusOK, nil
 	}, func(s string) string {
 		return s
 	})
@@ -50,7 +51,7 @@ func TestHTTPAuthRequestMethod_Filter_Path(t *testing.T) {
 		t.Fatal(err)
 	}
 	req.Header.Set("Hello", "World")
-	req.Header.Set("User-Agent", "GoEdge/1.0")
+	req.Header.Set("User-Agent", "Lingcdn/1.0")
 	b, uri, uriChanged, err := method.Filter(req, func(subReq *http.Request) (status int, err error) {
 		status = rands.Int(200, 400)
 		t.Log("execute sub request:", subReq.URL, status)

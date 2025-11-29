@@ -30,7 +30,7 @@ func NewRegionCountryDAO() *RegionCountryDAO {
 	return dbs.NewDAO(&RegionCountryDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingRegionCountries",
+			Table:  "edgeRegionCountries",
 			Model:  new(RegionCountry),
 			PkName: "id",
 		},

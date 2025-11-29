@@ -25,7 +25,7 @@ func NewACMEUserDAO() *ACMEUserDAO {
 	return dbs.NewDAO(&ACMEUserDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingACMEUsers",
+			Table:  "edgeACMEUsers",
 			Model:  new(ACMEUser),
 			PkName: "id",
 		},

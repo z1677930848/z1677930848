@@ -1,8 +1,8 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package userconfigs
 
-// 认证状态
+// 璁よ瘉鐘舵€?
 
 type UserIdentityStatus = string
 
@@ -13,7 +13,7 @@ const (
 	UserIdentityStatusVerified  UserIdentityStatus = "verified"
 )
 
-// 认证类型
+// 璁よ瘉绫诲瀷
 
 type UserIdentityType = string
 
@@ -22,7 +22,7 @@ const (
 	UserIdentityTypeEnterpriseLicense UserIdentityType = "enterpriseLicense"
 )
 
-// 组织类型
+// 缁勭粐绫诲瀷
 
 type UserIdentityOrgType = string
 

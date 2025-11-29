@@ -21,7 +21,7 @@ func NewUserIdentityDAO() *UserIdentityDAO {
 	return dbs.NewDAO(&UserIdentityDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserIdentities",
+			Table:  "edgeUserIdentities",
 			Model:  new(UserIdentity),
 			PkName: "id",
 		},

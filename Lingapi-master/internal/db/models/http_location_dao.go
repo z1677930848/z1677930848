@@ -25,7 +25,7 @@ func NewHTTPLocationDAO() *HTTPLocationDAO {
 	return dbs.NewDAO(&HTTPLocationDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPLocations",
+			Table:  "edgeHTTPLocations",
 			Model:  new(HTTPLocation),
 			PkName: "id",
 		},

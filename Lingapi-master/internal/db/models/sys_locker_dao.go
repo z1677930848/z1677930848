@@ -18,7 +18,7 @@ func NewSysLockerDAO() *SysLockerDAO {
 	return dbs.NewDAO(&SysLockerDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingSysLockers",
+			Table:  "edgeSysLockers",
 			Model:  new(SysLocker),
 			PkName: "id",
 		},

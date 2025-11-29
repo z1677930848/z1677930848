@@ -29,7 +29,7 @@ func NewIPLibraryFileDAO() *IPLibraryFileDAO {
 	return dbs.NewDAO(&IPLibraryFileDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingIPLibraryFiles",
+			Table:  "edgeIPLibraryFiles",
 			Model:  new(IPLibraryFile),
 			PkName: "id",
 		},

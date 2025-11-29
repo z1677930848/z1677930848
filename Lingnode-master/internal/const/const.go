@@ -1,20 +1,21 @@
 package teaconst
 
 const (
-	Version = "1.0.0"
+	// 版本号：保持与管理端的节点版本一致
+	Version = "1.1.0"
 
-	ProductName = "Edge Node"
-	ProcessName = "edge-node"
+	ProductName = "Ling node"
+	ProcessName = "ling-node"
 
 	Role = "node"
 
 	EncryptMethod = "aes-256-cfb"
 
 	// SystemdServiceName systemd
-	SystemdServiceName = "edge-node"
+	SystemdServiceName = "ling-node"
 
-	AccessLogSockName    = "edge-node.accesslog"
-	CacheGarbageSockName = "edge-node.cache.garbage"
+	AccessLogSockName    = "ling-node.accesslog"
+	CacheGarbageSockName = "ling-node.cache.garbage"
 
 	EnableKVCacheStore = true // determine store cache keys in KVStore or sqlite
 )

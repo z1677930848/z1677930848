@@ -35,7 +35,7 @@ func NewServerClientSystemMonthlyStatDAO() *ServerClientSystemMonthlyStatDAO {
 	return dbs.NewDAO(&ServerClientSystemMonthlyStatDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingServerClientSystemMonthlyStats",
+			Table:  "edgeServerClientSystemMonthlyStats",
 			Model:  new(ServerClientSystemMonthlyStat),
 			PkName: "id",
 		},

@@ -17,7 +17,7 @@ func NewPostCategoryDAO() *PostCategoryDAO {
 	return dbs.NewDAO(&PostCategoryDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingPostCategories",
+			Table:  "edgePostCategories",
 			Model:  new(PostCategory),
 			PkName: "id",
 		},

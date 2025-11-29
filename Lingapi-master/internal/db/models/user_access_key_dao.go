@@ -21,7 +21,7 @@ func NewUserAccessKeyDAO() *UserAccessKeyDAO {
 	return dbs.NewDAO(&UserAccessKeyDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserAccessKeys",
+			Table:  "edgeUserAccessKeys",
 			Model:  new(UserAccessKey),
 			PkName: "id",
 		},

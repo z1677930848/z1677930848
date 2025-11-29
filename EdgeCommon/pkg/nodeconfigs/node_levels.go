@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package nodeconfigs
 
@@ -10,28 +10,19 @@ type NodeLevel struct {
 
 func FindAllNodeLevels() []*NodeLevel {
 	return []*NodeLevel{
-		{
-			Name:        "边缘节点",
-			Code:        1,
-			Description: "普通的边缘节点。",
-		},
-		{
-			Name:        "L2节点",
-			Code:        2,
-			Description: "特殊的边缘节点，同时负责同组上一级节点的回源。",
-		},
+		{Name: "Edge", Code: 1, Description: "standard edge node"},
+		{Name: "L2", Code: 2, Description: "edge node with upstream backhaul"},
 	}
 }
 
 func FindNodeLevel(level int) *NodeLevel {
-	level--
-
-	var levels = FindAllNodeLevels()
-	if level < 0 {
-		return levels[0]
+	levels := FindAllNodeLevels()
+	idx := level - 1
+	if idx < 0 {
+		idx = 0
 	}
-	if level < len(levels) {
-		return levels[level]
+	if idx >= len(levels) {
+		idx = 0
 	}
-	return levels[0]
+	return levels[idx]
 }

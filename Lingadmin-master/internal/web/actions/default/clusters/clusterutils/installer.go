@@ -20,13 +20,13 @@ type installerFile struct {
 
 func ListInstallerFiles() []*installerFile {
 	var dir = Tea.Root + "/edge-api/deploy"
-	matches, err := filepath.Glob(dir + "/edge-node-*.zip")
+	matches, err := filepath.Glob(dir + "/ling-node-*.zip")
 	if err != nil {
 		return nil
 	}
 
 	var result = []*installerFile{}
-	var reg = regexp.MustCompile(`^edge-node-(\w+)-(\w+)-v([\w.]+)\.zip$`)
+	var reg = regexp.MustCompile(`^ling-node-(\w+)-(\w+)-v([\w.]+)\.zip$`)
 	for _, match := range matches {
 		var baseName = filepath.Base(match)
 		var subMatches = reg.FindStringSubmatch(baseName)

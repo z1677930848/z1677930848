@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package langs_test
 
@@ -49,7 +49,7 @@ func TestFormat(t *testing.T) {
 
 	{
 		var lang = langs.DefaultManager().AddLang("zh-CN")
-		lang.Set("book_name", "Go语言")
+		lang.Set("book_name", "Go璇█")
 	}
 
 	t.Log(langs.Format("en-US", "this is ${lang:book_name} book"))

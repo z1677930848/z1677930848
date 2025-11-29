@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -28,7 +28,7 @@ const (
 
 var AccessLogSyslogStoragePriorities = []maps.Map{
 	{
-		"name":  "[无]",
+		"name":  "[鏃燷",
 		"value": -1,
 	},
 	{
@@ -65,7 +65,7 @@ var AccessLogSyslogStoragePriorities = []maps.Map{
 	},
 }
 
-// AccessLogSyslogStorageConfig syslog存储策略
+// AccessLogSyslogStorageConfig syslog瀛樺偍绛栫暐
 type AccessLogSyslogStorageConfig struct {
 	Protocol   string                         `yaml:"protocol" json:"protocol"` // SysLogStorageProtocol*
 	ServerAddr string                         `yaml:"serverAddr" json:"serverAddr"`

@@ -17,7 +17,7 @@ func NewProviderDAO() *ProviderDAO {
 	return dbs.NewDAO(&ProviderDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingProviders",
+			Table:  "edgeProviders",
 			Model:  new(Provider),
 			PkName: "id",
 		},

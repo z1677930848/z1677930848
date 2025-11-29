@@ -65,6 +65,7 @@ func (this *IndexAction) RunPost(params struct {
 			"message": "读取更新信息失败：" + err.Error(),
 		}
 		this.Success()
+		return
 	}
 
 	defer func() {
@@ -77,6 +78,7 @@ func (this *IndexAction) RunPost(params struct {
 			"message": "读取更新信息失败：" + err.Error(),
 		}
 		this.Success()
+		return
 	}
 
 	var apiResponse = &Response{}
@@ -87,6 +89,7 @@ func (this *IndexAction) RunPost(params struct {
 			"message": "解析更新信息失败：" + err.Error(),
 		}
 		this.Success()
+		return
 	}
 
 	if apiResponse.Code != 200 {
@@ -95,6 +98,7 @@ func (this *IndexAction) RunPost(params struct {
 			"message": "解析更新信息失败：" + apiResponse.Message,
 		}
 		this.Success()
+		return
 	}
 
 	var m = maps.NewMap(apiResponse.Data)

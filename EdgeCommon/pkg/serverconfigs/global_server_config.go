@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package serverconfigs
 
@@ -39,68 +39,68 @@ func NewGlobalServerConfig() *GlobalServerConfig {
 	return config
 }
 
-// GlobalServerConfig 全局的服务配置
+// GlobalServerConfig 鍏ㄥ眬鐨勬湇鍔￠厤缃?
 type GlobalServerConfig struct {
 	HTTPAll struct {
-		MatchDomainStrictly  bool                  `yaml:"matchDomainStrictly" json:"matchDomainStrictly"`   // 是否严格匹配域名
-		AllowMismatchDomains []string              `yaml:"allowMismatchDomains" json:"allowMismatchDomains"` // 允许的不匹配的域名
-		AllowNodeIP          bool                  `yaml:"allowNodeIP" json:"allowNodeIP"`                   // 允许IP直接访问
-		NodeIPShowPage       bool                  `yaml:"nodeIPShowPage" json:"nodeIPShowPage"`             // 访问IP地址是否显示页面
-		NodeIPPageHTML       string                `yaml:"nodeIPPageHTML" json:"nodeIPPageHTML"`             // 访问IP地址页面内容
-		DefaultDomain        string                `yaml:"defaultDomain" json:"defaultDomain"`               // 默认的域名
-		DomainMismatchAction *DomainMismatchAction `yaml:"domainMismatchAction" json:"domainMismatchAction"` // 不匹配时采取的动作
+		MatchDomainStrictly  bool                  `yaml:"matchDomainStrictly" json:"matchDomainStrictly"`   // 鏄惁涓ユ牸鍖归厤鍩熷悕
+		AllowMismatchDomains []string              `yaml:"allowMismatchDomains" json:"allowMismatchDomains"` // 鍏佽鐨勪笉鍖归厤鐨勫煙鍚?
+		AllowNodeIP          bool                  `yaml:"allowNodeIP" json:"allowNodeIP"`                   // 鍏佽IP鐩存帴璁块棶
+		NodeIPShowPage       bool                  `yaml:"nodeIPShowPage" json:"nodeIPShowPage"`             // 璁块棶IP鍦板潃鏄惁鏄剧ず椤甸潰
+		NodeIPPageHTML       string                `yaml:"nodeIPPageHTML" json:"nodeIPPageHTML"`             // 璁块棶IP鍦板潃椤甸潰鍐呭
+		DefaultDomain        string                `yaml:"defaultDomain" json:"defaultDomain"`               // 榛樿鐨勫煙鍚?
+		DomainMismatchAction *DomainMismatchAction `yaml:"domainMismatchAction" json:"domainMismatchAction"` // 涓嶅尮閰嶆椂閲囧彇鐨勫姩浣?
 
-		SupportsLowVersionHTTP    bool                      `yaml:"supportsLowVersionHTTP" json:"supportsLowVersionHTTP"`       // 是否启用低版本HTTP
-		MatchCertFromAllServers   bool                      `yaml:"matchCertFromAllServers" json:"matchCertFromAllServers"`     // 从所有服务中匹配证书（不要轻易开启！）
-		ForceLnRequest            bool                      `yaml:"forceLnRequest" json:"forceLnRequest"`                       // 强制从Ln请求内容
-		LnRequestSchedulingMethod LnRequestSchedulingMethod `yaml:"lnRequestSchedulingMethod" json:"lnRequestSchedulingMethod"` // Ln请求调度方法
-		ServerName                string                    `yaml:"serverName" json:"serverName"`                               // Server名称
-		EnableServerAddrVariable  bool                      `yaml:"enableServerAddrVariable" json:"enableServerAddrVariable"`   // 是否支持${serverAddr}变量
-		XFFMaxAddresses           int                       `yaml:"xffMaxAddresses" json:"xffMaxAddresses"`                     // XFF中最多的地址数
+		SupportsLowVersionHTTP    bool                      `yaml:"supportsLowVersionHTTP" json:"supportsLowVersionHTTP"`       // 鏄惁鍚敤浣庣増鏈琀TTP
+		MatchCertFromAllServers   bool                      `yaml:"matchCertFromAllServers" json:"matchCertFromAllServers"`     // 浠庢墍鏈夋湇鍔′腑鍖归厤璇佷功锛堜笉瑕佽交鏄撳紑鍚紒锛?
+		ForceLnRequest            bool                      `yaml:"forceLnRequest" json:"forceLnRequest"`                       // 寮哄埗浠嶭n璇锋眰鍐呭
+		LnRequestSchedulingMethod LnRequestSchedulingMethod `yaml:"lnRequestSchedulingMethod" json:"lnRequestSchedulingMethod"` // Ln璇锋眰璋冨害鏂规硶
+		ServerName                string                    `yaml:"serverName" json:"serverName"`                               // Server鍚嶇О
+		EnableServerAddrVariable  bool                      `yaml:"enableServerAddrVariable" json:"enableServerAddrVariable"`   // 鏄惁鏀寔${serverAddr}鍙橀噺
+		XFFMaxAddresses           int                       `yaml:"xffMaxAddresses" json:"xffMaxAddresses"`                     // XFF涓渶澶氱殑鍦板潃鏁?
 
-		DomainAuditingIsOn   bool   `yaml:"domainAuditingIsOn" json:"domainAuditingIsOn"`     // 域名是否需要审核
-		DomainAuditingPrompt string `yaml:"domainAuditingPrompt" json:"domainAuditingPrompt"` // 域名审核的提示
+		DomainAuditingIsOn   bool   `yaml:"domainAuditingIsOn" json:"domainAuditingIsOn"`     // 鍩熷悕鏄惁闇€瑕佸鏍?
+		DomainAuditingPrompt string `yaml:"domainAuditingPrompt" json:"domainAuditingPrompt"` // 鍩熷悕瀹℃牳鐨勬彁绀?
 
-		RequestOriginsWithEncodings bool `yaml:"requestOriginsWithEncodings" json:"requestOriginsWithEncodings"` // 使用使用压缩编码回源
-	} `yaml:"httpAll" json:"httpAll"` // HTTP统一配置
+		RequestOriginsWithEncodings bool `yaml:"requestOriginsWithEncodings" json:"requestOriginsWithEncodings"` // 浣跨敤浣跨敤鍘嬬缉缂栫爜鍥炴簮
+	} `yaml:"httpAll" json:"httpAll"` // HTTP缁熶竴閰嶇疆
 
 	TCPAll struct {
-		PortRangeMin int   `yaml:"portRangeMin" json:"portRangeMin"` // 最小端口
-		PortRangeMax int   `yaml:"portRangeMax" json:"portRangeMax"` // 最大端口
-		DenyPorts    []int `yaml:"denyPorts" json:"denyPorts"`       // 禁止使用的端口
+		PortRangeMin int   `yaml:"portRangeMin" json:"portRangeMin"` // 鏈€灏忕鍙?
+		PortRangeMax int   `yaml:"portRangeMax" json:"portRangeMax"` // 鏈€澶х鍙?
+		DenyPorts    []int `yaml:"denyPorts" json:"denyPorts"`       // 绂佹浣跨敤鐨勭鍙?
 	} `yaml:"tcpAll" json:"tcpAll"`
 
 	HTTPAccessLog struct {
-		IsOn                     bool `yaml:"isOn" json:"isOn"`                                         // 是否启用此功能
-		EnableRequestHeaders     bool `yaml:"enableRequestHeaders" json:"enableRequestHeaders"`         // 记录请求Header
-		CommonRequestHeadersOnly bool `yaml:"commonRequestHeadersOnly" json:"commonRequestHeadersOnly"` // 只保留通用Header
-		EnableResponseHeaders    bool `yaml:"enableResponseHeaders" json:"enableResponseHeaders"`       // 记录响应Header
-		EnableCookies            bool `yaml:"enableCookies" json:"enableCookies"`                       // 记录Cookie
-		EnableServerNotFound     bool `yaml:"enableServerNotFound" json:"enableServerNotFound"`         // 记录服务找不到的日志
-	} `yaml:"httpAccessLog" json:"httpAccessLog"` // 访问日志配置
+		IsOn                     bool `yaml:"isOn" json:"isOn"`                                         // 鏄惁鍚敤姝ゅ姛鑳?
+		EnableRequestHeaders     bool `yaml:"enableRequestHeaders" json:"enableRequestHeaders"`         // 璁板綍璇锋眰Header
+		CommonRequestHeadersOnly bool `yaml:"commonRequestHeadersOnly" json:"commonRequestHeadersOnly"` // 鍙繚鐣欓€氱敤Header
+		EnableResponseHeaders    bool `yaml:"enableResponseHeaders" json:"enableResponseHeaders"`       // 璁板綍鍝嶅簲Header
+		EnableCookies            bool `yaml:"enableCookies" json:"enableCookies"`                       // 璁板綍Cookie
+		EnableServerNotFound     bool `yaml:"enableServerNotFound" json:"enableServerNotFound"`         // 璁板綍鏈嶅姟鎵句笉鍒扮殑鏃ュ織
+	} `yaml:"httpAccessLog" json:"httpAccessLog"` // 璁块棶鏃ュ織閰嶇疆
 
 	Stat struct {
 		Upload struct {
-			MaxCities    int16 `yaml:"maxCities" json:"maxCities"`       // 最大区域数量
-			MaxProviders int16 `yaml:"maxProviders" json:"maxProviders"` // 最大运营商数量
-			MaxSystems   int16 `yaml:"maxSystems" json:"maxSystems"`     // 最大操作系统数量
-			MaxBrowsers  int16 `yaml:"maxBrowsers" json:"maxBrowsers"`   // 最大浏览器数量
-		} `yaml:"upload" json:"upload"` // 上传相关设置
-	} `yaml:"stat" json:"stat"` // 统计相关配置
+			MaxCities    int16 `yaml:"maxCities" json:"maxCities"`       // 鏈€澶у尯鍩熸暟閲?
+			MaxProviders int16 `yaml:"maxProviders" json:"maxProviders"` // 鏈€澶ц繍钀ュ晢鏁伴噺
+			MaxSystems   int16 `yaml:"maxSystems" json:"maxSystems"`     // 鏈€澶ф搷浣滅郴缁熸暟閲?
+			MaxBrowsers  int16 `yaml:"maxBrowsers" json:"maxBrowsers"`   // 鏈€澶ф祻瑙堝櫒鏁伴噺
+		} `yaml:"upload" json:"upload"` // 涓婁紶鐩稿叧璁剧疆
+	} `yaml:"stat" json:"stat"` // 缁熻鐩稿叧閰嶇疆
 
 	Performance struct {
-		Debug            bool `yaml:"debug" json:"debug"`                       // Debug模式
-		AutoWriteTimeout bool `yaml:"autoWriteTimeout" json:"autoWriteTimeout"` // 是否自动写超时
-		AutoReadTimeout  bool `yaml:"autoReadTimeout" json:"autoReadTimeout"`   // 是否自动读超时
-	} `yaml:"performance" json:"performance"` // 性能
+		Debug            bool `yaml:"debug" json:"debug"`                       // Debug妯″紡
+		AutoWriteTimeout bool `yaml:"autoWriteTimeout" json:"autoWriteTimeout"` // 鏄惁鑷姩鍐欒秴鏃?
+		AutoReadTimeout  bool `yaml:"autoReadTimeout" json:"autoReadTimeout"`   // 鏄惁鑷姩璇昏秴鏃?
+	} `yaml:"performance" json:"performance"` // 鎬ц兘
 
 	Log struct {
-		RecordServerError bool `yaml:"recordServerError" json:"recordServerError"` // 记录服务错误到运行日志
-	} `yaml:"log" json:"log"` // 运行日志配置
+		RecordServerError bool `yaml:"recordServerError" json:"recordServerError"` // 璁板綍鏈嶅姟閿欒鍒拌繍琛屾棩蹇?
+	} `yaml:"log" json:"log"` // 杩愯鏃ュ織閰嶇疆
 }
 
 func (this *GlobalServerConfig) Init() error {
-	// 未找到域名时的动作
+	// 鏈壘鍒板煙鍚嶆椂鐨勫姩浣?
 	if this.HTTPAll.DomainMismatchAction != nil {
 		err := this.HTTPAll.DomainMismatchAction.Init()
 		if err != nil {

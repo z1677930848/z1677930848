@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package ossconfigs
 
@@ -10,7 +10,7 @@ type OSSTypeDefinition struct {
 	Name             string `json:"name"`
 	Code             string `json:"code"`
 	BucketOptionName string `json:"bucketOptionName"`
-	BucketIgnored    bool   `json:"bucketIgnored"` // 是否忽略Bucket名称
+	BucketIgnored    bool   `json:"bucketIgnored"` // 鏄惁蹇界暐Bucket鍚嶇О
 }
 
 func FindAllOSSTypes() []*OSSTypeDefinition {

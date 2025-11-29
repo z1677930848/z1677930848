@@ -24,7 +24,7 @@ func NewRegionProviderDAO() *RegionProviderDAO {
 	return dbs.NewDAO(&RegionProviderDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingRegionProviders",
+			Table:  "edgeRegionProviders",
 			Model:  new(RegionProvider),
 			PkName: "id",
 		},

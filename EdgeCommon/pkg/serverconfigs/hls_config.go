@@ -1,11 +1,11 @@
-// Copyright 2024 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2024 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package serverconfigs
 
-// HLSConfig HTTP Living Streaming相关配置
+// HLSConfig HTTP Living Streaming鐩稿叧閰嶇疆
 type HLSConfig struct {
 	IsPrior    bool                 `yaml:"isPrior" json:"isPrior"`
-	Encrypting *HLSEncryptingConfig `yaml:"encrypting" json:"encrypting"` // 加密设置
+	Encrypting *HLSEncryptingConfig `yaml:"encrypting" json:"encrypting"` // 鍔犲瘑璁剧疆
 }
 
 func (this *HLSConfig) Init() error {

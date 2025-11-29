@@ -21,7 +21,7 @@ func NewNodeRegionDAO() *NodeRegionDAO {
 	return dbs.NewDAO(&NodeRegionDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeRegions",
+			Table:  "edgeNodeRegions",
 			Model:  new(NodeRegion),
 			PkName: "id",
 		},

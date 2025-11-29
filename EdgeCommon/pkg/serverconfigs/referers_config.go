@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package serverconfigs
 
@@ -7,25 +7,25 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 )
 
-// NewReferersConfig 获取新防盗链配置对象
+// NewReferersConfig 鑾峰彇鏂伴槻鐩楅摼閰嶇疆瀵硅薄
 func NewReferersConfig() *ReferersConfig {
 	return &ReferersConfig{
 		CheckOrigin: true,
 	}
 }
 
-// ReferersConfig 防盗链设置
+// ReferersConfig 闃茬洍閾捐缃?
 type ReferersConfig struct {
 	IsPrior         bool     `yaml:"isPrior" json:"isPrior"`
 	IsOn            bool     `yaml:"isOn" json:"isOn"`
-	AllowEmpty      bool     `yaml:"allowEmpty" json:"allowEmpty"`           // 来源域名允许为空
-	AllowSameDomain bool     `yaml:"allowSameDomain" json:"allowSameDomain"` // 允许来源域名和当前访问的域名一致，相当于在站内访问
-	AllowDomains    []string `yaml:"allowDomains" json:"allowDomains"`       // 允许的来源域名列表
-	DenyDomains     []string `yaml:"denyDomains" json:"denyDomains"`         // 禁止的来源域名列表
-	CheckOrigin     bool     `yaml:"checkOrigin" json:"checkOrigin"`         // 是否检查Origin
+	AllowEmpty      bool     `yaml:"allowEmpty" json:"allowEmpty"`           // 鏉ユ簮鍩熷悕鍏佽涓虹┖
+	AllowSameDomain bool     `yaml:"allowSameDomain" json:"allowSameDomain"` // 鍏佽鏉ユ簮鍩熷悕鍜屽綋鍓嶈闂殑鍩熷悕涓€鑷达紝鐩稿綋浜庡湪绔欏唴璁块棶
+	AllowDomains    []string `yaml:"allowDomains" json:"allowDomains"`       // 鍏佽鐨勬潵婧愬煙鍚嶅垪琛?
+	DenyDomains     []string `yaml:"denyDomains" json:"denyDomains"`         // 绂佹鐨勬潵婧愬煙鍚嶅垪琛?
+	CheckOrigin     bool     `yaml:"checkOrigin" json:"checkOrigin"`         // 鏄惁妫€鏌rigin
 
-	OnlyURLPatterns   []*shared.URLPattern `yaml:"onlyURLPatterns" json:"onlyURLPatterns"`     // 仅限的URL
-	ExceptURLPatterns []*shared.URLPattern `yaml:"exceptURLPatterns" json:"exceptURLPatterns"` // 排除的URL
+	OnlyURLPatterns   []*shared.URLPattern `yaml:"onlyURLPatterns" json:"onlyURLPatterns"`     // 浠呴檺鐨刄RL
+	ExceptURLPatterns []*shared.URLPattern `yaml:"exceptURLPatterns" json:"exceptURLPatterns"` // 鎺掗櫎鐨刄RL
 }
 
 func (this *ReferersConfig) Init() error {

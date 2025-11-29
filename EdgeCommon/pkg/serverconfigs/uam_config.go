@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -6,17 +6,17 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 )
 
-// UAMConfig UAM配置
+// UAMConfig UAM閰嶇疆
 type UAMConfig struct {
 	IsPrior bool `yaml:"isPrior" json:"isPrior"`
 	IsOn    bool `yaml:"isOn" json:"isOn"`
 
-	AddToWhiteList    bool                           `yaml:"addToWhiteList" json:"addToWhiteList"`       // 是否将IP加入到白名单
-	OnlyURLPatterns   []*shared.URLPattern           `yaml:"onlyURLPatterns" json:"onlyURLPatterns"`     // 仅限的URL
-	ExceptURLPatterns []*shared.URLPattern           `yaml:"exceptURLPatterns" json:"exceptURLPatterns"` // 排除的URL
-	MinQPSPerIP       int                            `yaml:"minQPSPerIP" json:"minQPSPerIP"`             // 启用要求的单IP最低平均QPS
-	Conds             *shared.HTTPRequestCondsConfig `yaml:"conds" json:"conds"`                         // 匹配条件
-	KeyLife           int                            `yaml:"keyLife" json:"keyLife"`                     // Key有效期
+	AddToWhiteList    bool                           `yaml:"addToWhiteList" json:"addToWhiteList"`       // 鏄惁灏咺P鍔犲叆鍒扮櫧鍚嶅崟
+	OnlyURLPatterns   []*shared.URLPattern           `yaml:"onlyURLPatterns" json:"onlyURLPatterns"`     // 浠呴檺鐨刄RL
+	ExceptURLPatterns []*shared.URLPattern           `yaml:"exceptURLPatterns" json:"exceptURLPatterns"` // 鎺掗櫎鐨刄RL
+	MinQPSPerIP       int                            `yaml:"minQPSPerIP" json:"minQPSPerIP"`             // 鍚敤瑕佹眰鐨勫崟IP鏈€浣庡钩鍧嘠PS
+	Conds             *shared.HTTPRequestCondsConfig `yaml:"conds" json:"conds"`                         // 鍖归厤鏉′欢
+	KeyLife           int                            `yaml:"keyLife" json:"keyLife"`                     // Key鏈夋晥鏈?
 }
 
 func NewUAMConfig() *UAMConfig {

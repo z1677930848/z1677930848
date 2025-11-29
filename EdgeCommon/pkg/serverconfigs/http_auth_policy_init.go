@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -6,7 +6,7 @@ import (
 	"errors"
 )
 
-// Init 初始化
+// Init 鍒濆鍖?
 func (this *HTTPAuthPolicy) Init() error {
 	switch this.Type {
 	case HTTPAuthTypeBasicAuth:

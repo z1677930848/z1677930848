@@ -37,7 +37,7 @@ func NewNodeTrafficHourlyStatDAO() *NodeTrafficHourlyStatDAO {
 	return dbs.NewDAO(&NodeTrafficHourlyStatDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeTrafficHourlyStats",
+			Table:  "edgeNodeTrafficHourlyStats",
 			Model:  new(NodeTrafficHourlyStat),
 			PkName: "id",
 		},

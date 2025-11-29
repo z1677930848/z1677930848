@@ -1,30 +1,22 @@
 //go:build !cgo
-// +build !cgo
-
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
 
 package injectionutils
 
-import (
-	"github.com/TeaOSLab/EdgeNode/internal/waf/utils"
-)
+import "github.com/TeaOSLab/EdgeNode/internal/waf/utils"
 
-// DetectSQLInjectionCache detect sql injection in string with cache (stub for non-CGO builds)
+// 在禁用 cgo 的环境下不执行 libinjection 检测，直接返回未命中。
 func DetectSQLInjectionCache(input string, isStrict bool, cacheLife utils.CacheLife) bool {
-	return false // WAF功能在非CGO编译中禁用
+	return false
 }
 
-// DetectSQLInjection detect sql injection in string (stub for non-CGO builds)
 func DetectSQLInjection(input string, isStrict bool) bool {
-	return false // WAF功能在非CGO编译中禁用
+	return false
 }
 
-// DetectXSSCache detect xss in string with cache (stub for non-CGO builds)
 func DetectXSSCache(input string, isStrict bool, cacheLife utils.CacheLife) bool {
-	return false // WAF功能在非CGO编译中禁用
+	return false
 }
 
-// DetectXSS detect xss in string (stub for non-CGO builds)
 func DetectXSS(input string, isStrict bool) bool {
-	return false // WAF功能在非CGO编译中禁用
+	return false
 }

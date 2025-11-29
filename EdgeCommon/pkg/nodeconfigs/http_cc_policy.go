@@ -1,13 +1,13 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package nodeconfigs
 
 import "github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 
-// HTTPCCPolicy CC策略
+// HTTPCCPolicy CC绛栫暐
 type HTTPCCPolicy struct {
 	IsOn       bool                             `json:"isOn" yaml:"isOn"`
-	Thresholds []*serverconfigs.HTTPCCThreshold `json:"thresholds" yaml:"thresholds"` // 阈值
+	Thresholds []*serverconfigs.HTTPCCThreshold `json:"thresholds" yaml:"thresholds"` // 闃堝€?
 }
 
 func NewHTTPCCPolicy() *HTTPCCPolicy {

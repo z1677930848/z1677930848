@@ -22,7 +22,7 @@ func NewHTTPBrotliPolicyDAO() *HTTPBrotliPolicyDAO {
 	return dbs.NewDAO(&HTTPBrotliPolicyDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPBrotliPolicies",
+			Table:  "edgeHTTPBrotliPolicies",
 			Model:  new(HTTPBrotliPolicy),
 			PkName: "id",
 		},

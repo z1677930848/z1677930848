@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package iplibrary
 
@@ -16,13 +16,13 @@ var ipLibraryData []byte
 var defaultLibrary = NewIPLibrary()
 var commonLibrary *IPLibrary
 
-var libraryLocker = &sync.Mutex{} // 为了保持加载顺序性
+var libraryLocker = &sync.Mutex{} // 涓轰簡淇濇寔鍔犺浇椤哄簭鎬?
 
 func DefaultIPLibraryData() []byte {
 	return ipLibraryData
 }
 
-// InitDefault 加载默认的IP库
+// InitDefault 鍔犺浇榛樿鐨処P搴?
 func InitDefault() error {
 	libraryLocker.Lock()
 	defer libraryLocker.Unlock()
@@ -43,17 +43,17 @@ func InitDefault() error {
 	return nil
 }
 
-// Lookup 查询IP信息
+// Lookup 鏌ヨIP淇℃伅
 func Lookup(ip net.IP) *QueryResult {
 	return defaultLibrary.Lookup(ip)
 }
 
-// LookupIP 查询IP信息
+// LookupIP 鏌ヨIP淇℃伅
 func LookupIP(ip string) *QueryResult {
 	return defaultLibrary.LookupIP(ip)
 }
 
-// LookupIPSummaries 查询一组IP对应的区域描述
+// LookupIPSummaries 鏌ヨ涓€缁処P瀵瑰簲鐨勫尯鍩熸弿杩?
 func LookupIPSummaries(ipList []string) map[string]string /** ip => summary **/ {
 	var result = map[string]string{}
 	for _, ip := range ipList {

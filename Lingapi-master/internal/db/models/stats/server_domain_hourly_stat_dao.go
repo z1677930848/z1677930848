@@ -40,7 +40,7 @@ func NewServerDomainHourlyStatDAO() *ServerDomainHourlyStatDAO {
 	return dbs.NewDAO(&ServerDomainHourlyStatDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingServerDomainHourlyStats",
+			Table:  "edgeServerDomainHourlyStats",
 			Model:  new(ServerDomainHourlyStat),
 			PkName: "id",
 		},

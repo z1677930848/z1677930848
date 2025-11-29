@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -8,16 +8,16 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 )
 
-// WebPImageConfig WebP配置
+// WebPImageConfig WebP閰嶇疆
 type WebPImageConfig struct {
 	IsPrior bool `yaml:"isPrior" json:"isPrior"`
 	IsOn    bool `yaml:"isOn" json:"isOn"`
 
-	MinLength  *shared.SizeCapacity           `yaml:"minLength" json:"minLength"`   // 最小压缩对象比如4m, 24k
-	MaxLength  *shared.SizeCapacity           `yaml:"maxLength" json:"maxLength"`   // 最大压缩对象
-	MimeTypes  []string                       `yaml:"mimeTypes" json:"mimeTypes"`   // 支持的MimeType，支持image/*这样的通配符使用
-	Extensions []string                       `yaml:"extensions" json:"extensions"` // 文件扩展名，包含点符号，不区分大小写
-	Conds      *shared.HTTPRequestCondsConfig `yaml:"conds" json:"conds"`           // 匹配条件
+	MinLength  *shared.SizeCapacity           `yaml:"minLength" json:"minLength"`   // 鏈€灏忓帇缂╁璞℃瘮濡?m, 24k
+	MaxLength  *shared.SizeCapacity           `yaml:"maxLength" json:"maxLength"`   // 鏈€澶у帇缂╁璞?
+	MimeTypes  []string                       `yaml:"mimeTypes" json:"mimeTypes"`   // 鏀寔鐨凪imeType锛屾敮鎸乮mage/*杩欐牱鐨勯€氶厤绗︿娇鐢?
+	Extensions []string                       `yaml:"extensions" json:"extensions"` // 鏂囦欢鎵╁睍鍚嶏紝鍖呭惈鐐圭鍙凤紝涓嶅尯鍒嗗ぇ灏忓啓
+	Conds      *shared.HTTPRequestCondsConfig `yaml:"conds" json:"conds"`           // 鍖归厤鏉′欢
 
 	minLength     int64
 	maxLength     int64
@@ -63,7 +63,7 @@ func (this *WebPImageConfig) Init() error {
 	return nil
 }
 
-// MatchResponse 是否匹配响应
+// MatchResponse 鏄惁鍖归厤鍝嶅簲
 func (this *WebPImageConfig) MatchResponse(mimeType string, contentLength int64, requestExt string, formatter shared.Formatter) bool {
 	if this.Conds != nil && formatter != nil {
 		if !this.Conds.MatchRequest(formatter) {
@@ -117,7 +117,7 @@ func (this *WebPImageConfig) MatchResponse(mimeType string, contentLength int64,
 		}
 	}
 
-	// 如果没有指定条件，则所有的都能压缩
+	// 濡傛灉娌℃湁鎸囧畾鏉′欢锛屽垯鎵€鏈夌殑閮借兘鍘嬬缉
 	if len(this.extensions) == 0 && len(this.mimeTypeRules) == 0 {
 		return true
 	}
@@ -125,7 +125,7 @@ func (this *WebPImageConfig) MatchResponse(mimeType string, contentLength int64,
 	return false
 }
 
-// MatchRequest 是否匹配请求
+// MatchRequest 鏄惁鍖归厤璇锋眰
 func (this *WebPImageConfig) MatchRequest(requestExt string, formatter shared.Formatter) bool {
 	if this.Conds != nil && formatter != nil {
 		if !this.Conds.MatchRequest(formatter) {
@@ -146,7 +146,7 @@ func (this *WebPImageConfig) MatchRequest(requestExt string, formatter shared.Fo
 	return true
 }
 
-// MatchAccept 检查客户端是否能接受WebP
+// MatchAccept 妫€鏌ュ鎴风鏄惁鑳芥帴鍙梂ebP
 func (this *WebPImageConfig) MatchAccept(acceptContentTypes string) bool {
 	var t = "image/webp"
 	var index = strings.Index(acceptContentTypes, t)

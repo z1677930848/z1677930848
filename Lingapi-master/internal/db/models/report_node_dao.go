@@ -26,7 +26,7 @@ func NewReportNodeDAO() *ReportNodeDAO {
 	return dbs.NewDAO(&ReportNodeDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingReportNodes",
+			Table:  "edgeReportNodes",
 			Model:  new(ReportNode),
 			PkName: "id",
 		},

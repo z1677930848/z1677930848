@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package nodeutils
 
@@ -8,7 +8,7 @@ import (
 	"github.com/iwind/TeaGo/maps"
 )
 
-// Base64EncodeMap 对Map进行Base64编码
+// Base64EncodeMap 瀵筂ap杩涜Base64缂栫爜
 func Base64EncodeMap(m maps.Map) (string, error) {
 	if m == nil {
 		m = maps.Map{}
@@ -21,7 +21,7 @@ func Base64EncodeMap(m maps.Map) (string, error) {
 	return result, nil
 }
 
-// Base64DecodeMap 对Map进行Base64解码
+// Base64DecodeMap 瀵筂ap杩涜Base64瑙ｇ爜
 func Base64DecodeMap(encodedString string) (maps.Map, error) {
 	data, err := base64.StdEncoding.DecodeString(encodedString)
 	if err != nil {

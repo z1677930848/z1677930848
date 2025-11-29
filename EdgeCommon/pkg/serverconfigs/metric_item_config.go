@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -9,26 +9,26 @@ import (
 	timeutil "github.com/iwind/TeaGo/utils/time"
 )
 
-// MetricItemConfig 指标配置
+// MetricItemConfig 鎸囨爣閰嶇疆
 type MetricItemConfig struct {
 	Id            int64                `yaml:"id" json:"id"`
 	IsOn          bool                 `yaml:"isOn" json:"isOn"`
 	Category      MetricItemCategory   `yaml:"category" json:"category"`
-	Period        int                  `yaml:"period" json:"period"`         // 统计周期
-	PeriodUnit    MetricItemPeriodUnit `yaml:"periodUnit" json:"periodUnit"` // 统计周期单位
+	Period        int                  `yaml:"period" json:"period"`         // 缁熻鍛ㄦ湡
+	PeriodUnit    MetricItemPeriodUnit `yaml:"periodUnit" json:"periodUnit"` // 缁熻鍛ㄦ湡鍗曚綅
 	Keys          []string             `yaml:"keys" json:"keys"`
 	Value         string               `yaml:"value" json:"value"`
 	Version       int32                `yaml:"version" json:"version"`
-	ExpiresPeriod int                  `yaml:"expiresPeriod" json:"expiresPeriod"` // 过期周期
+	ExpiresPeriod int                  `yaml:"expiresPeriod" json:"expiresPeriod"` // 杩囨湡鍛ㄦ湡
 
-	//sumType                string    // 统计类型
-	baseTime               time.Time // 基准时间
-	hasHTTPConnectionValue bool      // 是否有统计HTTP连接数的数值
+	//sumType                string    // 缁熻绫诲瀷
+	baseTime               time.Time // 鍩哄噯鏃堕棿
+	hasHTTPConnectionValue bool      // 鏄惁鏈夌粺璁TTP杩炴帴鏁扮殑鏁板€?
 }
 
-// Init 初始化
+// Init 鍒濆鍖?
 func (this *MetricItemConfig) Init() error {
-	// 所有时间以 2020-01-01日 为基准
+	// 鎵€鏈夋椂闂翠互 2020-01-01鏃?涓哄熀鍑?
 	this.baseTime = time.Date(2020, 1, 1, 0, 0, 0, 0, time.Local)
 
 	if this.Period <= 0 {
@@ -44,7 +44,7 @@ func (this *MetricItemConfig) Init() error {
 	return nil
 }
 
-// CurrentTime 根据周期计算时间
+// CurrentTime 鏍规嵁鍛ㄦ湡璁＄畻鏃堕棿
 func (this *MetricItemConfig) CurrentTime() string {
 	var t string
 
@@ -120,7 +120,7 @@ func (this *MetricItemConfig) CurrentTime() string {
 	return t
 }
 
-// ServerExpiresTime 根据周期计算服务器端数据过期时间
+// ServerExpiresTime 鏍规嵁鍛ㄦ湡璁＄畻鏈嶅姟鍣ㄧ鏁版嵁杩囨湡鏃堕棿
 func (this *MetricItemConfig) ServerExpiresTime() string {
 	switch this.PeriodUnit {
 	case MetricItemPeriodUnitMonth:
@@ -138,7 +138,7 @@ func (this *MetricItemConfig) ServerExpiresTime() string {
 	}
 }
 
-// ServerExpiresDay 根据周期计算服务器端数据过期日期
+// ServerExpiresDay 鏍规嵁鍛ㄦ湡璁＄畻鏈嶅姟鍣ㄧ鏁版嵁杩囨湡鏃ユ湡
 func (this *MetricItemConfig) ServerExpiresDay() string {
 	switch this.PeriodUnit {
 	case MetricItemPeriodUnitMonth:
@@ -176,7 +176,7 @@ func (this *MetricItemConfig) ServerExpiresDay() string {
 	}
 }
 
-// LocalExpiresTime 根据周期计算本地端过期时间
+// LocalExpiresTime 鏍规嵁鍛ㄦ湡璁＄畻鏈湴绔繃鏈熸椂闂?
 func (this *MetricItemConfig) LocalExpiresTime() string {
 	switch this.PeriodUnit {
 	case MetricItemPeriodUnitMonth:
@@ -194,7 +194,7 @@ func (this *MetricItemConfig) LocalExpiresTime() string {
 	}
 }
 
-// UploadDuration 上传数据的周期
+// UploadDuration 涓婁紶鏁版嵁鐨勫懆鏈?
 func (this *MetricItemConfig) UploadDuration() time.Duration {
 	if Tea.IsTesting() {
 		return 5 * time.Second

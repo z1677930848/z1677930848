@@ -49,7 +49,7 @@ func NewACMETaskDAO() *ACMETaskDAO {
 	return dbs.NewDAO(&ACMETaskDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingACMETasks",
+			Table:  "edgeACMETasks",
 			Model:  new(ACMETask),
 			PkName: "id",
 		},

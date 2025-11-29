@@ -18,15 +18,15 @@ func TestServerDomainHourlyStatDAO_PartitionTable(t *testing.T) {
 	var a = assert.NewAssertion(t)
 
 	var dao = NewServerDomainHourlyStatDAO()
-	a.IsTrue(dao.PartitionTable("") == "LingServerDomainHourlyStats_0")
-	a.IsTrue(dao.PartitionTable("a1") == "LingServerDomainHourlyStats_a")
-	a.IsTrue(dao.PartitionTable("Y1") == "LingServerDomainHourlyStats_y")
-	a.IsTrue(dao.PartitionTable("z1") == "LingServerDomainHourlyStats_z")
-	a.IsTrue(dao.PartitionTable("A1") == "LingServerDomainHourlyStats_a")
-	a.IsTrue(dao.PartitionTable("Z1") == "LingServerDomainHourlyStats_z")
-	a.IsTrue(dao.PartitionTable("中国") == "LingServerDomainHourlyStats_0")
-	a.IsTrue(dao.PartitionTable("_") == "LingServerDomainHourlyStats_0")
-	a.IsTrue(dao.PartitionTable(" ") == "LingServerDomainHourlyStats_0")
+	a.IsTrue(dao.PartitionTable("") == "edgeServerDomainHourlyStats_0")
+	a.IsTrue(dao.PartitionTable("a1") == "edgeServerDomainHourlyStats_a")
+	a.IsTrue(dao.PartitionTable("Y1") == "edgeServerDomainHourlyStats_y")
+	a.IsTrue(dao.PartitionTable("z1") == "edgeServerDomainHourlyStats_z")
+	a.IsTrue(dao.PartitionTable("A1") == "edgeServerDomainHourlyStats_a")
+	a.IsTrue(dao.PartitionTable("Z1") == "edgeServerDomainHourlyStats_z")
+	a.IsTrue(dao.PartitionTable("中国") == "edgeServerDomainHourlyStats_0")
+	a.IsTrue(dao.PartitionTable("_") == "edgeServerDomainHourlyStats_0")
+	a.IsTrue(dao.PartitionTable(" ") == "edgeServerDomainHourlyStats_0")
 }
 
 func TestServerDomainHourlyStatDAO_FindAllPartitionTables(t *testing.T) {

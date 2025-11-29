@@ -142,7 +142,7 @@ func testAliDNSProvider() (ProviderInterface, error) {
 	if err != nil {
 		return nil, err
 	}
-	one, err := db.FindOne("SELECT * FROM skDNSProviders WHERE type='alidns' AND state=1 ORDER BY id DESC")
+	one, err := db.FindOne("SELECT * FROM edgeDNSProviders WHERE type='alidns' AND state=1 ORDER BY id DESC")
 	if err != nil {
 		return nil, err
 	}

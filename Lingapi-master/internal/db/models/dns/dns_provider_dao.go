@@ -22,7 +22,7 @@ func NewDNSProviderDAO() *DNSProviderDAO {
 	return dbs.NewDAO(&DNSProviderDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingDNSProviders",
+			Table:  "edgeDNSProviders",
 			Model:  new(DNSProvider),
 			PkName: "id",
 		},

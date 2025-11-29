@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package serverconfigs
 
@@ -24,16 +24,16 @@ func (this *HTTPCCThreshold) Clone() *HTTPCCThreshold {
 
 var DefaultHTTPCCThresholds = []*HTTPCCThreshold{} // stub
 
-// DefaultHTTPCCConfig 默认的CC配置
+// DefaultHTTPCCConfig 榛樿鐨凜C閰嶇疆
 func DefaultHTTPCCConfig() *HTTPCCConfig {
 	return &HTTPCCConfig{}
 }
 
-// HTTPCCConfig HTTP CC防护配置
+// HTTPCCConfig HTTP CC闃叉姢閰嶇疆
 type HTTPCCConfig struct {
-	IsPrior    bool               `yaml:"isPrior" json:"isPrior"`       // 是否覆盖父级
-	IsOn       bool               `yaml:"isOn" json:"isOn"`             // 是否启用
-	Thresholds []*HTTPCCThreshold `yaml:"thresholds" json:"thresholds"` // 阈值设置
+	IsPrior    bool               `yaml:"isPrior" json:"isPrior"`       // 鏄惁瑕嗙洊鐖剁骇
+	IsOn       bool               `yaml:"isOn" json:"isOn"`             // 鏄惁鍚敤
+	Thresholds []*HTTPCCThreshold `yaml:"thresholds" json:"thresholds"` // 闃堝€艰缃?
 }
 
 func NewHTTPCCConfig() *HTTPCCConfig {

@@ -23,7 +23,7 @@ func NewHTTPFastcgiDAO() *HTTPFastcgiDAO {
 	return dbs.NewDAO(&HTTPFastcgiDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPFastcgis",
+			Table:  "edgeHTTPFastcgis",
 			Model:  new(HTTPFastcgi),
 			PkName: "id",
 		},

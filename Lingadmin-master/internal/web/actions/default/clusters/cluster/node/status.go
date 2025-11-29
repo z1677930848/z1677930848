@@ -12,7 +12,8 @@ type StatusAction struct {
 }
 
 func (this *StatusAction) RunPost(params struct {
-	NodeId int64
+	NodeId        int64
+	LastUpdatedAt int64
 }) {
 	// 节点
 	nodeResp, err := this.RPC().NodeRPC().FindEnabledNode(this.AdminContext(), &pb.FindEnabledNodeRequest{NodeId: params.NodeId})
@@ -26,21 +27,30 @@ func (this *StatusAction) RunPost(params struct {
 		return
 	}
 
-	// 安装信息
+	// 安装信息，支持未变时快速返回
+	var isChanged = true
 	if node.InstallStatus != nil {
-		this.Data["installStatus"] = maps.Map{
-			"isRunning":  node.InstallStatus.IsRunning,
-			"isFinished": node.InstallStatus.IsFinished,
-			"isOk":       node.InstallStatus.IsOk,
-			"updatedAt":  node.InstallStatus.UpdatedAt,
-			"error":      node.InstallStatus.Error,
-			"errorCode":  node.InstallStatus.ErrorCode,
+		if params.LastUpdatedAt > 0 && node.InstallStatus.UpdatedAt == params.LastUpdatedAt {
+			isChanged = false
+		} else {
+			this.Data["installStatus"] = maps.Map{
+				"isRunning":  node.InstallStatus.IsRunning,
+				"isFinished": node.InstallStatus.IsFinished,
+				"isOk":       node.InstallStatus.IsOk,
+				"updatedAt":  node.InstallStatus.UpdatedAt,
+				"error":      node.InstallStatus.Error,
+				"errorCode":  node.InstallStatus.ErrorCode,
+			}
 		}
 	} else {
 		this.Data["installStatus"] = nil
+		if params.LastUpdatedAt > 0 {
+			isChanged = false
+		}
 	}
 
 	this.Data["isInstalled"] = node.IsInstalled
+	this.Data["isChanged"] = isChanged
 
 	this.Success()
 }

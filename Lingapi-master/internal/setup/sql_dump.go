@@ -19,50 +19,50 @@ import (
 
 var recordsTables = []*SQLRecordsTable{
 	{
-		TableName:    "LingRegionCountries",
+		TableName:    "edgeRegionCountries",
 		UniqueFields: []string{"name"},
 		ExceptFields: []string{"customName", "customCodes"},
 	},
 	{
-		TableName:    "LingRegionProvinces",
+		TableName:    "edgeRegionProvinces",
 		UniqueFields: []string{"name", "countryId"},
 		ExceptFields: []string{"customName", "customCodes"},
 	},
 	{
-		TableName:    "LingRegionCities",
+		TableName:    "edgeRegionCities",
 		UniqueFields: []string{"name", "provinceId"},
 		ExceptFields: []string{"customName", "customCodes"},
 	},
 	{
-		TableName:    "LingRegionTowns",
+		TableName:    "edgeRegionTowns",
 		UniqueFields: []string{"name", "cityId"},
 		ExceptFields: []string{"customName", "customCodes"},
 	},
 	{
-		TableName:    "LingRegionProviders",
+		TableName:    "edgeRegionProviders",
 		UniqueFields: []string{"name"},
 		ExceptFields: []string{"customName", "customCodes"},
 	},
 	{
-		TableName:    "LingFormalClientSystems",
+		TableName:    "edgeFormalClientSystems",
 		UniqueFields: []string{"dataId"},
 	},
 	{
-		TableName:    "LingFormalClientBrowsers",
+		TableName:    "edgeFormalClientBrowsers",
 		UniqueFields: []string{"dataId"},
 	},
 	{
-		TableName:    "LingClientAgents",
+		TableName:    "edgeClientAgents",
 		UniqueFields: []string{"code"},
 		ExceptFields: []string{"countIPs"},
 	},
 	{
-		TableName:    "LingClientAgentIPs",
+		TableName:    "edgeClientAgentIPs",
 		UniqueFields: []string{"agentId", "ip"},
 		IgnoreId:     true,
 	},
 	{
-		TableName:    "LingMessageMedias",
+		TableName:    "edgeMessageMedias",
 		UniqueFields: []string{"type"},
 		IgnoreId:     true,
 	},

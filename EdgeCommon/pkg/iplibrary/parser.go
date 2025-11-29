@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package iplibrary
 
@@ -48,7 +48,7 @@ func (this *Parser) Parse() error {
 					}
 				}
 			} else {
-				// 防止错误信息太长
+				// 闃叉閿欒淇℃伅澶暱
 				if len(line) > 256 {
 					line = line[:256]
 				}

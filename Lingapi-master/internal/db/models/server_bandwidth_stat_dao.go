@@ -48,7 +48,7 @@ func NewServerBandwidthStatDAO() *ServerBandwidthStatDAO {
 	return dbs.NewDAO(&ServerBandwidthStatDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingServerBandwidthStats",
+			Table:  "edgeServerBandwidthStats",
 			Model:  new(ServerBandwidthStat),
 			PkName: "id",
 		},

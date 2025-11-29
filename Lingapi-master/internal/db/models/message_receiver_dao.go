@@ -20,7 +20,7 @@ func NewMessageReceiverDAO() *MessageReceiverDAO {
 	return dbs.NewDAO(&MessageReceiverDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingMessageReceivers",
+			Table:  "edgeMessageReceivers",
 			Model:  new(MessageReceiver),
 			PkName: "id",
 		},

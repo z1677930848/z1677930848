@@ -1,10 +1,10 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
 import "github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 
-// PlanConfig 套餐配置
+// PlanConfig 濂楅閰嶇疆
 type PlanConfig struct {
 	Id   int64  `yaml:"id" json:"id"`
 	Name string `yaml:"name" json:"name"`

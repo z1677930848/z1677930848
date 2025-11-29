@@ -17,7 +17,7 @@ func NewNSRouteCategoryDAO() *NSRouteCategoryDAO {
 	return dbs.NewDAO(&NSRouteCategoryDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNSRouteCategories",
+			Table:  "edgeNSRouteCategories",
 			Model:  new(NSRouteCategory),
 			PkName: "id",
 		},

@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package nodeutils
 
@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-// EncryptMap 加密
+// EncryptMap 鍔犲瘑
 func EncryptMap(nodeUniqueId string, nodeSecret string, data maps.Map, timeout int32) (string, error) {
 	if data == nil {
 		data = maps.Map{}
@@ -43,7 +43,7 @@ func EncryptMap(nodeUniqueId string, nodeSecret string, data maps.Map, timeout i
 	return base64.StdEncoding.EncodeToString(result), nil
 }
 
-// DecryptMap 解密
+// DecryptMap 瑙ｅ瘑
 func DecryptMap(nodeUniqueId string, nodeSecret string, encodedString string) (maps.Map, error) {
 	var method = &AES256CFBMethod{}
 	err := method.Init([]byte(nodeUniqueId), []byte(nodeSecret))
@@ -75,7 +75,7 @@ func DecryptMap(nodeUniqueId string, nodeSecret string, encodedString string) (m
 	return result.GetMap("data"), nil
 }
 
-// EncryptData 加密
+// EncryptData 鍔犲瘑
 func EncryptData(nodeUniqueId string, nodeSecret string, data []byte) (string, error) {
 	if len(data) == 0 {
 		return "", nil
@@ -94,7 +94,7 @@ func EncryptData(nodeUniqueId string, nodeSecret string, data []byte) (string, e
 	return base64.StdEncoding.EncodeToString(result), nil
 }
 
-// DecryptData 解密
+// DecryptData 瑙ｅ瘑
 func DecryptData(nodeUniqueId string, nodeSecret string, encodedString string) ([]byte, error) {
 	if len(encodedString) == 0 {
 		return nil, nil

@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -8,7 +8,7 @@ import (
 	"github.com/iwind/TeaGo/maps"
 )
 
-// SchedulingGroup 负载均衡分组
+// SchedulingGroup 璐熻浇鍧囪　鍒嗙粍
 type SchedulingGroup struct {
 	Scheduling *SchedulingConfig `yaml:"scheduling" json:"scheduling"`
 
@@ -21,7 +21,7 @@ type SchedulingGroup struct {
 	schedulingObject   schedulingconfigs.SchedulingInterface
 }
 
-// Init 初始化
+// Init 鍒濆鍖?
 func (this *SchedulingGroup) Init() error {
 	this.hasPrimaryOrigins = len(this.PrimaryOrigins) > 0
 	this.hasBackupOrigins = len(this.BackupOrigins) > 0
@@ -36,7 +36,7 @@ func (this *SchedulingGroup) Init() error {
 	return nil
 }
 
-// NextOrigin 取得下一个可用源站
+// NextOrigin 鍙栧緱涓嬩竴涓彲鐢ㄦ簮绔?
 func (this *SchedulingGroup) NextOrigin(call *shared.RequestCall) *OriginConfig {
 	if this.schedulingObject == nil {
 		return nil
@@ -50,7 +50,7 @@ func (this *SchedulingGroup) NextOrigin(call *shared.RequestCall) *OriginConfig 
 
 	var candidate = this.schedulingObject.Next(call)
 
-	// 末了重置状态
+	// 鏈簡閲嶇疆鐘舵€?
 	defer func() {
 		if candidate == nil {
 			this.schedulingIsBackup = false
@@ -58,16 +58,16 @@ func (this *SchedulingGroup) NextOrigin(call *shared.RequestCall) *OriginConfig 
 	}()
 
 	if candidate == nil {
-		// 启用备用服务器
+		// 鍚敤澶囩敤鏈嶅姟鍣?
 		if !this.schedulingIsBackup {
 			this.SetupScheduling(true, true)
 			candidate = this.schedulingObject.Next(call)
 			if candidate == nil {
-				// 不检查主要源站
+				// 涓嶆鏌ヤ富瑕佹簮绔?
 				this.SetupScheduling(false, false)
 				candidate = this.schedulingObject.Next(call)
 				if candidate == nil {
-					// 不检查备用源站
+					// 涓嶆鏌ュ鐢ㄦ簮绔?
 					this.SetupScheduling(true, false)
 					candidate = this.schedulingObject.Next(call)
 					if candidate == nil {
@@ -85,7 +85,7 @@ func (this *SchedulingGroup) NextOrigin(call *shared.RequestCall) *OriginConfig 
 	return candidate.(*OriginConfig)
 }
 
-// AnyOrigin 取下一个任意源站
+// AnyOrigin 鍙栦笅涓€涓换鎰忔簮绔?
 func (this *SchedulingGroup) AnyOrigin(excludingOriginIds []int64) *OriginConfig {
 	for _, origin := range this.PrimaryOrigins {
 		if !origin.IsOn {
@@ -107,9 +107,9 @@ func (this *SchedulingGroup) AnyOrigin(excludingOriginIds []int64) *OriginConfig
 	return nil
 }
 
-// SetupScheduling 设置调度算法
+// SetupScheduling 璁剧疆璋冨害绠楁硶
 func (this *SchedulingGroup) SetupScheduling(isBackup bool, checkOk bool) {
-	// 如果只有一个源站，则快速返回，避免因为状态的改变而不停地转换
+	// 濡傛灉鍙湁涓€涓簮绔欙紝鍒欏揩閫熻繑鍥烇紝閬垮厤鍥犱负鐘舵€佺殑鏀瑰彉鑰屼笉鍋滃湴杞崲
 	if checkOk {
 		if len(this.PrimaryOrigins) == 1 && len(this.BackupOrigins) == 0 && this.schedulingObject != nil {
 			return
@@ -152,7 +152,7 @@ func (this *SchedulingGroup) SetupScheduling(isBackup bool, checkOk bool) {
 	this.schedulingObject.Start()
 }
 
-// 判断是否包含int64
+// 鍒ゆ柇鏄惁鍖呭惈int64
 func (this *SchedulingGroup) containsInt64(originIds []int64, originId int64) bool {
 	for _, id := range originIds {
 		if id == originId {

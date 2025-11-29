@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -15,13 +15,13 @@ const (
 	ProxyProtocolVersion2 ProxyProtocolVersion = 2
 )
 
-// ProxyProtocolConfig PROXY Protocol配置
+// ProxyProtocolConfig PROXY Protocol閰嶇疆
 type ProxyProtocolConfig struct {
 	IsOn    bool                 `yaml:"isOn" json:"isOn"`
 	Version ProxyProtocolVersion `yaml:"version" json:"version"`
 }
 
-// Init 初始化
+// Init 鍒濆鍖?
 func (this *ProxyProtocolConfig) Init() error {
 	if this.IsOn {
 		if this.Version != ProxyProtocolVersion1 && this.Version != ProxyProtocolVersion2 {

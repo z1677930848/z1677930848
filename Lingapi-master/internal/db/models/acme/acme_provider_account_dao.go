@@ -19,7 +19,7 @@ func NewACMEProviderAccountDAO() *ACMEProviderAccountDAO {
 	return dbs.NewDAO(&ACMEProviderAccountDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingACMEProviderAccounts",
+			Table:  "edgeACMEProviderAccounts",
 			Model:  new(ACMEProviderAccount),
 			PkName: "id",
 		},

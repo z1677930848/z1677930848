@@ -1,13 +1,13 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package nodeconfigs
 
-// NewTOAConfig 默认的TOA配置
+// NewTOAConfig 榛樿鐨凾OA閰嶇疆
 func NewTOAConfig() *TOAConfig {
 	return &TOAConfig{}
 }
 
-// TOAConfig TOA相关配置
+// TOAConfig TOA鐩稿叧閰嶇疆
 type TOAConfig struct {
 	IsOn bool `yaml:"isOn" json:"isOn"`
 }

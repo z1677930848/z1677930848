@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package dnsconfigs
 
@@ -16,8 +16,8 @@ type DNSResolver struct {
 func (this *DNSResolver) Addr() string {
 	var port = this.Port
 	if port <= 0 {
-		// 暂时不支持DoH
-		// 实际应用中只支持udp
+		// 鏆傛椂涓嶆敮鎸丏oH
+		// 瀹為檯搴旂敤涓彧鏀寔udp
 		switch this.Protocol {
 		case "tls":
 			port = 853

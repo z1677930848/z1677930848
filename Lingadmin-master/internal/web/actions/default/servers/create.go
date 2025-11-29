@@ -65,6 +65,24 @@ func (this *CreateAction) RunGet(params struct{}) {
 	}
 	this.Data["hasUsers"] = countUsersResp.Count > 0
 
+	// 预加载用户套餐（管理员手动分配）
+	userPlans := []maps.Map{}
+	plansResp, err := this.RPC().UserPlanRPC().ListEnabledUserPlans(this.AdminContext(), &pb.ListEnabledUserPlansRequest{
+		UserId: 0,
+		Offset: 0,
+		Size:   200,
+	})
+	if err == nil && plansResp != nil {
+		for _, up := range plansResp.UserPlans {
+			userPlans = append(userPlans, maps.Map{
+				"id":    up.Id,
+				"name":  up.Name,
+				"dayTo": up.DayTo,
+			})
+		}
+	}
+	this.Data["plans"] = userPlans
+
 	this.Show()
 }
 

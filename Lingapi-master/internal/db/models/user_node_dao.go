@@ -27,7 +27,7 @@ func NewUserNodeDAO() *UserNodeDAO {
 	return dbs.NewDAO(&UserNodeDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserNodes",
+			Table:  "edgeUserNodes",
 			Model:  new(UserNode),
 			PkName: "id",
 		},

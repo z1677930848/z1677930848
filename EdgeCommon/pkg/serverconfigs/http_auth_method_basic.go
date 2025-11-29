@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// HTTPAuthBasicMethodUser BasicAuth中的用户
+// HTTPAuthBasicMethodUser BasicAuth涓殑鐢ㄦ埛
 type HTTPAuthBasicMethodUser struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -17,7 +17,7 @@ func (this *HTTPAuthBasicMethodUser) Validate(password string) (bool, error) {
 	return this.Password == password, nil
 }
 
-// HTTPAuthBasicMethod BasicAuth方法定义
+// HTTPAuthBasicMethod BasicAuth鏂规硶瀹氫箟
 type HTTPAuthBasicMethod struct {
 	HTTPAuthBaseMethod
 

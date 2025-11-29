@@ -47,7 +47,7 @@ func NewHTTPCacheTaskDAO() *HTTPCacheTaskDAO {
 	return dbs.NewDAO(&HTTPCacheTaskDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPCacheTasks",
+			Table:  "edgeHTTPCacheTasks",
 			Model:  new(HTTPCacheTask),
 			PkName: "id",
 		},

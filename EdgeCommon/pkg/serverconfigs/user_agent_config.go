@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package serverconfigs
 
@@ -44,8 +44,8 @@ func NewUserAgentKeyword(keyword string) *UserAgentKeyword {
 }
 
 type UserAgentFilter struct {
-	Keywords []string        `yaml:"keywords" json:"keywords"` // 关键词
-	Action   UserAgentAction `yaml:"action" json:"action"`     // 动作
+	Keywords []string        `yaml:"keywords" json:"keywords"` // 鍏抽敭璇?
+	Action   UserAgentAction `yaml:"action" json:"action"`     // 鍔ㄤ綔
 
 	keywords []*UserAgentKeyword
 }
@@ -66,7 +66,7 @@ func (this *UserAgentFilter) Match(userAgent string) bool {
 
 	for _, keyword := range this.keywords {
 		if len(keyword.keyword) == 0 {
-			// 空白
+			// 绌虹櫧
 			if len(userAgent) == 0 {
 				return true
 			}
@@ -87,8 +87,8 @@ type UserAgentConfig struct {
 	IsOn    bool               `yaml:"isOn" json:"isOn"`
 	Filters []*UserAgentFilter `yaml:"filters" json:"filters"`
 
-	OnlyURLPatterns   []*shared.URLPattern `yaml:"onlyURLPatterns" json:"onlyURLPatterns"`     // 仅限的URL
-	ExceptURLPatterns []*shared.URLPattern `yaml:"exceptURLPatterns" json:"exceptURLPatterns"` // 排除的URL
+	OnlyURLPatterns   []*shared.URLPattern `yaml:"onlyURLPatterns" json:"onlyURLPatterns"`     // 浠呴檺鐨刄RL
+	ExceptURLPatterns []*shared.URLPattern `yaml:"exceptURLPatterns" json:"exceptURLPatterns"` // 鎺掗櫎鐨刄RL
 }
 
 func NewUserAgentConfig() *UserAgentConfig {

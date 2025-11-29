@@ -7,7 +7,7 @@ if [ -z "$TAG" ]; then
 fi
 
 # stop node
-go run -tags=${TAG}  ../cmd/edge-node/main.go stop
+go run -tags=${TAG}  ../cmd/ling-node/main.go stop
 
 # reference: https://pkg.go.dev/cmd/go/internal/test
 go clean -testcache

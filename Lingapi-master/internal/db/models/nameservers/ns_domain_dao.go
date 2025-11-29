@@ -17,7 +17,7 @@ func NewNSDomainDAO() *NSDomainDAO {
 	return dbs.NewDAO(&NSDomainDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNSDomains",
+			Table:  "edgeNSDomains",
 			Model:  new(NSDomain),
 			PkName: "id",
 		},

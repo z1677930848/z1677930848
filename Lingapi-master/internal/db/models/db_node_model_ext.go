@@ -13,6 +13,6 @@ func (this *DBNode) DBConfig() *dbs.DBConfig {
 	return &dbs.DBConfig{
 		Driver: "mysql",
 		Dsn:    dsn,
-		Prefix: "Ling",
+		Prefix: "edge",
 	}
 }

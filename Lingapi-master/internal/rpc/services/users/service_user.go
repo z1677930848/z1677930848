@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	// teaconst "github.com/TeaOSLab/EdgeAPI/internal/const"  // 已删除授权检测，不再需要
+	teaconst "github.com/TeaOSLab/EdgeAPI/internal/const"
 	"github.com/TeaOSLab/EdgeAPI/internal/db/models"
 	"github.com/TeaOSLab/EdgeAPI/internal/errors"
 	"github.com/TeaOSLab/EdgeAPI/internal/rpc/services"
@@ -302,7 +302,13 @@ func (this *UserService) LoginUser(ctx context.Context, req *pb.LoginUserRequest
 		}
 	}
 
-	// 已删除授权检测，所有功能默认启用
+	if !teaconst.IsPlus {
+		return &pb.LoginUserResponse{
+			UserId:  0,
+			IsOk:    false,
+			Message: "你正在使用的系统版本为非商业版本或已过期，请管理员续费后才能登录",
+		}, nil
+	}
 
 	if len(req.Username) == 0 || len(req.Password) == 0 {
 		return &pb.LoginUserResponse{

@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package iplibrary
 
@@ -57,7 +57,7 @@ func (this *FileWriter) Close() error {
 		return err2
 	}
 
-	// 加密内容
+	// 鍔犲瘑鍐呭
 	if len(this.password) > 0 {
 		var filePath = this.fp.Name()
 		data, err := os.ReadFile(filePath)

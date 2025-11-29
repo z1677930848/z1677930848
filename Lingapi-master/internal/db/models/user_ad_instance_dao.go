@@ -17,7 +17,7 @@ func NewUserADInstanceDAO() *UserADInstanceDAO {
 	return dbs.NewDAO(&UserADInstanceDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserADInstances",
+			Table:  "edgeUserADInstances",
 			Model:  new(UserADInstance),
 			PkName: "id",
 		},

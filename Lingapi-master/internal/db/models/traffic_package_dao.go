@@ -17,7 +17,7 @@ func NewTrafficPackageDAO() *TrafficPackageDAO {
 	return dbs.NewDAO(&TrafficPackageDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingTrafficPackages",
+			Table:  "edgeTrafficPackages",
 			Model:  new(TrafficPackage),
 			PkName: "id",
 		},

@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package iplibrary
 
@@ -58,7 +58,7 @@ func (this *Template) Extract(text string, emptyValues []string) (values map[str
 			continue
 		}
 		var v = matches[index]
-		if name != "ipFrom" && name != "ipTo" && (v == "0" || v == "无" || v == "空" || lists.ContainsString(emptyValues, v)) {
+		if name != "ipFrom" && name != "ipTo" && (v == "0" || lists.ContainsString(emptyValues, v)) {
 			v = ""
 		}
 		values[name] = v

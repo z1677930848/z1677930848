@@ -174,7 +174,7 @@ func (this *DBNodeInitializer) loop() error {
 			var config = &dbs.DBConfig{
 				Driver: "mysql",
 				Dsn:    dsn,
-				Prefix: "Ling",
+				Prefix: "edge",
 			}
 			db, err := dbs.NewInstanceFromConfig(config)
 			if err != nil {

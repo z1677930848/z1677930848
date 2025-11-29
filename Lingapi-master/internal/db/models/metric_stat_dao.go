@@ -48,7 +48,7 @@ func NewMetricStatDAO() *MetricStatDAO {
 	return dbs.NewDAO(&MetricStatDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingMetricStats",
+			Table:  "edgeMetricStats",
 			Model:  new(MetricStat),
 			PkName: "id",
 		},

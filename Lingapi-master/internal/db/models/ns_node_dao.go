@@ -24,7 +24,7 @@ func NewNSNodeDAO() *NSNodeDAO {
 	return dbs.NewDAO(&NSNodeDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNSNodes",
+			Table:  "edgeNSNodes",
 			Model:  new(NSNode),
 			PkName: "id",
 		},

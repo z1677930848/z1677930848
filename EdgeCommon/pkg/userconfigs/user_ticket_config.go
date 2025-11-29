@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package userconfigs
 
@@ -15,28 +15,19 @@ const (
 func UserTicketStatusName(status UserTicketStatus) string {
 	switch status {
 	case UserTicketStatusNone:
-		return "进行中"
+		return "pending"
 	case UserTicketStatusSolved:
-		return "已解决"
+		return "solved"
 	case UserTicketStatusClosed:
-		return "已关闭"
+		return "closed"
 	}
 	return ""
 }
 
 func FindAllUserTicketStatusList() []*shared.Definition {
 	return []*shared.Definition{
-		{
-			Name: "进行中",
-			Code: UserTicketStatusNone,
-		},
-		{
-			Name: "已解决",
-			Code: UserTicketStatusSolved,
-		},
-		{
-			Name: "已关闭",
-			Code: UserTicketStatusClosed,
-		},
+		{Name: "pending", Code: UserTicketStatusNone},
+		{Name: "solved", Code: UserTicketStatusSolved},
+		{Name: "closed", Code: UserTicketStatusClosed},
 	}
 }

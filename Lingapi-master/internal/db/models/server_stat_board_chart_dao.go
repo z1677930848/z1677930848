@@ -17,7 +17,7 @@ func NewServerStatBoardChartDAO() *ServerStatBoardChartDAO {
 	return dbs.NewDAO(&ServerStatBoardChartDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingServerStatBoardCharts",
+			Table:  "edgeServerStatBoardCharts",
 			Model:  new(ServerStatBoardChart),
 			PkName: "id",
 		},

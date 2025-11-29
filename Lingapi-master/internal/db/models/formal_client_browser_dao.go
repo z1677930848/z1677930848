@@ -26,7 +26,7 @@ func NewFormalClientBrowserDAO() *FormalClientBrowserDAO {
 	return dbs.NewDAO(&FormalClientBrowserDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingFormalClientBrowsers",
+			Table:  "edgeFormalClientBrowsers",
 			Model:  new(FormalClientBrowser),
 			PkName: "id",
 		},

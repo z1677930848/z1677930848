@@ -19,7 +19,7 @@ func NewNodeThresholdDAO() *NodeThresholdDAO {
 	return dbs.NewDAO(&NodeThresholdDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeThresholds",
+			Table:  "edgeNodeThresholds",
 			Model:  new(NodeThreshold),
 			PkName: "id",
 		},

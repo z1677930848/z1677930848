@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -19,14 +19,14 @@ var httpAuthSubRequestHTTPClient = &http.Client{
 	},
 }
 
-// HTTPAuthSubRequestMethod 使用URL认证
+// HTTPAuthSubRequestMethod 浣跨敤URL璁よ瘉
 type HTTPAuthSubRequestMethod struct {
 	HTTPAuthBaseMethod
 
 	URL    string `json:"url"`
 	Method string `json:"method"`
 
-	// TODO 增加自定义Header、超时、证书等
+	// TODO 澧炲姞鑷畾涔塇eader銆佽秴鏃躲€佽瘉涔︾瓑
 
 	isFullURL bool
 }
@@ -35,7 +35,7 @@ func NewHTTPAuthSubRequestMethod() *HTTPAuthSubRequestMethod {
 	return &HTTPAuthSubRequestMethod{}
 }
 
-// Init 初始化
+// Init 鍒濆鍖?
 func (this *HTTPAuthSubRequestMethod) Init(params map[string]any) error {
 	paramsJSON, err := json.Marshal(params)
 	if err != nil {
@@ -46,7 +46,7 @@ func (this *HTTPAuthSubRequestMethod) Init(params map[string]any) error {
 		return err
 	}
 
-	// 是否是完整的URL
+	// 鏄惁鏄畬鏁寸殑URL
 	this.isFullURL = false
 	if regexp.MustCompile(`^(?i)(http|https)://`).MatchString(this.URL) {
 		this.isFullURL = true
@@ -59,7 +59,7 @@ func (this *HTTPAuthSubRequestMethod) Init(params map[string]any) error {
 	return nil
 }
 
-// Filter 过滤
+// Filter 杩囨护
 func (this *HTTPAuthSubRequestMethod) Filter(req *http.Request, doSubReq func(subReq *http.Request) (status int, err error), formatter func(string) string) (ok bool, newURI string, uriChanged bool, err error) {
 	var method = this.Method
 	if len(method) == 0 {
@@ -96,7 +96,7 @@ func (this *HTTPAuthSubRequestMethod) Filter(req *http.Request, doSubReq func(su
 		return status >= 200 && status < 300, "", false, nil
 	}
 
-	// TODO 需要将Header和StatusCode、ResponseBody输出到客户端
+	// TODO 闇€瑕佸皢Header鍜孲tatusCode銆丷esponseBody杈撳嚭鍒板鎴风
 	newReq.Header.Set("Referer", scheme+"://"+host+req.URL.RequestURI())
 	resp, err := httpAuthSubRequestHTTPClient.Do(newReq)
 	if err != nil {

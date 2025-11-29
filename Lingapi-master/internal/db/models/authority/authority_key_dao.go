@@ -12,7 +12,7 @@ func NewAuthorityKeyDAO() *AuthorityKeyDAO {
 	return dbs.NewDAO(&AuthorityKeyDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingAuthorityKeys",
+			Table:  "edgeAuthorityKeys",
 			Model:  new(AuthorityKey),
 			PkName: "id",
 		},

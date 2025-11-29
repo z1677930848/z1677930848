@@ -16,7 +16,7 @@ func NewHTTPCacheTaskKeyDAO() *HTTPCacheTaskKeyDAO {
 	return dbs.NewDAO(&HTTPCacheTaskKeyDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPCacheTaskKeys",
+			Table:  "edgeHTTPCacheTaskKeys",
 			Model:  new(HTTPCacheTaskKey),
 			PkName: "id",
 		},

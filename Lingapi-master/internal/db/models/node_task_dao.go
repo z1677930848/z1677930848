@@ -53,7 +53,7 @@ func NewNodeTaskDAO() *NodeTaskDAO {
 	return dbs.NewDAO(&NodeTaskDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeTasks",
+			Table:  "edgeNodeTasks",
 			Model:  new(NodeTask),
 			PkName: "id",
 		},

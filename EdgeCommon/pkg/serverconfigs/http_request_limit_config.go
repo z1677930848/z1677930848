@@ -1,17 +1,17 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
 import "github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 
-// HTTPRequestLimitConfig HTTP请求限制相关限制配置
+// HTTPRequestLimitConfig HTTP璇锋眰闄愬埗鐩稿叧闄愬埗閰嶇疆
 type HTTPRequestLimitConfig struct {
-	IsPrior             bool                 `yaml:"isPrior" json:"isPrior"`                         // 是否覆盖父级
-	IsOn                bool                 `yaml:"isOn" json:"isOn"`                               // 是否启用
-	MaxConns            int                  `yaml:"maxConns" json:"maxConns"`                       // 并发连接数
-	MaxConnsPerIP       int                  `yaml:"maxConnsPerIP" json:"maxConnsPerIP"`             // 单个IP并发连接数
-	OutBandwidthPerConn *shared.SizeCapacity `yaml:"outBandwidthPerConn" json:"outBandwidthPerConn"` // 下行流量限制
-	MaxBodySize         *shared.SizeCapacity `yaml:"maxBodySize" json:"maxBodySize"`                 // 单个请求最大尺寸
+	IsPrior             bool                 `yaml:"isPrior" json:"isPrior"`                         // 鏄惁瑕嗙洊鐖剁骇
+	IsOn                bool                 `yaml:"isOn" json:"isOn"`                               // 鏄惁鍚敤
+	MaxConns            int                  `yaml:"maxConns" json:"maxConns"`                       // 骞跺彂杩炴帴鏁?
+	MaxConnsPerIP       int                  `yaml:"maxConnsPerIP" json:"maxConnsPerIP"`             // 鍗曚釜IP骞跺彂杩炴帴鏁?
+	OutBandwidthPerConn *shared.SizeCapacity `yaml:"outBandwidthPerConn" json:"outBandwidthPerConn"` // 涓嬭娴侀噺闄愬埗
+	MaxBodySize         *shared.SizeCapacity `yaml:"maxBodySize" json:"maxBodySize"`                 // 鍗曚釜璇锋眰鏈€澶у昂瀵?
 
 	outBandwidthPerConnBytes int64
 	maxBodyBytes             int64

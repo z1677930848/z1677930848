@@ -24,7 +24,7 @@ func NewUserPlanDAO() *UserPlanDAO {
 	return dbs.NewDAO(&UserPlanDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserPlans",
+			Table:  "edgeUserPlans",
 			Model:  new(UserPlan),
 			PkName: "id",
 		},

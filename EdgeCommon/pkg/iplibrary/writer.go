@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package iplibrary
 
@@ -20,7 +20,7 @@ type WriterV1 struct {
 	writer *hashWriter
 	meta   *Meta
 
-	lastIPFrom     uint64 // 上一次的IP
+	lastIPFrom     uint64 // 涓婁竴娆＄殑IP
 	lastCountryId  int64
 	lastProvinceId int64
 	lastCityId     int64

@@ -12,7 +12,7 @@ func NewUserEmailVerificationDAO() *UserEmailVerificationDAO {
 	return dbs.NewDAO(&UserEmailVerificationDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserEmailVerifications",
+			Table:  "edgeUserEmailVerifications",
 			Model:  new(UserEmailVerification),
 			PkName: "id",
 		},

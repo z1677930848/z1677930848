@@ -17,7 +17,7 @@ func NewUserOrderDAO() *UserOrderDAO {
 	return dbs.NewDAO(&UserOrderDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserOrders",
+			Table:  "edgeUserOrders",
 			Model:  new(UserOrder),
 			PkName: "id",
 		},

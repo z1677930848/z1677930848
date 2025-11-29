@@ -1,115 +1,94 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
+//
+// Rewritten to provide a minimal but valid description list for
+// IP address related threshold items used inside the node console.
 
 package nodeconfigs
 
 import "github.com/iwind/TeaGo/maps"
 
+// NodeValueOperator 节点值比较操作符
+type NodeValueOperator = string
+
+const (
+	NodeValueOperatorGt  NodeValueOperator = "gt"  // 大于
+	NodeValueOperatorGte NodeValueOperator = "gte" // 大于等于
+	NodeValueOperatorLt  NodeValueOperator = "lt"  // 小于
+	NodeValueOperatorLte NodeValueOperator = "lte" // 小于等于
+	NodeValueOperatorEq  NodeValueOperator = "eq"  // 等于
+	NodeValueOperatorNeq NodeValueOperator = "neq" // 不等于
+)
+
+// NodeValueDurationUnit 节点值持续时间单位
+type NodeValueDurationUnit = string
+
+const (
+	NodeValueDurationUnitMinute NodeValueDurationUnit = "minute" // 分钟
+	NodeValueDurationUnitHour   NodeValueDurationUnit = "hour"   // 小时
+	NodeValueDurationUnitDay    NodeValueDurationUnit = "day"    // 天
+)
+
 type IPAddressThresholdItem = string
 
 const (
-	IPAddressThresholdItemNodeAvgRequests      IPAddressThresholdItem = "nodeAvgRequests"      // 个
-	IPAddressThresholdItemNodeAvgTrafficOut    IPAddressThresholdItem = "nodeAvgTrafficOut"    // 节点下行流量 M
-	IPAddressThresholdItemNodeAvgTrafficIn     IPAddressThresholdItem = "nodeAvgTrafficIn"     // 节点上行流量 M
-	IPAddressThresholdItemNodeHealthCheck      IPAddressThresholdItem = "nodeHealthCheck"      // 节点健康检查结果
-	IPAddressThresholdItemGroupAvgRequests     IPAddressThresholdItem = "groupAvgRequests"     // 个
-	IPAddressThresholdItemGroupAvgTrafficIn    IPAddressThresholdItem = "groupAvgTrafficIn"    // 分组上行流量 M
-	IPAddressThresholdItemGroupAvgTrafficOut   IPAddressThresholdItem = "groupAvgTrafficOut"   // 分组下行流量 M
-	IPAddressThresholdItemClusterAvgRequests   IPAddressThresholdItem = "clusterAvgRequests"   // 个
-	IPAddressThresholdItemClusterAvgTrafficIn  IPAddressThresholdItem = "clusterAvgTrafficIn"  // 集群上行流量 M
-	IPAddressThresholdItemClusterAvgTrafficOut IPAddressThresholdItem = "clusterAvgTrafficOut" // 集群下行流量 M
-	IPAddressThresholdItemConnectivity         IPAddressThresholdItem = "connectivity"         // 0-100
+	IPAddressThresholdItemNodeAvgRequests      IPAddressThresholdItem = "nodeAvgRequests"
+	IPAddressThresholdItemNodeAvgTrafficOut    IPAddressThresholdItem = "nodeAvgTrafficOut"
+	IPAddressThresholdItemNodeAvgTrafficIn     IPAddressThresholdItem = "nodeAvgTrafficIn"
+	IPAddressThresholdItemNodeHealthCheck      IPAddressThresholdItem = "nodeHealthCheck"
+	IPAddressThresholdItemGroupAvgRequests     IPAddressThresholdItem = "groupAvgRequests"
+	IPAddressThresholdItemGroupAvgTrafficIn    IPAddressThresholdItem = "groupAvgTrafficIn"
+	IPAddressThresholdItemGroupAvgTrafficOut   IPAddressThresholdItem = "groupAvgTrafficOut"
+	IPAddressThresholdItemClusterAvgRequests   IPAddressThresholdItem = "clusterAvgRequests"
+	IPAddressThresholdItemClusterAvgTrafficIn  IPAddressThresholdItem = "clusterAvgTrafficIn"
+	IPAddressThresholdItemClusterAvgTrafficOut IPAddressThresholdItem = "clusterAvgTrafficOut"
+	IPAddressThresholdItemConnectivity         IPAddressThresholdItem = "connectivity"
 )
 
-// FindAllIPAddressThresholdItems IP相关阈值项目
 func FindAllIPAddressThresholdItems() []maps.Map {
-	return []maps.Map{
-		{
-			"name":        "节点平均请求数",
-			"code":        IPAddressThresholdItemNodeAvgRequests,
-			"description": "当前节点在单位时间内接收到的平均请求数。",
-			"unit":        "个",
-		},
-		{
-			"name":        "节点平均下行流量",
-			"code":        IPAddressThresholdItemNodeAvgTrafficOut,
-			"description": "当前节点在单位时间内发送的下行流量。",
-			"unit":        "M",
-		},
-		{
-			"name":        "节点平均上行流量",
-			"code":        IPAddressThresholdItemNodeAvgTrafficIn,
-			"description": "当前节点在单位时间内接收的上行流量。",
-			"unit":        "M",
-		},
-		{
-			"name":        "节点健康检查结果",
-			"code":        IPAddressThresholdItemNodeHealthCheck,
-			"description": "当前节点健康检查结果。",
-			"unit":        "",
-		},
-
-		{
-			"name":        "IP连通性",
-			"code":        IPAddressThresholdItemConnectivity,
-			"description": "通过区域监控得到的当前IP地址的连通性数值，取值在0和100之间。",
-			"unit":        "%",
-		},
-
-		{
-			"name":        "分组平均请求数",
-			"code":        IPAddressThresholdItemGroupAvgRequests,
-			"description": "当前节点所在分组在单位时间内接收到的平均请求数。",
-			"unit":        "个",
-		},
-		{
-			"name":        "分组平均下行流量",
-			"code":        IPAddressThresholdItemGroupAvgTrafficOut,
-			"description": "当前节点所在分组在单位时间内发送的下行流量。",
-			"unit":        "M",
-		},
-		{
-			"name":        "分组平均上行流量",
-			"code":        IPAddressThresholdItemGroupAvgTrafficIn,
-			"description": "当前节点所在分组在单位时间内接收的上行流量。",
-			"unit":        "M",
-		},
-
-		{
-			"name":        "集群平均请求数",
-			"code":        IPAddressThresholdItemClusterAvgRequests,
-			"description": "当前节点所在集群在单位时间内接收到的平均请求数。",
-			"unit":        "个",
-		},
-		{
-			"name":        "集群平均下行流量",
-			"code":        IPAddressThresholdItemClusterAvgTrafficOut,
-			"description": "当前节点所在集群在单位时间内发送的下行流量。",
-			"unit":        "M",
-		},
-		{
-			"name":        "集群平均上行流量",
-			"code":        IPAddressThresholdItemClusterAvgTrafficIn,
-			"description": "当前节点所在集群在单位时间内接收的上行流量。",
-			"unit":        "M",
-		},
+	var items = []struct {
+		name string
+		code IPAddressThresholdItem
+		desc string
+		unit string
+	}{
+		{"Node average requests", IPAddressThresholdItemNodeAvgRequests, "Average requests per minute handled by this node.", "req/min"},
+		{"Node average downstream traffic", IPAddressThresholdItemNodeAvgTrafficOut, "Average downstream (egress) traffic produced by this node.", "MB"},
+		{"Node average upstream traffic", IPAddressThresholdItemNodeAvgTrafficIn, "Average upstream (ingress) traffic received by this node.", "MB"},
+		{"Node health check result", IPAddressThresholdItemNodeHealthCheck, "Latest health check status for this node.", ""},
+		{"Group average requests", IPAddressThresholdItemGroupAvgRequests, "Average requests per minute for the node group.", "req/min"},
+		{"Group average downstream traffic", IPAddressThresholdItemGroupAvgTrafficOut, "Average downstream traffic for the node group.", "MB"},
+		{"Group average upstream traffic", IPAddressThresholdItemGroupAvgTrafficIn, "Average upstream traffic for the node group.", "MB"},
+		{"Cluster average requests", IPAddressThresholdItemClusterAvgRequests, "Average requests per minute for the cluster.", "req/min"},
+		{"Cluster average downstream traffic", IPAddressThresholdItemClusterAvgTrafficOut, "Average downstream traffic for the cluster.", "MB"},
+		{"Cluster average upstream traffic", IPAddressThresholdItemClusterAvgTrafficIn, "Average upstream traffic for the cluster.", "MB"},
+		{"Connectivity", IPAddressThresholdItemConnectivity, "Connectivity score (0-100) collected from regional monitors.", "%"},
 	}
+
+	result := make([]maps.Map, 0, len(items))
+	for _, item := range items {
+		result = append(result, maps.Map{
+			"name":        item.name,
+			"code":        item.code,
+			"description": item.desc,
+			"unit":        item.unit,
+		})
+	}
+	return result
 }
 
-// IPAddressThresholdConfig 阈值列表
 type IPAddressThresholdConfig struct {
 	Id      int64                             `json:"id"`
 	Items   []*IPAddressThresholdItemConfig   `json:"items"`
 	Actions []*IPAddressThresholdActionConfig `json:"actions"`
 }
 
-// IPAddressThresholdItemConfig 阈值项目
 type IPAddressThresholdItemConfig struct {
 	Item         IPAddressThresholdItem `json:"item"`
 	Operator     NodeValueOperator      `json:"operator"`
 	Value        float64                `json:"value"`
 	Duration     int                    `json:"duration"`
 	DurationUnit NodeValueDurationUnit  `json:"durationUnit"`
-	Options      maps.Map               `json:"options"` // 附加选项
+	Options      maps.Map               `json:"options"`
 }
 
 type IPAddressThresholdActionConfig struct {
@@ -117,44 +96,22 @@ type IPAddressThresholdActionConfig struct {
 	Options maps.Map `json:"options"`
 }
 
-// IPAddressThresholdAction 动作
 type IPAddressThresholdAction = string
 
 const (
-	IPAddressThresholdActionUp      IPAddressThresholdAction = "up"      // 上线
-	IPAddressThresholdActionDown    IPAddressThresholdAction = "down"    // 下线
-	IPAddressThresholdActionNotify  IPAddressThresholdAction = "notify"  // 通知
-	IPAddressThresholdActionSwitch  IPAddressThresholdAction = "switch"  // 切换到备用IP
-	IPAddressThresholdActionWebHook IPAddressThresholdAction = "webHook" // 调用外部Webhook
+	IPAddressThresholdActionUp      IPAddressThresholdAction = "up"
+	IPAddressThresholdActionDown    IPAddressThresholdAction = "down"
+	IPAddressThresholdActionNotify  IPAddressThresholdAction = "notify"
+	IPAddressThresholdActionSwitch  IPAddressThresholdAction = "switch"
+	IPAddressThresholdActionWebHook IPAddressThresholdAction = "webHook"
 )
 
-// FindAllIPAddressThresholdActions IP相关阈值动作
 func FindAllIPAddressThresholdActions() []maps.Map {
 	return []maps.Map{
-		{
-			"name":        "上线",
-			"code":        IPAddressThresholdActionUp,
-			"description": "上线当前IP。",
-		},
-		{
-			"name":        "下线",
-			"code":        IPAddressThresholdActionDown,
-			"description": "下线当前IP。",
-		},
-		{
-			"name":        "通知",
-			"code":        IPAddressThresholdActionNotify,
-			"description": "发送已达到阈值通知。",
-		},
-		{
-			"name":        "切换",
-			"code":        IPAddressThresholdActionSwitch,
-			"description": "在DNS中记录中将IP切换到指定的备用IP。",
-		},
-		{
-			"name":        "WebHook",
-			"code":        IPAddressThresholdActionWebHook,
-			"description": "调用外部的WebHook。",
-		},
+		{"name": "Up", "code": IPAddressThresholdActionUp, "description": "IP up"},
+		{"name": "Down", "code": IPAddressThresholdActionDown, "description": "IP down"},
+		{"name": "Notify", "code": IPAddressThresholdActionNotify, "description": "Notify"},
+		{"name": "Switch", "code": IPAddressThresholdActionSwitch, "description": "Switch IP"},
+		{"name": "WebHook", "code": IPAddressThresholdActionWebHook, "description": "WebHook"},
 	}
 }

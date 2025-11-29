@@ -40,7 +40,7 @@ func NewClientBrowserDAO() *ClientBrowserDAO {
 	return dbs.NewDAO(&ClientBrowserDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingClientBrowsers",
+			Table:  "edgeClientBrowsers",
 			Model:  new(ClientBrowser),
 			PkName: "id",
 		},

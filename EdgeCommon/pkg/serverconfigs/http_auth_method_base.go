@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package serverconfigs
 
@@ -53,7 +53,7 @@ func (this *HTTPAuthBaseMethod) MatchRequest(req *http.Request) bool {
 			return false
 		}
 
-		// ext中包含点符号
+		// ext涓寘鍚偣绗﹀彿
 		ext = strings.ToLower(ext)
 		if !lists.ContainsString(this.Exts, ext) {
 			return false

@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package shared
 
@@ -9,21 +9,21 @@ import (
 	"sync"
 )
 
-var dataMapPrefix = []byte("GOEDGE_DATA_MAP:")
+var dataMapPrefix = []byte("Lingcdn_DATA_MAP:")
 
-// DataMap 二进制数据共享Map
-// 用来减少相同数据占用的空间和内存
+// DataMap 浜岃繘鍒舵暟鎹叡浜玀ap
+// 鐢ㄦ潵鍑忓皯鐩稿悓鏁版嵁鍗犵敤鐨勭┖闂村拰鍐呭瓨
 type DataMap struct {
 	Map    map[string][]byte
 	locker sync.Mutex
 }
 
-// NewDataMap 构建对象
+// NewDataMap 鏋勫缓瀵硅薄
 func NewDataMap() *DataMap {
 	return &DataMap{Map: map[string][]byte{}}
 }
 
-// Put 放入数据
+// Put 鏀惧叆鏁版嵁
 func (this *DataMap) Put(data []byte) (keyData []byte) {
 	this.locker.Lock()
 	defer this.locker.Unlock()
@@ -32,7 +32,7 @@ func (this *DataMap) Put(data []byte) (keyData []byte) {
 	return []byte(key)
 }
 
-// Read 读取数据
+// Read 璇诲彇鏁版嵁
 func (this *DataMap) Read(key []byte) []byte {
 	this.locker.Lock()
 	defer this.locker.Unlock()

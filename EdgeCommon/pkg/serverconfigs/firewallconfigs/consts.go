@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package firewallconfigs
 
@@ -8,9 +8,9 @@ import (
 )
 
 const (
-	GlobalBlackListId int64 = 2_000_000_000
-	GlobalWhiteListId int64 = 2_000_000_001
-	GlobalGreyListId  int64 = 2_000_000_002
+	GlobalBlackListId int64 = 2000000000
+	GlobalWhiteListId int64 = 2000000001
+	GlobalGreyListId  int64 = 2000000002
 
 	DefaultEventLevel = "critical"
 )
@@ -24,20 +24,19 @@ func FindGlobalListIdWithType(listType ipconfigs.IPListType) int64 {
 	case ipconfigs.IPListTypeGrey:
 		return GlobalGreyListId
 	}
-
 	return 0
 }
 
 func FindGlobalListNameWithType(listType ipconfigs.IPListType) string {
 	switch listType {
 	case ipconfigs.IPListTypeBlack:
-		return "全局黑名单"
+		return "global blacklist"
 	case ipconfigs.IPListTypeWhite:
-		return "全局白名单"
+		return "global whitelist"
 	case ipconfigs.IPListTypeGrey:
-		return "全局灰名单"
+		return "global greylist"
 	}
-	return "全局黑名单"
+	return "global blacklist"
 }
 
 func IsGlobalListId(listId int64) bool {

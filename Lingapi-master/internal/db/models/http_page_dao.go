@@ -24,7 +24,7 @@ func NewHTTPPageDAO() *HTTPPageDAO {
 	return dbs.NewDAO(&HTTPPageDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPPages",
+			Table:  "edgeHTTPPages",
 			Model:  new(HTTPPage),
 			PkName: "id",
 		},

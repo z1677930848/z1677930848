@@ -33,7 +33,7 @@ func NewMessageTaskLogDAO() *MessageTaskLogDAO {
 	return dbs.NewDAO(&MessageTaskLogDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingMessageTaskLogs",
+			Table:  "edgeMessageTaskLogs",
 			Model:  new(MessageTaskLog),
 			PkName: "id",
 		},

@@ -25,7 +25,7 @@ func NewHTTPCachePolicyDAO() *HTTPCachePolicyDAO {
 	return dbs.NewDAO(&HTTPCachePolicyDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPCachePolicies",
+			Table:  "edgeHTTPCachePolicies",
 			Model:  new(HTTPCachePolicy),
 			PkName: "id",
 		},

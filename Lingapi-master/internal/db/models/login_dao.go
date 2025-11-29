@@ -25,7 +25,7 @@ func NewLoginDAO() *LoginDAO {
 	return dbs.NewDAO(&LoginDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingLogins",
+			Table:  "edgeLogins",
 			Model:  new(Login),
 			PkName: "id",
 		},

@@ -40,7 +40,7 @@ func NewClientSystemDAO() *ClientSystemDAO {
 	return dbs.NewDAO(&ClientSystemDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingClientSystems",
+			Table:  "edgeClientSystems",
 			Model:  new(ClientSystem),
 			PkName: "id",
 		},

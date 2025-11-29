@@ -1,8 +1,8 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package monitorconfigs
 
 type RateConfig struct {
-	Minutes int32 `json:"minutes"` // 周期分钟
-	Count   int32 `json:"count"`   // 数量
+	Minutes int32 `json:"minutes"` // 鍛ㄦ湡鍒嗛挓
+	Count   int32 `json:"count"`   // 鏁伴噺
 }

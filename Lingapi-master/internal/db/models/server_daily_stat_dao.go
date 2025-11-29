@@ -42,7 +42,7 @@ func NewServerDailyStatDAO() *ServerDailyStatDAO {
 	return dbs.NewDAO(&ServerDailyStatDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingServerDailyStats",
+			Table:  "edgeServerDailyStats",
 			Model:  new(ServerDailyStat),
 			PkName: "id",
 		},

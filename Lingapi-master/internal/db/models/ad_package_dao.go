@@ -17,7 +17,7 @@ func NewADPackageDAO() *ADPackageDAO {
 	return dbs.NewDAO(&ADPackageDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingADPackages",
+			Table:  "edgeADPackages",
 			Model:  new(ADPackage),
 			PkName: "id",
 		},

@@ -1,13 +1,13 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
-// AccessLogQueueConfig 访问日志队列配置
+// AccessLogQueueConfig 璁块棶鏃ュ織闃熷垪閰嶇疆
 type AccessLogQueueConfig struct {
-	MaxLength      int `yaml:"maxLength" json:"maxLength"`           // 队列最大长度
-	CountPerSecond int `yaml:"countPerSecond" json:"countPerSecond"` // 每秒写入数量
-	Percent        int `yaml:"percent" json:"percent"`               // 比例，如果为0-100，默认为100
+	MaxLength      int `yaml:"maxLength" json:"maxLength"`           // 闃熷垪鏈€澶ч暱搴?
+	CountPerSecond int `yaml:"countPerSecond" json:"countPerSecond"` // 姣忕鍐欏叆鏁伴噺
+	Percent        int `yaml:"percent" json:"percent"`               // 姣斾緥锛屽鏋滀负0-100锛岄粯璁や负100
 
-	EnableAutoPartial bool  `yaml:"enableAutoPartial" json:"enableAutoPartial"` // 是否启动自动分表
-	RowsPerTable      int64 `yaml:"rowsPerTable" json:"rowsPerTable"`           // 单表最大行数
+	EnableAutoPartial bool  `yaml:"enableAutoPartial" json:"enableAutoPartial"` // 鏄惁鍚姩鑷姩鍒嗚〃
+	RowsPerTable      int64 `yaml:"rowsPerTable" json:"rowsPerTable"`           // 鍗曡〃鏈€澶ц鏁?
 }

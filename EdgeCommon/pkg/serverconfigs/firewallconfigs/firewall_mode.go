@@ -1,35 +1,22 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package firewallconfigs
 
 import "github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 
-// FirewallMode 模式
 type FirewallMode = string
 
 const (
-	FirewallModeDefend  FirewallMode = "defend"  // 防御模式
-	FirewallModeObserve FirewallMode = "observe" // 观察模式
-	FirewallModeBypass  FirewallMode = "bypass"  // 通过模式
+	FirewallModeDefend  FirewallMode = "defend"
+	FirewallModeObserve FirewallMode = "observe"
+	FirewallModeBypass  FirewallMode = "bypass"
 )
 
 func FindAllFirewallModes() []*shared.Definition {
 	return []*shared.Definition{
-		{
-			Name:        "防御模式",
-			Description: "执行正常的防御规则和相应动作。",
-			Code:        FirewallModeDefend,
-		},
-		{
-			Name:        "观察模式",
-			Description: "执行正常的防御规则，但只记录日志，不执行动作。",
-			Code:        FirewallModeObserve,
-		},
-		{
-			Name:        "通过模式",
-			Description: "不执行任何规则，所有的请求都将会直接通过。",
-			Code:        FirewallModeBypass,
-		},
+		{Name: "Defend", Description: "apply firewall rules and actions", Code: FirewallModeDefend},
+		{Name: "Observe", Description: "apply rules but only log without actions", Code: FirewallModeObserve},
+		{Name: "Bypass", Description: "skip firewall rules", Code: FirewallModeBypass},
 	}
 }
 

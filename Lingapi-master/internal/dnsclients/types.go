@@ -13,7 +13,7 @@ const (
 	ProviderTypeHuaweiDNS    ProviderType = "huaweiDNS"    // 华为DNS
 	ProviderTypeCloudFlare   ProviderType = "cloudFlare"   // CloudFlare DNS
 	ProviderTypeLocalEdgeDNS ProviderType = "localEdgeDNS" // 和当前系统集成的EdgeDNS
-	ProviderTypeEdgeDNSAPI   ProviderType = "skDNSAPI"   // 通过API连接的EdgeDNS
+	ProviderTypeEdgeDNSAPI   ProviderType = "edgeDNSAPI"   // 通过API连接的EdgeDNS
 	ProviderTypeCustomHTTP   ProviderType = "customHTTP"   // 自定义HTTP接口
 	ProviderTypeDNSLA        ProviderType = "dnsla"        // DNSLA
 )

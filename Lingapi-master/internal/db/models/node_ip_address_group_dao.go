@@ -12,7 +12,7 @@ func NewNodeIPAddressGroupDAO() *NodeIPAddressGroupDAO {
 	return dbs.NewDAO(&NodeIPAddressGroupDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeIPAddressGroups",
+			Table:  "edgeNodeIPAddressGroups",
 			Model:  new(NodeIPAddressGroup),
 			PkName: "id",
 		},

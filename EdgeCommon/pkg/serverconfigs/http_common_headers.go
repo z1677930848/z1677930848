@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package serverconfigs
 
@@ -195,7 +195,7 @@ func init() {
 	}
 }
 
-// IsCommonRequestHeader 判断某个HTTP请求Header名称是否为通用
+// IsCommonRequestHeader 鍒ゆ柇鏌愪釜HTTP璇锋眰Header鍚嶇О鏄惁涓洪€氱敤
 func IsCommonRequestHeader(headerName string) bool {
 	_, ok := allRequestHeaderMap[headerName]
 	return ok

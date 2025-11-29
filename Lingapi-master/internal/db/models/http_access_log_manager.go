@@ -38,7 +38,7 @@ func (this *HTTPAccessLogManager) FindTableNames(db *dbs.DB, day string) ([]stri
 	var results = []string{}
 
 	// 需要防止用户设置了表名自动小写
-	for _, prefix := range []string{"LingHTTPAccessLogs_" + day + "%", "skhttpaccesslogs_" + day + "%"} {
+	for _, prefix := range []string{"edgeHTTPAccessLogs_" + day + "%", "edgehttpaccesslogs_" + day + "%"} {
 		ones, columnNames, err := db.FindPreparedOnes(`SHOW TABLES LIKE '` + prefix + `'`)
 		if err != nil {
 			return nil, fmt.Errorf("query table names error: %w", err)
@@ -85,7 +85,7 @@ func (this *HTTPAccessLogManager) FindTables(db *dbs.DB, day string) ([]*httpAcc
 	var cachePrefix = config.Dsn
 
 	// 需要防止用户设置了表名自动小写
-	for _, prefix := range []string{"LingHTTPAccessLogs_" + day + "%", "skhttpaccesslogs_" + day + "%"} {
+	for _, prefix := range []string{"edgeHTTPAccessLogs_" + day + "%", "edgehttpaccesslogs_" + day + "%"} {
 		ones, columnNames, err := db.FindPreparedOnes(`SHOW TABLES LIKE '` + prefix + `'`)
 		if err != nil {
 			return nil, fmt.Errorf("query table names error: %w", err)
@@ -169,9 +169,9 @@ func (this *HTTPAccessLogManager) FindPartitionTable(db *dbs.DB, day string, par
 			Exists:        false,
 		}, nil
 	} else if partition == 0 {
-		tableNames = []string{"LingHTTPAccessLogs_" + day, "skhttpaccesslogs_" + day}
+		tableNames = []string{"edgeHTTPAccessLogs_" + day, "edgehttpaccesslogs_" + day}
 	} else {
-		tableNames = []string{"LingHTTPAccessLogs_" + day + "_" + fmt.Sprintf("%04d", partition), "skhttpaccesslogs_" + day + "_" + fmt.Sprintf("%04d", partition)}
+		tableNames = []string{"edgeHTTPAccessLogs_" + day + "_" + fmt.Sprintf("%04d", partition), "edgehttpaccesslogs_" + day + "_" + fmt.Sprintf("%04d", partition)}
 	}
 	for _, tableName := range tableNames {
 		hasRemoteField, hasDomainField, err := this.checkTableFields(db, tableName)
@@ -324,7 +324,7 @@ func (this *HTTPAccessLogManager) findTableWithoutCache(db *dbs.DB, day string, 
 		return nil, err
 	}
 
-	var prefix = "LingHTTPAccessLogs_" + day
+	var prefix = "edgeHTTPAccessLogs_" + day
 
 	if len(tableNames) == 0 {
 		if force {

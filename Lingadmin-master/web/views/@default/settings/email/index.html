@@ -1,0 +1,74 @@
+{$layout}
+
+<form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
+	<csrf-token></csrf-token>
+
+	<table class="ui table definition selectable">
+		<tr>
+			<td class="title">SMTP服务器 *</td>
+			<td>
+				<input type="text" name="smtpHost" v-model="smtpHost" maxlength="200"/>
+				<p class="comment">例如：smtp.gmail.com</p>
+			</td>
+		</tr>
+		<tr>
+			<td>SMTP端口 *</td>
+			<td>
+				<input type="number" name="smtpPort" v-model="smtpPort" style="width: 6em"/>
+				<p class="comment">常用端口：587（TLS）、465（SSL）、25（无加密）</p>
+			</td>
+		</tr>
+		<tr>
+			<td>SMTP用户名 *</td>
+			<td>
+				<input type="text" name="smtpUsername" v-model="smtpUsername" maxlength="200"/>
+			</td>
+		</tr>
+		<tr>
+			<td>SMTP密码 *</td>
+			<td>
+				<input type="password" name="smtpPassword" v-model="smtpPassword" maxlength="500"/>
+			</td>
+		</tr>
+		<tr>
+			<td>发件人邮箱 *</td>
+			<td>
+				<input type="email" name="fromEmail" v-model="fromEmail" maxlength="200"/>
+			</td>
+		</tr>
+		<tr>
+			<td>发件人名称</td>
+			<td>
+				<input type="text" name="fromName" v-model="fromName" maxlength="200"/>
+				<p class="comment">邮件中显示的发件人名称</p>
+			</td>
+		</tr>
+		<tr>
+			<td>使用TLS</td>
+			<td>
+				<checkbox name="useTLS" v-model="useTLS"></checkbox>
+				<p class="comment">推荐开启TLS加密连接</p>
+			</td>
+		</tr>
+	</table>
+
+	<h4>测试邮件</h4>
+	<table class="ui table definition selectable">
+		<tr>
+			<td class="title">测试邮箱</td>
+			<td>
+				<div class="ui fields inline">
+					<div class="ui field">
+						<input type="email" v-model="testEmail" placeholder="输入测试邮箱" style="width: 20em"/>
+					</div>
+					<div class="ui field">
+						<button type="button" class="ui button tiny" @click="sendTest">发送测试邮件</button>
+					</div>
+				</div>
+				<p class="comment">发送测试邮件验证SMTP配置是否正确</p>
+			</td>
+		</tr>
+	</table>
+
+	<submit-btn></submit-btn>
+</form>

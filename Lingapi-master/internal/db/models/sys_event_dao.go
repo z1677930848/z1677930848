@@ -15,7 +15,7 @@ func NewSysEventDAO() *SysEventDAO {
 	return dbs.NewDAO(&SysEventDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingSysEvents",
+			Table:  "edgeSysEvents",
 			Model:  new(SysEvent),
 			PkName: "id",
 		},

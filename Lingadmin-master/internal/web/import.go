@@ -132,6 +132,9 @@ import (
 	// 恢复
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/recover"
 
+	// 套餐管理
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/plans"
+
 	// 安装
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/setup"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/setup/confirm"

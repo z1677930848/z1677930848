@@ -31,30 +31,44 @@ Tea.context(function () {
         })
     }
 
-    // 刷新状态
-    this.reloadStatus = function (nodeId) {
-        let that = this
+	// 刷新状态
+	this.reloadStatus = function (nodeId) {
+		let that = this
+		let lastUpdatedAt = 0
+		if (this.installStatus != null && this.installStatus.updatedAt != null) {
+			lastUpdatedAt = this.installStatus.updatedAt
+		}
 
-        this.$post("/clusters/cluster/node/status")
-            .params({
-                nodeId: nodeId
-            })
-            .success(function (resp) {
-                this.installStatus = resp.data.installStatus
-                this.node.isInstalled = resp.data.isInstalled
+		this.$post("/clusters/cluster/node/status")
+			.params({
+				nodeId: nodeId,
+				lastUpdatedAt: lastUpdatedAt
+			})
+			.success(function (resp) {
+				const isChanged = resp.data.isChanged !== false
+				if (typeof resp.data.isInstalled !== "undefined") {
+					this.node.isInstalled = resp.data.isInstalled
+				}
+				if (isChanged) {
+					this.installStatus = resp.data.installStatus
+				}
 
-                if (!isInstalling) {
-                    return
-                }
+				if (!isInstalling) {
+					return
+				}
 
-                let nodeId = this.node.id
-                let errMsg = this.installStatus.error
+				if (!isChanged || this.installStatus == null) {
+					return
+				}
 
-                if (this.installStatus.errorCode.length > 0) {
-                    isInstalling = false
-                }
+				let nodeId = this.node.id
+				let errMsg = this.installStatus.error
 
-                switch (this.installStatus.errorCode) {
+				if (this.installStatus.errorCode.length > 0) {
+					isInstalling = false
+				}
+
+				switch (this.installStatus.errorCode) {
                     case "EMPTY_LOGIN":
                     case "EMPTY_SSH_HOST":
                     case "EMPTY_SSH_PORT":
@@ -96,13 +110,14 @@ Tea.context(function () {
                         shouldReload = true
                     //teaweb.warn("安装失败：" + errMsg)
                 }
-            })
-            .done(function () {
-                this.$delay(function () {
-                    this.reloadStatus(nodeId)
-                }, 1000)
-            });
-    }
+			})
+			.done(function () {
+				let interval = isInstalling ? 1000 : 3000
+				this.$delay(function () {
+					this.reloadStatus(nodeId)
+				}, interval)
+			});
+	}
 
 	this.showSSHPopup = function (nodeId) {
 		teaweb.popup("/clusters/cluster/updateNodeSSH?nodeId=" + nodeId, {

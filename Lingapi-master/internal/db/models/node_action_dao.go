@@ -17,7 +17,7 @@ func NewNodeActionDAO() *NodeActionDAO {
 	return dbs.NewDAO(&NodeActionDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeActions",
+			Table:  "edgeNodeActions",
 			Model:  new(NodeAction),
 			PkName: "id",
 		},

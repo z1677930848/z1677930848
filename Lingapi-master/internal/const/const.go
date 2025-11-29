@@ -1,7 +1,8 @@
 package teaconst
 
 const (
-	Version = "1.0.16"  // 更新版本号
+	// 版本号：保持与管理端同步
+	Version = "1.1.0"
 
 	ProductName   = "Ling API"
 	ProcessName   = "ling-api"
@@ -17,5 +18,5 @@ const (
 
 	// 其他节点版本号，用来检测是否有需要升级的节点
 
-	NodeVersion = "1.0.15"  // 更新节点版本号
+	NodeVersion = "1.0.15"
 )

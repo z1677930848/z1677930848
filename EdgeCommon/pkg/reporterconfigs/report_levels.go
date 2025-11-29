@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package reporterconfigs
 
@@ -18,19 +18,19 @@ const (
 func FindAllReportLevels() []*shared.Definition {
 	return []*shared.Definition{
 		{
-			Name: "良好",
+			Name: "鑹ソ",
 			Code: ReportLevelGood,
 		},
 		{
-			Name: "正常",
+			Name: "姝ｅ父",
 			Code: ReportLevelNormal,
 		},
 		{
-			Name: "不良",
+			Name: "涓嶈壇",
 			Code: ReportLevelBad,
 		},
 		{
-			Name: "错误",
+			Name: "閿欒",
 			Code: ReportLevelBroken,
 		},
 	}

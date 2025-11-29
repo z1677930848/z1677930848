@@ -20,7 +20,7 @@ func NewApiTokenDAO() *ApiTokenDAO {
 	return dbs.NewDAO(&ApiTokenDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingAPITokens",
+			Table:  "edgeAPITokens",
 			Model:  new(ApiToken),
 			PkName: "id",
 		},

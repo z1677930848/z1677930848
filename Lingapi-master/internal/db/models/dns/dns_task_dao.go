@@ -29,7 +29,7 @@ func NewDNSTaskDAO() *DNSTaskDAO {
 	return dbs.NewDAO(&DNSTaskDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingDNSTasks",
+			Table:  "edgeDNSTasks",
 			Model:  new(DNSTask),
 			PkName: "id",
 		},

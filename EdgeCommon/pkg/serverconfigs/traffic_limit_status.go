@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
@@ -12,12 +12,12 @@ const (
 	TrafficLimitTargetWebsocketConnections TrafficLimitTarget = "websocketConnections"
 )
 
-// TrafficLimitStatus 流量限制状态
+// TrafficLimitStatus 娴侀噺闄愬埗鐘舵€?
 type TrafficLimitStatus struct {
-	UntilDay   string `yaml:"untilDay" json:"untilDay"`     // 有效日期，格式YYYYMMDD
-	PlanId     int64  `yaml:"planId" json:"planId"`         // 套餐ID
-	DateType   string `yaml:"dateType" json:"dateType"`     // 日期类型 day|month
-	TargetType string `yaml:"targetType" json:"targetType"` // 限制类型：traffic|request|...
+	UntilDay   string `yaml:"untilDay" json:"untilDay"`     // 鏈夋晥鏃ユ湡锛屾牸寮廦YYYMMDD
+	PlanId     int64  `yaml:"planId" json:"planId"`         // 濂楅ID
+	DateType   string `yaml:"dateType" json:"dateType"`     // 鏃ユ湡绫诲瀷 day|month
+	TargetType string `yaml:"targetType" json:"targetType"` // 闄愬埗绫诲瀷锛歵raffic|request|...
 }
 
 func (this *TrafficLimitStatus) IsValid() bool {

@@ -28,7 +28,7 @@ func NewHTTPWebDAO() *HTTPWebDAO {
 	return dbs.NewDAO(&HTTPWebDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPWebs",
+			Table:  "edgeHTTPWebs",
 			Model:  new(HTTPWeb),
 			PkName: "id",
 		},

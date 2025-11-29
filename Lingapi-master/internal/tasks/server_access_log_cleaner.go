@@ -115,7 +115,7 @@ func (this *ServerAccessLogCleaner) cleanDB(db *dbs.DB, endDay string) error {
 		return errors.New("invalid column names: " + strings.Join(columnNames, ", "))
 	}
 	var columnName = columnNames[0]
-	var reg = regexp.MustCompile(`^(?i)(skHTTPAccessLogs|skNSAccessLogs)_(\d{8})(_\d{4})?$`)
+	var reg = regexp.MustCompile(`^(?i)(edgeHTTPAccessLogs|edgeNSAccessLogs)_(\d{8})(_\d{4})?$`)
 	for _, one := range ones {
 		var tableName = one.GetString(columnName)
 		if len(tableName) == 0 {

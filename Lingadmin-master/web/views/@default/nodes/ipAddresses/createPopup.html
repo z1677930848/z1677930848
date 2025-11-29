@@ -1,4 +1,4 @@
-{$layout "layout_popup"}
+﻿{$layout "layout_popup"}
 
 <h3>添加IP地址</h3>
 
@@ -8,7 +8,7 @@
 			<td class="title">IP地址 *</td>
 			<td>
 				<input type="text" name="ip" maxlength="128" ref="focus"/>
-                <p class="comment">支持单个IP、CIDR格式的一组IP（位数不能小于24）、IP范围（类似于<code-label>x.x.x.x-x.x.x.x</code-label>，最多只取256个）等。</p>
+                <p class="comment">支持单个 IP、CIDR 段（掩码不少于 /24）、IP 范围（如 <code-label>x.x.x.x-x.x.x.x</code-label>，最多 256 个）。</p>
 			</td>
 		</tr>
 		<tr>
@@ -18,7 +18,7 @@
 					<input type="checkbox" name="canAccess" value="1" checked="checked"/>
 					<label></label>
 				</div>
-				<p class="comment">是否为可以公开访问的IP，如果选中表示当前IP可以被公开访问，并可被加入到DNS解析记录中。</p>
+				<p class="comment">勾选表示当前 IP 可公开访问，并可加入 DNS 解析记录。</p>
 			</td>
 		</tr>
         <tr>
@@ -40,7 +40,7 @@
                     </select>
                 </td>
             </tr>
-            <tr v-if="teaIsPlus && supportThresholds">
+            <tr v-if="supportThresholds">
                 <td>阈值设置</td>
                 <td>
                     <node-ip-address-thresholds-box></node-ip-address-thresholds-box>

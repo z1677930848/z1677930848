@@ -98,8 +98,8 @@
             </table>
         </div>
 
-        <div v-show="teaIsPlus && currentItem == 'title-server-name-auditing'">
-            <h4 id="title-server-name-auditing" v-if="teaIsPlus">域名审核</h4>
+        <div v-show="currentItem == 'title-server-name-auditing'">
+            <h4 id="title-server-name-auditing">域名审核</h4>
             <table class="ui table definition selectable">
                 <tr>
                     <td class="title">域名变更时需要审核</td>
@@ -206,8 +206,8 @@
             </table>
         </div>
 
-        <div v-show="teaIsPlus && currentItem == 'title-ln'">
-            <h4 id="title-ln" v-if="teaIsPlus">Ln节点</h4>
+        <div v-show="currentItem == 'title-ln'">
+            <h4 id="title-ln">Ln节点</h4>
             <table class="ui table definition selectable">
                 <tr>
                     <td>强制Ln请求</td>

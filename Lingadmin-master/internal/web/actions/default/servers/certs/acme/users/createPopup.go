@@ -48,13 +48,15 @@ func (this *CreatePopupAction) RunPost(params struct {
 	Must *actions.Must
 	CSRF *actionutils.CSRF
 }) {
+	// 邮箱允许为空，填写时校验格式
+	if len(params.Email) > 0 {
+		params.Must.
+			Field("email", params.Email).
+			Email("请输入正确的邮箱格式")
+	}
 	params.Must.
-		Field("email", params.Email).
-		Require("请输入邮箱").
-		Email("请输入正确的邮箱格式").
 		Field("providerCode", params.ProviderCode).
 		Require("请选择所属服务商")
-
 	providerResp, err := this.RPC().ACMEProviderRPC().FindACMEProviderWithCode(this.AdminContext(), &pb.FindACMEProviderWithCodeRequest{
 		AcmeProviderCode: params.ProviderCode,
 	})

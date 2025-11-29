@@ -17,7 +17,7 @@ func NewADNetworkDAO() *ADNetworkDAO {
 	return dbs.NewDAO(&ADNetworkDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingADNetworks",
+			Table:  "edgeADNetworks",
 			Model:  new(ADNetwork),
 			PkName: "id",
 		},

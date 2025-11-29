@@ -194,7 +194,7 @@ func testDNSLaProvider() (dnsclients.ProviderInterface, error) {
 	if err != nil {
 		return nil, err
 	}
-	one, err := db.FindOne("SELECT * FROM skDNSProviders WHERE type='dnsla' ORDER BY id DESC")
+	one, err := db.FindOne("SELECT * FROM edgeDNSProviders WHERE type='dnsla' ORDER BY id DESC")
 	if err != nil {
 		return nil, err
 	}

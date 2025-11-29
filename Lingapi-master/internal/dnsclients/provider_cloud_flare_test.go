@@ -172,7 +172,7 @@ func testCloudFlareProvider() (ProviderInterface, error) {
 	if err != nil {
 		return nil, err
 	}
-	one, err := db.FindOne("SELECT * FROM skDNSProviders WHERE type='cloudFlare' AND state=1 ORDER BY id DESC")
+	one, err := db.FindOne("SELECT * FROM edgeDNSProviders WHERE type='cloudFlare' AND state=1 ORDER BY id DESC")
 	if err != nil {
 		return nil, err
 	}

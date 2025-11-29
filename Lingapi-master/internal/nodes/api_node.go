@@ -385,7 +385,7 @@ func (this *APINode) autoUpgrade() error {
 	defer func() {
 		_ = db.Close()
 	}()
-	one, err := db.FindOne("SELECT version FROM LingVersions LIMIT 1")
+	one, err := db.FindOne("SELECT version FROM edgeVersions LIMIT 1")
 	if err != nil {
 		return fmt.Errorf("query version failed: %w", err)
 	}

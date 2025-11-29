@@ -12,7 +12,7 @@ func NewUserOrderLogDAO() *UserOrderLogDAO {
 	return dbs.NewDAO(&UserOrderLogDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserOrderLogs",
+			Table:  "edgeUserOrderLogs",
 			Model:  new(UserOrderLog),
 			PkName: "id",
 		},

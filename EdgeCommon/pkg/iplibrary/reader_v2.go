@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package iplibrary
 
@@ -14,11 +14,11 @@ import (
 	"strings"
 )
 
-// ReaderV2 IP库Reader V2
+// ReaderV2 IP搴揜eader V2
 type ReaderV2 struct {
 	meta *Meta
 
-	regionMap map[string]*ipRegion // 缓存重复的区域用来节约内存
+	regionMap map[string]*ipRegion // 缂撳瓨閲嶅鐨勫尯鍩熺敤鏉ヨ妭绾﹀唴瀛?
 
 	ipV4Items []ipv4ItemV2
 	ipV6Items []ipv6ItemV2
@@ -30,13 +30,13 @@ type ReaderV2 struct {
 	lastProviderId uint16
 }
 
-// NewReaderV2 创建新Reader对象
+// NewReaderV2 鍒涘缓鏂癛eader瀵硅薄
 func NewReaderV2(reader io.Reader) (*ReaderV2, error) {
 	var libReader = &ReaderV2{
 		regionMap: map[string]*ipRegion{},
 	}
 
-	if runtime.NumCPU() >= 4 /** CPU数量较多的通常有着大内存 **/ {
+	if runtime.NumCPU() >= 4 /** CPU鏁伴噺杈冨鐨勯€氬父鏈夌潃澶у唴瀛?**/ {
 		libReader.ipV4Items = make([]ipv4ItemV2, 0, 6_000_000)
 	} else {
 		libReader.ipV4Items = make([]ipv4ItemV2, 0, 600_000)
@@ -49,7 +49,7 @@ func NewReaderV2(reader io.Reader) (*ReaderV2, error) {
 	return libReader, nil
 }
 
-// 从Reader中加载数据
+// 浠嶳eader涓姞杞芥暟鎹?
 func (this *ReaderV2) load(reader io.Reader) error {
 	var buf = make([]byte, 1024)
 	var metaLine []byte
@@ -118,7 +118,7 @@ func (this *ReaderV2) load(reader io.Reader) error {
 		return bytes.Compare(from0[:], from1[:]) < 0
 	})
 
-	// 清理内存
+	// 娓呯悊鍐呭瓨
 	this.regionMap = nil
 
 	return nil
@@ -182,7 +182,7 @@ func (this *ReaderV2) Destroy() {
 	this.ipV6Items = nil
 }
 
-// 分析数据
+// 鍒嗘瀽鏁版嵁
 func (this *ReaderV2) parse(data []byte) (left []byte, err error) {
 	if len(data) == 0 {
 		return
@@ -219,7 +219,7 @@ func (this *ReaderV2) parse(data []byte) (left []byte, err error) {
 	return
 }
 
-// 单行分析
+// 鍗曡鍒嗘瀽
 func (this *ReaderV2) parseLine(line []byte) error {
 	if len(line) == 0 {
 		return nil
@@ -243,7 +243,7 @@ func (this *ReaderV2) parseLine(line []byte) error {
 	pieces = append(pieces, strings.Split(string(line[offset:]), "|")...)
 
 	var countPieces = len(pieces)
-	if countPieces < maxPieces { // 补足一行
+	if countPieces < maxPieces { // 琛ヨ冻涓€琛?
 		for i := 0; i < maxPieces-countPieces; i++ {
 			pieces = append(pieces, "")
 		}

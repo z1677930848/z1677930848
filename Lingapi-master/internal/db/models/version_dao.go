@@ -12,7 +12,7 @@ func NewVersionDAO() *VersionDAO {
 	return dbs.NewDAO(&VersionDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingVersions",
+			Table:  "edgeVersions",
 			Model:  new(Version),
 			PkName: "id",
 		},

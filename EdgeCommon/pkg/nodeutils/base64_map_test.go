@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package nodeutils
 
@@ -39,7 +39,7 @@ func TestBase64EncodeMap(t *testing.T) {
 	}
 
 	{
-		var m = maps.Map{"userId": 1, "name": "李白"}
+		var m = maps.Map{"userId": 1, "name": "鏉庣櫧"}
 		encodedString, err := Base64EncodeMap(m)
 		if err != nil {
 			t.Fatal(err)

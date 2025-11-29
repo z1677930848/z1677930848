@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package reporterconfigs
 
@@ -17,7 +17,7 @@ type IPTask struct {
 func FindTaskTypeName(taskType TaskType) string {
 	switch taskType {
 	case TaskTypeIPAddr:
-		return "IP地址"
+		return "IP鍦板潃"
 	}
 	return ""
 }

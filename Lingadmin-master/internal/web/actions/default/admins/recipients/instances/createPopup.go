@@ -2,6 +2,9 @@ package instances
 
 import (
 	"encoding/json"
+	"fmt"
+
+	"github.com/TeaOSLab/EdgeAdmin/internal/models"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/monitorconfigs"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -18,6 +21,23 @@ func (this *CreatePopupAction) Init() {
 }
 
 func (this *CreatePopupAction) RunGet(params struct{}) {
+	setting, err := (&models.EmailSettingModel{}).Get()
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if setting != nil {
+		this.Data["hasGlobalEmailSetting"] = true
+		this.Data["globalEmailSetting"] = maps.Map{
+			"host":     setting.SmtpHost,
+			"port":     setting.SmtpPort,
+			"username": setting.SmtpUsername,
+			"from":     setting.FromEmail,
+		}
+	} else {
+		this.Data["hasGlobalEmailSetting"] = false
+	}
+
 	this.Show()
 }
 
@@ -25,6 +45,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	Name      string
 	MediaType string
 
+	UseGlobalSMTP bool
 	EmailSmtp     string
 	EmailUsername string
 	EmailPassword string
@@ -86,23 +107,46 @@ func (this *CreatePopupAction) RunPost(params struct {
 
 	switch params.MediaType {
 	case "email":
-		params.Must.
-			Field("emailSmtp", params.EmailSmtp).
-			Require("请输入SMTP地址").
-			Field("emailUsername", params.EmailUsername).
-			Require("请输入邮箱账号").
-			Field("emailPassword", params.EmailPassword).
-			Require("请输入密码或授权码")
+		var smtpHostPort = params.EmailSmtp
+		var smtpUsername = params.EmailUsername
+		var smtpPassword = params.EmailPassword
+		var smtpFrom = params.EmailFrom
 
-		options["smtp"] = params.EmailSmtp
-		options["username"] = params.EmailUsername
-		options["password"] = params.EmailPassword
-		options["from"] = params.EmailFrom
+		if params.UseGlobalSMTP {
+			setting, err := (&models.EmailSettingModel{}).Get()
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+			if setting == nil {
+				this.Fail("请先在“系统设置-邮件”中配置SMTP，再启用全局SMTP")
+			}
+			smtpHostPort = fmt.Sprintf("%s:%d", setting.SmtpHost, setting.SmtpPort)
+			smtpUsername = setting.SmtpUsername
+			smtpPassword = setting.SmtpPassword
+			smtpFrom = setting.FromEmail
+			options["useTLS"] = setting.UseTLS
+			options["fromName"] = setting.FromName
+		} else {
+			params.Must.
+				Field("emailSmtp", params.EmailSmtp).
+				Require("SMTP").
+				Field("emailUsername", params.EmailUsername).
+				Require("邮箱账号").
+				Field("emailPassword", params.EmailPassword).
+				Require("密码或授权码")
+		}
+
+		options["useGlobal"] = params.UseGlobalSMTP
+		options["smtp"] = smtpHostPort
+		options["username"] = smtpUsername
+		options["password"] = smtpPassword
+		options["from"] = smtpFrom
 	case "webHook":
 		params.Must.
 			Field("webHookURL", params.WebHookURL).
-			Require("请输入URL地址").
-			Match("(?i)^(http|https)://", "URL地址必须以http或https开头").
+			Require("URL").
+			Match("(?i)^(http|https)://", "URL必须以http或https开头").
 			Field("webHookMethod", params.WebHookMethod).
 			Require("请选择请求方法")
 

@@ -19,7 +19,7 @@ func NewFileDAO() *FileDAO {
 	return dbs.NewDAO(&FileDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingFiles",
+			Table:  "edgeFiles",
 			Model:  new(File),
 			PkName: "id",
 		},

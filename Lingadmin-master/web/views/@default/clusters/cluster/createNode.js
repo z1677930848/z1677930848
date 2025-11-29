@@ -4,8 +4,10 @@ Tea.context(function () {
 	this.sshHost = ""
 	this.sshPort = ""
 	this.grantId = 0
+	this.scriptId = 0
 	this.step = "info"
 	this.name = ""
+	this.runInitNodeScript = 0
 
 	this.success = function (resp) {
 		this.node = resp.data.node
@@ -33,6 +35,7 @@ Tea.context(function () {
 		let that = this
 		let selectedClusterIds = [this.clusterId].concat(this.secondaryClusterIds)
 		teaweb.popup("/clusters/selectPopup?selectedClusterIds=" + selectedClusterIds.join(",") + "&mode=multiple", {
+			title: '选择集群',
 			height: "30em",
 			width: "50em",
 			callback: function (resp) {
@@ -86,13 +89,18 @@ Tea.context(function () {
 			this.grantId = this.node.grant.id
 		}
 
+		if (this.node.script != null) {
+			this.scriptId = this.node.script.id
+		}
+
 		this.isInstalling = true
 		this.$post(".createNodeInstall")
 			.params({
 				nodeId: this.node.id,
 				sshHost: this.sshHost,
 				sshPort: this.sshPort,
-				grantId: this.grantId
+				grantId: this.grantId,
+				initScriptId: this.scriptId
 			})
 			.timeout(30)
 			.success(function () {
@@ -114,18 +122,34 @@ Tea.context(function () {
 		}
 	}
 
+	this.changeScript = function (script) {
+		if (script != null) {
+			this.scriptId = script.id
+		} else {
+			this.scriptId = 0
+		}
+	}
+
 	// 刷新状态
 	this.installStatus = null
 	this.reloadStatus = function (nodeId) {
 		let that = this
+		let lastUpdatedAt = 0
+		if (this.installStatus != null && this.installStatus.updatedAt != null) {
+			lastUpdatedAt = this.installStatus.updatedAt
+		}
 
 		this.$post("/clusters/cluster/node/status")
 			.params({
-				nodeId: nodeId
+				nodeId: nodeId,
+				lastUpdatedAt: lastUpdatedAt
 			})
 			.success(function (resp) {
-				this.installStatus = resp.data.installStatus
+				const isChanged = resp.data.isChanged !== false
 				this.node.isInstalled = resp.data.isInstalled
+				if (isChanged) {
+					this.installStatus = resp.data.installStatus
+				}
 				if (this.node.isInstalled) {
 					this.isInstalling = false
 					this.isInstalled = true
@@ -136,20 +160,26 @@ Tea.context(function () {
 					return
 				}
 
-				let nodeId = this.node.id
-				let errMsg = this.installStatus.error
+				if (!isChanged || this.installStatus == null) {
+					return
+				}
 
-				if (this.installStatus.errorCode.length > 0 || errMsg.length > 0) {
+				let nodeId = this.node.id
+				let errMsg = this.installStatus.error || ""
+				let errorCode = this.installStatus.errorCode || ""
+
+				if (errorCode.length > 0 || errMsg.length > 0) {
 					this.isInstalling = false
 				}
 
-				switch (this.installStatus.errorCode) {
+				switch (errorCode) {
 					case "EMPTY_LOGIN":
 					case "EMPTY_SSH_HOST":
 					case "EMPTY_SSH_PORT":
 					case "EMPTY_GRANT":
 						teaweb.warn("需要填写SSH登录信息", function () {
 							teaweb.popup("/clusters/cluster/updateNodeSSH?nodeId=" + nodeId, {
+								title: '修改节点SSH登录信息',
 								height: "30em",
 								callback: function () {
 									that.install()
@@ -159,6 +189,9 @@ Tea.context(function () {
 						return
 					case "SSH_LOGIN_FAILED":
 						teaweb.warn("SSH登录失败，请检查设置")
+						return
+					case "INIT_NODE_FAILED":
+						teaweb.warn("初始化节点失败: " + errMsg)
 						return
 					case "CREATE_ROOT_DIRECTORY_FAILED":
 						teaweb.warn("创建根目录失败，请检查目录权限或者手工创建：" + errMsg)
@@ -170,7 +203,7 @@ Tea.context(function () {
 						teaweb.warn("环境测试失败：" + errMsg)
 						return
 					case "RPC_TEST_FAILED":
-						teaweb.confirm("html:要安装的节点到API服务之间的RPC通讯测试失败，具体错误：" + errMsg + "，<br/>现在修改API信息？", function () {
+						teaweb.confirm("html:要安装的节点到API服务之间的RPC通讯测试失败，具体错误：" + errMsg + "。<br/>现在修改API信息吗？", function () {
 							window.location = "/settings/api"
 						})
 						return
@@ -180,9 +213,10 @@ Tea.context(function () {
 				}
 			})
 			.done(function () {
+				let interval = this.isInstalling ? 1000 : 3000
 				this.$delay(function () {
 					this.reloadStatus(nodeId)
-				}, 1000)
+				}, interval)
 			});
 	}
 

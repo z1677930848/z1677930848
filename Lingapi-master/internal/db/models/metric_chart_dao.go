@@ -21,7 +21,7 @@ func NewMetricChartDAO() *MetricChartDAO {
 	return dbs.NewDAO(&MetricChartDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingMetricCharts",
+			Table:  "edgeMetricCharts",
 			Model:  new(MetricChart),
 			PkName: "id",
 		},

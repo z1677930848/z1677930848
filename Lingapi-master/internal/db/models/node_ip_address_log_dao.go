@@ -13,7 +13,7 @@ func NewNodeIPAddressLogDAO() *NodeIPAddressLogDAO {
 	return dbs.NewDAO(&NodeIPAddressLogDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeIPAddressLogs",
+			Table:  "edgeNodeIPAddressLogs",
 			Model:  new(NodeIPAddressLog),
 			PkName: "id",
 		},

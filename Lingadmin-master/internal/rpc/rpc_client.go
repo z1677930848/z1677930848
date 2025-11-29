@@ -459,6 +459,14 @@ func (this *RPCClient) TrafficDailyStatRPC() pb.TrafficDailyStatServiceClient {
 	return pb.NewTrafficDailyStatServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) PlanRPC() pb.PlanServiceClient {
+	return pb.NewPlanServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) UserPlanRPC() pb.UserPlanServiceClient {
+	return pb.NewUserPlanServiceClient(this.pickConn())
+}
+
 // Context 构造Admin上下文
 func (this *RPCClient) Context(adminId int64) context.Context {
 	var ctx = context.Background()
@@ -466,6 +474,29 @@ func (this *RPCClient) Context(adminId int64) context.Context {
 		"timestamp": time.Now().Unix(),
 		"type":      "admin",
 		"userId":    adminId,
+	}
+	method, err := encrypt.NewMethodInstance(teaconst.EncryptMethod, this.apiConfig.Secret, this.apiConfig.NodeId)
+	if err != nil {
+		utils.PrintError(err)
+		return context.Background()
+	}
+	data, err := method.Encrypt(m.AsJSON())
+	if err != nil {
+		utils.PrintError(err)
+		return context.Background()
+	}
+	var token = base64.StdEncoding.EncodeToString(data)
+	ctx = metadata.AppendToOutgoingContext(ctx, "nodeId", this.apiConfig.NodeId, "token", token)
+	return ctx
+}
+
+// UserContext 构造User上下文
+func (this *RPCClient) UserContext(userId int64) context.Context {
+	var ctx = context.Background()
+	var m = maps.Map{
+		"timestamp": time.Now().Unix(),
+		"type":      "user",
+		"userId":    userId,
 	}
 	method, err := encrypt.NewMethodInstance(teaconst.EncryptMethod, this.apiConfig.Secret, this.apiConfig.NodeId)
 	if err != nil {

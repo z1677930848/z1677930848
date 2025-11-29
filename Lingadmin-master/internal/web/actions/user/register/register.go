@@ -116,7 +116,7 @@ func (this *RegisterAction) RunPost(params struct {
 	}
 
 	// 自动登录
-	params.Auth.StoreAdmin(createResp.UserId, false)
+	params.Auth.StoreUser(createResp.UserId, params.Username, false)
 
 	this.Data["userId"] = createResp.UserId
 	this.Success()

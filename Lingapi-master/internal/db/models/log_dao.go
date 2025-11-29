@@ -23,7 +23,7 @@ func NewLogDAO() *LogDAO {
 	return dbs.NewDAO(&LogDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingLogs",
+			Table:  "edgeLogs",
 			Model:  new(Log),
 			PkName: "id",
 		},

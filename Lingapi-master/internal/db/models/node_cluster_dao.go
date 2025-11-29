@@ -31,7 +31,7 @@ func NewNodeClusterDAO() *NodeClusterDAO {
 	return dbs.NewDAO(&NodeClusterDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeClusters",
+			Table:  "edgeNodeClusters",
 			Model:  new(NodeCluster),
 			PkName: "id",
 		},

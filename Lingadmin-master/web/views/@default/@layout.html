@@ -24,13 +24,14 @@
     <link rel="stylesheet" type="text/css" href="/js/langs/{$.teaLang}.css?v={$ .teaVersion}"/>
 
     <link rel="stylesheet" type="text/css" href="/_/@default/@layout_override.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="/css/unified-ui.css?v={$ .teaVersion}" media="all"/>
 </head>
-<body>
+<body class="app-shell">
 
 <div>
     <!-- 顶部导航 -->
-    <div class="ui menu top-nav blue inverted small borderless" :class="(teaTheme == null || teaTheme.length == 0) ? 'theme2': teaTheme" v-cloak="">
-        <a href="/" class="item">
+    <div class="ui menu top-nav blue inverted small borderless app-topbar" :class="(teaTheme == null || teaTheme.length == 0) ? 'theme2': teaTheme" v-cloak="">
+        <a href="/" class="item brand">
 			<i class="ui icon leaf" v-if="teaLogoFileId == 0"></i><img alt="logo" v-if="teaLogoFileId > 0" :src="'/ui/image/' + teaLogoFileId" style="width: auto;height: 1.6em"/> &nbsp; {{teaTitle}}&nbsp;<sup v-if="teaShowVersion">v{{teaVersion}}<span v-if="teaVersion.split('.').length == 4" title="当前版本为测试版，再次感谢您参与测试"> beta</span></sup> &nbsp;
 		</a>
 
@@ -68,7 +69,6 @@
             <a href="" class="item" title="点击切换界面风格" @click.prevent="changeTheme()"><i class="icon adjust"></i></a>
 
             <!-- 企业版 -->
-           <!-- <a :href="'/settings/authority'" class="item" title="商业版" :v-if="teaIsPlus"><i class="icon gem outline yellow"></i></a>-->
 
             <!-- 退出登录 -->
             <a :href="Tea.url('logout')" class="item" title="安全退出登录"><i class="icon sign out"></i>
@@ -78,7 +78,7 @@
     </div>
 
     <!-- 左侧主菜单 -->
-    <div class="main-menu" :class="(teaTheme == null || teaTheme.length == 0) ? 'theme2': teaTheme" v-cloak="">
+    <div class="main-menu app-sidebar" :class="(teaTheme == null || teaTheme.length == 0) ? 'theme2': teaTheme" v-cloak="">
         <div class="ui labeled menu vertical blue inverted tiny borderless">
 			<div class="item"></div>
             <!--<a :href="Tea.url('dashboard')" class="item" :class="{active:teaMenu == 'dashboard'}">
@@ -109,7 +109,7 @@
     </div>
 
     <!-- 右侧主操作栏 -->
-    <div class="main" :class="{'without-menu':teaSubMenus.menus == null || teaSubMenus.menus.length == 0 || (teaSubMenus.menus.length == 1 && teaSubMenus.menus[0].alwaysActive), 'without-secondary-menu':teaSubMenus.alwaysMenu == null || teaSubMenus.alwaysMenu.items.length <= 1, 'without-footer':!teaShowOpenSourceInfo}" v-cloak="">
+    <div class="main app-main" :class="{'without-menu':teaSubMenus.menus == null || teaSubMenus.menus.length == 0 || (teaSubMenus.menus.length == 1 && teaSubMenus.menus[0].alwaysActive), 'without-secondary-menu':teaSubMenus.alwaysMenu == null || teaSubMenus.alwaysMenu.items.length <= 1, 'without-footer':!teaShowOpenSourceInfo}" v-cloak="">
         <!-- 操作菜单 -->
         <div class="ui top menu tabular tab-menu small" v-if="teaTabbar.length > 1">
             <a class="item" v-for="item in teaTabbar" :class="{'active':item.isActive && !item.isDisabled, right:item.isRight, title: item.isTitle, icon: item.icon != null && item.icon.length > 0, disabled: item.isDisabled}"  :href="item.url">

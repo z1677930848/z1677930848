@@ -22,7 +22,7 @@ func NewHTTPHeaderDAO() *HTTPHeaderDAO {
 	return dbs.NewDAO(&HTTPHeaderDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPHeaders",
+			Table:  "edgeHTTPHeaders",
 			Model:  new(HTTPHeader),
 			PkName: "id",
 		},

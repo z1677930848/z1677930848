@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package iplibrary
 
@@ -170,7 +170,7 @@ func (this *QueryResult) Summary() string {
 	if len(cityName) > 0 && !lists.ContainsString(pieces, cityName) && !lists.ContainsString(pieces, strings.TrimSuffix(cityName, "市")) {
 		pieces = append(pieces, cityName)
 	}
-	if len(townName) > 0 && !lists.ContainsString(pieces, townName) && !lists.ContainsString(pieces, strings.TrimSuffix(townName, "县")) {
+	if len(townName) > 0 && !lists.ContainsString(pieces, townName) && !lists.ContainsString(pieces, strings.TrimSuffix(townName, "区")) {
 		pieces = append(pieces, townName)
 	}
 
@@ -204,7 +204,7 @@ func (this *QueryResult) RegionSummary() string {
 	if len(cityName) > 0 && !lists.ContainsString(pieces, cityName) && !lists.ContainsString(pieces, strings.TrimSuffix(cityName, "市")) {
 		pieces = append(pieces, cityName)
 	}
-	if len(townName) > 0 && !lists.ContainsString(pieces, townName) && !lists.ContainsString(pieces, strings.TrimSuffix(townName, "县")) {
+	if len(townName) > 0 && !lists.ContainsString(pieces, townName) && !lists.ContainsString(pieces, strings.TrimSuffix(townName, "区")) {
 		pieces = append(pieces, townName)
 	}
 

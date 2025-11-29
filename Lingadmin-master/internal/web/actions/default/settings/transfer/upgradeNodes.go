@@ -35,7 +35,8 @@ func (this *UpgradeNodesAction) RunPost(params struct {
 
 	if len(nodes) > 0 {
 		var message = &messageconfigs.ChangeAPINodeMessage{
-			Addr: params.ApiNodeProtocol + "://" + configutils.QuoteIP(params.ApiNodeHost) + ":" + types.String(params.ApiNodePort),
+			Addr: params.ApiNodeProtocol + "://" + configutils.QuoteIP(params.ApiNodeHost) + ":" + 
+types.String(params.ApiNodePort),
 		}
 		messageJSON, err := json.Marshal(message)
 		if err != nil {

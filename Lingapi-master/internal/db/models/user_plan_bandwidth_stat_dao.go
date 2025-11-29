@@ -43,7 +43,7 @@ func NewUserPlanBandwidthStatDAO() *UserPlanBandwidthStatDAO {
 	return dbs.NewDAO(&UserPlanBandwidthStatDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserPlanBandwidthStats",
+			Table:  "edgeUserPlanBandwidthStats",
 			Model:  new(UserPlanBandwidthStat),
 			PkName: "id",
 		},

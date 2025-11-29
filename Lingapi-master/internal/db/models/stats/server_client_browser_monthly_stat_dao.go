@@ -35,7 +35,7 @@ func NewServerClientBrowserMonthlyStatDAO() *ServerClientBrowserMonthlyStatDAO {
 	return dbs.NewDAO(&ServerClientBrowserMonthlyStatDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingServerClientBrowserMonthlyStats",
+			Table:  "edgeServerClientBrowserMonthlyStats",
 			Model:  new(ServerClientBrowserMonthlyStat),
 			PkName: "id",
 		},

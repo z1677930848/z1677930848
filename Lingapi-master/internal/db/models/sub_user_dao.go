@@ -17,7 +17,7 @@ func NewSubUserDAO() *SubUserDAO {
 	return dbs.NewDAO(&SubUserDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingSubUsers",
+			Table:  "edgeSubUsers",
 			Model:  new(SubUser),
 			PkName: "id",
 		},

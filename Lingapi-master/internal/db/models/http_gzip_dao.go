@@ -23,7 +23,7 @@ func NewHTTPGzipDAO() *HTTPGzipDAO {
 	return dbs.NewDAO(&HTTPGzipDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPGzips",
+			Table:  "edgeHTTPGzips",
 			Model:  new(HTTPGzip),
 			PkName: "id",
 		},

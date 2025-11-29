@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package iplibrary
 
@@ -15,19 +15,19 @@ import (
 )
 
 type UpdaterSource interface {
-	// DataDir 文件目录
+	// DataDir 鏂囦欢鐩綍
 	DataDir() string
 
-	// FindLatestFile 检查最新的IP库文件
+	// FindLatestFile 妫€鏌ユ渶鏂扮殑IP搴撴枃浠?
 	FindLatestFile() (code string, fileId int64, err error)
 
-	// DownloadFile 下载文件
+	// DownloadFile 涓嬭浇鏂囦欢
 	DownloadFile(fileId int64, writer io.Writer) error
 
-	// LogInfo 普通日志
+	// LogInfo 鏅€氭棩蹇?
 	LogInfo(message string)
 
-	// LogError 错误日志
+	// LogError 閿欒鏃ュ織
 	LogError(err error)
 }
 
@@ -48,19 +48,19 @@ func NewUpdater(source UpdaterSource, interval time.Duration) *Updater {
 }
 
 func (this *Updater) Start() {
-	// 初始化
+	// 鍒濆鍖?
 	err := this.Init()
 	if err != nil {
 		this.source.LogError(err)
 	}
 
-	// 先运行一次
+	// 鍏堣繍琛屼竴娆?
 	err = this.Loop()
 	if err != nil {
 		this.source.LogError(err)
 	}
 
-	// 开始定时运行
+	// 寮€濮嬪畾鏃惰繍琛?
 	for range this.ticker.C {
 		err = this.Loop()
 		if err != nil {
@@ -70,7 +70,7 @@ func (this *Updater) Start() {
 }
 
 func (this *Updater) Init() error {
-	// 检查当前正在使用的IP库
+	// 妫€鏌ュ綋鍓嶆鍦ㄤ娇鐢ㄧ殑IP搴?
 	var path = this.source.DataDir() + "/ip-library.db"
 	fp, err := os.Open(path)
 	if err != nil {
@@ -100,14 +100,14 @@ func (this *Updater) Loop() error {
 
 	code, fileId, err := this.source.FindLatestFile()
 	if err != nil {
-		// 不提示连接错误
+		// 涓嶆彁绀鸿繛鎺ラ敊璇?
 		if this.isConnError(err) {
 			return nil
 		}
 		return err
 	}
 	if len(code) == 0 || fileId <= 0 {
-		// 还原到内置IP库
+		// 杩樺師鍒板唴缃甀P搴?
 		if len(this.currentCode) > 0 {
 			this.currentCode = ""
 			this.source.LogInfo("resetting to default ip library ...")
@@ -130,13 +130,13 @@ func (this *Updater) Loop() error {
 		return nil
 	}
 
-	// 下载
+	// 涓嬭浇
 	if this.currentCode == code {
-		// 不再重复下载
+		// 涓嶅啀閲嶅涓嬭浇
 		return nil
 	}
 
-	// 检查是否存在
+	// 妫€鏌ユ槸鍚﹀瓨鍦?
 	var dir = this.source.DataDir()
 	var path = dir + "/ip-" + code + ".db"
 	stat, err := os.Stat(path)
@@ -152,12 +152,12 @@ func (this *Updater) Loop() error {
 
 		err = this.loadFile(fp)
 		if err != nil {
-			// 尝试删除
+			// 灏濊瘯鍒犻櫎
 			_ = os.Remove(path)
 		} else {
 			this.currentCode = code
 
-			// 拷贝到 ip-library.db
+			// 鎷疯礉鍒?ip-library.db
 			err = this.createDefaultFile(path, dir)
 			if err != nil {
 				this.source.LogError(err)
@@ -203,7 +203,7 @@ func (this *Updater) Loop() error {
 	isOk = true
 	this.currentCode = code
 
-	// 拷贝到 ip-library.db
+	// 鎷疯礉鍒?ip-library.db
 	err = this.createDefaultFile(path, dir)
 	if err != nil {
 		this.source.LogError(err)
@@ -254,13 +254,13 @@ func (this *Updater) createDefaultFile(sourcePath string, dir string) error {
 	return nil
 }
 
-// isConnError 是否为连接错误
+// isConnError 鏄惁涓鸿繛鎺ラ敊璇?
 func (this *Updater) isConnError(err error) bool {
 	if err == nil {
 		return false
 	}
 
-	// 检查是否为连接错误
+	// 妫€鏌ユ槸鍚︿负杩炴帴閿欒
 	statusErr, ok := status.FromError(err)
 	if ok {
 		var errorCode = statusErr.Code()

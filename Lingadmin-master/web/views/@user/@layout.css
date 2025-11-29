@@ -1,0 +1,93 @@
+/* 用户端布局样式，依赖 unified-ui 提供的色板与圆角阴影 */
+.app-layout {
+  display: flex;
+  min-height: calc(100vh - 3.6em);
+}
+
+.user-sidebar {
+  position: fixed;
+  top: 3.6em;
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
+  z-index: 13;
+}
+
+.user-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.user-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.user-main {
+  margin-left: 15.5rem;
+  padding: 1.6em 1.8em 2.4em;
+  transition: margin-left 0.25s ease;
+}
+
+.user-main.is-collapsed {
+  margin-left: 5rem;
+}
+
+.app-toolbar {
+  margin: 0 0 0.6em 0;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.app-toolbar .item {
+  font-weight: 500;
+}
+
+.mobile-only {
+  display: none !important;
+}
+
+.desktop-only {
+  display: flex !important;
+}
+
+@media screen and (max-width: 1080px) {
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .user-sidebar {
+    transform: translateX(-100%);
+  }
+
+  .user-sidebar.is-mobile-open {
+    transform: translateX(0);
+    box-shadow: var(--shadow-strong);
+  }
+
+  .user-main {
+    margin-left: 0;
+    padding: 1.2em;
+  }
+
+  .user-main.is-collapsed {
+    margin-left: 0;
+  }
+
+  .mobile-only {
+    display: flex !important;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .app-topbar .item {
+    padding-inline: 0.75em !important;
+  }
+
+  .app-main .app-panel {
+    padding: 1.2em;
+  }
+}

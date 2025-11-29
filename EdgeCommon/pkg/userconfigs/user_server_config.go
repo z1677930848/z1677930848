@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package userconfigs
 
@@ -19,13 +19,13 @@ func DefaultHTTPCacheTaskConfig() *HTTPCacheTaskConfig {
 	}
 }
 
-// UserServerConfig 用户服务设置
+// UserServerConfig 鐢ㄦ埛鏈嶅姟璁剧疆
 type UserServerConfig struct {
-	GroupId                  int64                `yaml:"groupId" json:"groupId"`                                   // 分组
-	RequirePlan              bool                 `yaml:"requirePlan" json:"requirePlan"`                           // 必须使用套餐
-	EnableStat               bool                 `yaml:"enableStat" json:"enableStat"`                             // 开启统计
-	HTTPCacheTaskPurgeConfig *HTTPCacheTaskConfig `yaml:"httpCacheTaskPurgeConfig" json:"httpCacheTaskPurgeConfig"` // 缓存任务删除配置
-	HTTPCacheTaskFetchConfig *HTTPCacheTaskConfig `yaml:"httpCacheTaskFetchConfig" json:"httpCacheTaskFetchConfig"` // 缓存任务预热配置
+	GroupId                  int64                `yaml:"groupId" json:"groupId"`                                   // 鍒嗙粍
+	RequirePlan              bool                 `yaml:"requirePlan" json:"requirePlan"`                           // 蹇呴』浣跨敤濂楅
+	EnableStat               bool                 `yaml:"enableStat" json:"enableStat"`                             // 寮€鍚粺璁?
+	HTTPCacheTaskPurgeConfig *HTTPCacheTaskConfig `yaml:"httpCacheTaskPurgeConfig" json:"httpCacheTaskPurgeConfig"` // 缂撳瓨浠诲姟鍒犻櫎閰嶇疆
+	HTTPCacheTaskFetchConfig *HTTPCacheTaskConfig `yaml:"httpCacheTaskFetchConfig" json:"httpCacheTaskFetchConfig"` // 缂撳瓨浠诲姟棰勭儹閰嶇疆
 }
 
 func DefaultUserServerConfig() *UserServerConfig {

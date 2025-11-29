@@ -15,7 +15,7 @@ func NewFileChunkDAO() *FileChunkDAO {
 	return dbs.NewDAO(&FileChunkDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingFileChunks",
+			Table:  "edgeFileChunks",
 			Model:  new(FileChunk),
 			PkName: "id",
 		},

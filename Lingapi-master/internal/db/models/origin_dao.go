@@ -26,7 +26,7 @@ func NewOriginDAO() *OriginDAO {
 	return dbs.NewDAO(&OriginDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingOrigins",
+			Table:  "edgeOrigins",
 			Model:  new(Origin),
 			PkName: "id",
 		},

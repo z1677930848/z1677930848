@@ -1,19 +1,19 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package serverconfigs
 
-// FollowProtocolConfig 协议跟随配置
+// FollowProtocolConfig 鍗忚璺熼殢閰嶇疆
 type FollowProtocolConfig struct {
-	IsPrior bool `yaml:"isPrior" json:"isPrior"` // 是否覆盖父级配置
-	IsOn    bool `yaml:"isOn" json:"isOn"`       // 是否启用
+	IsPrior bool `yaml:"isPrior" json:"isPrior"` // 鏄惁瑕嗙洊鐖剁骇閰嶇疆
+	IsOn    bool `yaml:"isOn" json:"isOn"`       // 鏄惁鍚敤
 	HTTP    struct {
-		Port       int  `yaml:"port" json:"port"`             // 端口
-		FollowPort bool `yaml:"followPort" json:"followPort"` // 跟随端口
-	} `yaml:"http" json:"http"` // HTTP配置
+		Port       int  `yaml:"port" json:"port"`             // 绔彛
+		FollowPort bool `yaml:"followPort" json:"followPort"` // 璺熼殢绔彛
+	} `yaml:"http" json:"http"` // HTTP閰嶇疆
 	HTTPS struct {
-		Port       int  `yaml:"port" json:"port"`             // 端口
-		FollowPort bool `yaml:"followPort" json:"followPort"` // 跟随端口
-	} `yaml:"https" json:"https"` // HTTPS配置
+		Port       int  `yaml:"port" json:"port"`             // 绔彛
+		FollowPort bool `yaml:"followPort" json:"followPort"` // 璺熼殢绔彛
+	} `yaml:"https" json:"https"` // HTTPS閰嶇疆
 }
 
 func NewFollowProtocolConfig() *FollowProtocolConfig {

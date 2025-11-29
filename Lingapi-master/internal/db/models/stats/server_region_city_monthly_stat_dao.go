@@ -36,7 +36,7 @@ func NewServerRegionCityMonthlyStatDAO() *ServerRegionCityMonthlyStatDAO {
 	return dbs.NewDAO(&ServerRegionCityMonthlyStatDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingServerRegionCityMonthlyStats",
+			Table:  "edgeServerRegionCityMonthlyStats",
 			Model:  new(ServerRegionCityMonthlyStat),
 			PkName: "id",
 		},

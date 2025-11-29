@@ -18,7 +18,7 @@ func NewMessageRecipientGroupDAO() *MessageRecipientGroupDAO {
 	return dbs.NewDAO(&MessageRecipientGroupDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingMessageRecipientGroups",
+			Table:  "edgeMessageRecipientGroups",
 			Model:  new(MessageRecipientGroup),
 			PkName: "id",
 		},

@@ -17,7 +17,7 @@ func NewUserScriptDAO() *UserScriptDAO {
 	return dbs.NewDAO(&UserScriptDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserScripts",
+			Table:  "edgeUserScripts",
 			Model:  new(UserScript),
 			PkName: "id",
 		},

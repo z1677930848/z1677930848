@@ -14,7 +14,7 @@ func NewAPIMethodStatDAO() *APIMethodStatDAO {
 	return dbs.NewDAO(&APIMethodStatDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingAPIMethodStats",
+			Table:  "edgeAPIMethodStats",
 			Model:  new(APIMethodStat),
 			PkName: "id",
 		},

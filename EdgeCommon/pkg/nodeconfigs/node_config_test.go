@@ -1,15 +1,21 @@
 package nodeconfigs
 
 import (
+	"os"
 	"testing"
 	"time"
 
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	_ "github.com/iwind/TeaGo/bootstrap"
+	"github.com/iwind/TeaGo/Tea"
 	"github.com/iwind/TeaGo/logs"
 )
 
 func TestSharedNodeConfig(t *testing.T) {
+	configFile := Tea.ConfigFile("node.json")
+	if _, err := os.Stat(configFile); err != nil {
+		t.Skipf("skip: 节点配置缓存缺失（%v）", err)
+	}
 	{
 		config, err := SharedNodeConfig()
 		if err != nil {

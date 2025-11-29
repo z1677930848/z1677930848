@@ -12,7 +12,7 @@ func NewTCPFirewallPolicyDAO() *TCPFirewallPolicyDAO {
 	return dbs.NewDAO(&TCPFirewallPolicyDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingTCPFirewallPolicies",
+			Table:  "edgeTCPFirewallPolicies",
 			Model:  new(TCPFirewallPolicy),
 			PkName: "id",
 		},

@@ -1,40 +1,36 @@
 package teaconst
 
-// Package-level constants used across the application.
-// Keep these stable and document purpose when changing values.
 const (
-	// Version: EdgeAdmin release version. Bumped for releases.
-	Version = "1.0.11"
+	// 版本号：管理员端发布版本，每次发布需更新
+	Version = "1.1.6"
 
-	// APINodeVersion: expected EdgeAPI/ApiNode release version used when packaging.
-	// Avoid changing this unless you also update EdgeAPI accordingly.
-	APINodeVersion = "1.0.4"
+	// APINodeVersion：打包时期望的 EdgeAPI / API 节点版本号，需与 API 同步更新
+	APINodeVersion = "1.1.0"
 
-	// ProductName: user-facing product name.
+	// 产品名称（英文）
 	ProductName = "LingCDN"
 
-	// ProcessName: short process/service name used for sockets, service registration, etc.
-	// We standardize on 'lingcdnadmin' for the runtime/service name.
+	// 进程/服务名称，用于 socket、服务注册等
 	ProcessName = "lingcdnadmin"
 
-	// ProductNameZH: Chinese product name (for UI/messages).
+	// 产品名称（中文）
 	ProductNameZH = "LingCDN"
 
-	// Role: default role for this binary (admin).
+	// 默认角色（管理员端）
 	Role = "admin"
 
-	// EncryptMethod: symmetric encryption algorithm used in RPC token construction.
+	// RPC 加密算法
 	EncryptMethod = "aes-256-cfb"
 
-	// ErrServer: generic user-facing server error message.
+	// 通用服务端错误提示
 	ErrServer = "服务器出了点小问题，请联系技术人员处理。"
 
-	// CookieSID: cookie name for session id.
+	// 会话 cookie 名称
 	CookieSID = "sksid"
 
-	// SystemdServiceName: name used when installing systemd service on Linux.
+	// systemd 服务名
 	SystemdServiceName = "lingcdnadmin"
 
-	// UpdatesURL: URL used to query available updates; may be overridden in environment or CI.
+	// 更新检查地址（可通过环境变量或 CI 覆盖）
 	UpdatesURL = "http://dl.lingcdn.cloud/api/boot/versions?os=${os}&arch=${arch}"
 )

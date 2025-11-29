@@ -7,6 +7,8 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"image"
+	"image/gif"
 	_ "image/jpeg"
 	_ "image/png"
 	"io"
@@ -31,7 +33,7 @@ import (
 	"github.com/TeaOSLab/EdgeNode/internal/utils/writers"
 	_ "github.com/biessek/golang-ico"
 	"github.com/iwind/TeaGo/types"
-	//_ "github.com/iwind/gowebp"  // Disabled for CGO-less compilation
+	"github.com/iwind/gowebp"
 	_ "golang.org/x/image/bmp"
 	_ "golang.org/x/image/webp"
 )
@@ -1046,8 +1048,166 @@ func (this *HTTPWriter) calculateStaleLife() int {
 
 // 结束WebP
 func (this *HTTPWriter) finishWebP() {
-	// WebP support disabled for CGO-less compilation
-	return
+	// 处理WebP
+	if this.webpIsEncoding {
+		atomic.AddInt32(&webPThreads, 1)
+		defer func() {
+			atomic.AddInt32(&webPThreads, -1)
+		}()
+
+		var webpCacheWriter caches.Writer
+
+		// 准备WebP Cache
+		if this.cacheReader != nil || this.cacheWriter != nil {
+			var cacheKey = ""
+			var expiredAt int64 = 0
+
+			if this.cacheReader != nil {
+				cacheKey = this.req.cacheKey + caches.SuffixWebP
+				expiredAt = this.cacheReader.ExpiresAt()
+			} else if this.cacheWriter != nil {
+				cacheKey = this.cacheWriter.Key() + caches.SuffixWebP
+				expiredAt = this.cacheWriter.ExpiredAt()
+			}
+
+			webpCacheWriter, _ = this.cacheStorage.OpenWriter(cacheKey, expiredAt, this.StatusCode(), -1, -1, -1, false)
+			if webpCacheWriter != nil {
+				// 写入Header
+				for k, v := range this.Header() {
+					if this.shouldIgnoreHeader(k) {
+						continue
+					}
+
+					// 这里是原始的数据，不需要内容编码
+					if k == "Content-Encoding" || k == "Transfer-Encoding" {
+						continue
+					}
+					for _, v1 := range v {
+						_, err := webpCacheWriter.WriteHeader([]byte(k + ":" + v1 + "\n"))
+						if err != nil {
+							remotelogs.Error("HTTP_WRITER", "write webp cache failed: "+err.Error())
+							_ = webpCacheWriter.Discard()
+							webpCacheWriter = nil
+							break
+						}
+					}
+				}
+
+				if webpCacheWriter != nil {
+					var teeWriter = writers.NewTeeWriterCloser(this.writer, webpCacheWriter)
+					teeWriter.OnFail(func(err error) {
+						if webpCacheWriter != nil {
+							_ = webpCacheWriter.Discard()
+						}
+						webpCacheWriter = nil
+					})
+					this.writer = teeWriter
+				}
+			}
+		}
+
+		var reader = readers.NewBytesCounterReader(this.rawReader)
+
+		var imageData image.Image
+		var gifImage *gif.GIF
+		var isGif = strings.Contains(this.webpOriginContentType, "image/gif")
+		var err error
+		if isGif {
+			gifImage, err = gif.DecodeAll(reader)
+			if gifImage != nil && (gifImage.Config.Width > gowebp.WebPMaxDimension || gifImage.Config.Height > gowebp.WebPMaxDimension) {
+				webPIgnoreURLSet.Push(this.req.URL())
+				return
+			}
+		} else {
+			imageData, _, err = image.Decode(reader)
+			if imageData != nil {
+				var bound = imageData.Bounds()
+				if bound.Max.X > gowebp.WebPMaxDimension || bound.Max.Y > gowebp.WebPMaxDimension {
+					webPIgnoreURLSet.Push(this.req.URL())
+					return
+				}
+			}
+		}
+
+		if err != nil {
+			// 发生了错误终止处理
+			webPIgnoreURLSet.Push(this.req.URL())
+			return
+		}
+
+		var f = types.Float32(this.webpQuality)
+		if f <= 0 || f > 100 {
+			if this.size > (8<<20) || this.size <= 0 {
+				f = 30
+			} else if this.size > (1 << 20) {
+				f = 50
+			} else if this.size > (128 << 10) {
+				f = 60
+			} else {
+				f = 75
+			}
+		}
+
+		if imageData != nil {
+			err = gowebp.Encode(this.writer, imageData, &gowebp.Options{
+				Lossless: false,
+				Quality:  f,
+				Exact:    true,
+			})
+		} else if gifImage != nil {
+			var anim = gowebp.NewWebpAnimation(gifImage.Config.Width, gifImage.Config.Height, gifImage.LoopCount)
+
+			anim.WebPAnimEncoderOptions.SetKmin(9)
+			anim.WebPAnimEncoderOptions.SetKmax(17)
+			var webpConfig = gowebp.NewWebpConfig()
+			//webpConfig.SetLossless(1)
+			webpConfig.SetQuality(f)
+
+			var timeline = 0
+			var lastErr error
+			for i, img := range gifImage.Image {
+				err = anim.AddFrame(img, timeline, webpConfig)
+				if err != nil {
+					// 有错误直接跳过
+					lastErr = err
+					err = nil
+				}
+				timeline += gifImage.Delay[i] * 10
+			}
+			if lastErr != nil {
+				remotelogs.Error("HTTP_WRITER", "'"+this.req.URL()+"' encode webp failed: "+lastErr.Error())
+			}
+			err = anim.AddFrame(nil, timeline, webpConfig)
+
+			if err == nil {
+				err = anim.Encode(this.writer)
+			}
+
+			anim.ReleaseMemory()
+		}
+
+		if err != nil && !this.req.canIgnore(err) {
+			remotelogs.Error("HTTP_WRITER", "'"+this.req.URL()+"' encode webp failed: "+err.Error())
+		}
+
+		if err == nil && webpCacheWriter != nil {
+			err = webpCacheWriter.Close()
+			if err != nil {
+				_ = webpCacheWriter.Discard()
+			} else {
+				this.cacheStorage.AddToList(&caches.Item{
+					Type:       webpCacheWriter.ItemType(),
+					Key:        webpCacheWriter.Key(),
+					ExpiresAt:  webpCacheWriter.ExpiredAt(),
+					StaleAt:    webpCacheWriter.ExpiredAt() + int64(this.calculateStaleLife()),
+					HeaderSize: webpCacheWriter.HeaderSize(),
+					BodySize:   webpCacheWriter.BodySize(),
+					Host:       this.req.ReqHost,
+					ServerId:   this.req.ReqServer.Id,
+				})
+			}
+		}
+	}
 }
 
 // 结束缓存相关处理

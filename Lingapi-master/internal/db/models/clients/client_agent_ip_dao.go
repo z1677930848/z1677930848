@@ -15,7 +15,7 @@ func NewClientAgentIPDAO() *ClientAgentIPDAO {
 	return dbs.NewDAO(&ClientAgentIPDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingClientAgentIPs",
+			Table:  "edgeClientAgentIPs",
 			Model:  new(ClientAgentIP),
 			PkName: "id",
 		},

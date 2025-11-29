@@ -5,6 +5,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/user/domains"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/user/index"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/user/logout"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/user/plan"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/user/profile"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/user/stats"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
@@ -29,7 +30,10 @@ func init() {
 			GetPost("/domains/create", new(domains.CreateAction)).
 			Post("/domains/delete", new(domains.DeleteAction)).
 			GetPost("/stats", new(stats.IndexAction)).
+			GetPost("/plan", new(plan.IndexAction)).
 			GetPost("/profile", new(profile.IndexAction)).
+			Post("/profile/update", new(profile.UpdateAction)).
+			Post("/profile/changePassword", new(profile.ChangePasswordAction)).
 			Get("/logout", new(logout.IndexAction)).
 			EndAll()
 	})

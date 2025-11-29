@@ -25,7 +25,7 @@ func NewAuthorityNodeDAO() *AuthorityNodeDAO {
 	return dbs.NewDAO(&AuthorityNodeDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingAuthorityNodes",
+			Table:  "edgeAuthorityNodes",
 			Model:  new(AuthorityNode),
 			PkName: "id",
 		},

@@ -61,7 +61,7 @@ func NewIPListDAO() *IPListDAO {
 	return dbs.NewDAO(&IPListDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingIPLists",
+			Table:  "edgeIPLists",
 			Model:  new(IPList),
 			PkName: "id",
 		},

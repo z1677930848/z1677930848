@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package langs
 
@@ -10,7 +10,7 @@ import (
 	"github.com/iwind/TeaGo/actions"
 )
 
-// Message 读取消息
+// Message 璇诲彇娑堟伅
 // Read message
 func Message(langCode LangCode, messageCode MessageCode, args ...any) string {
 	return defaultManager.GetMessage(langCode, messageCode, args...)
@@ -52,10 +52,10 @@ func ParseLangFromAction(action actions.ActionWrapper) (langCode string) {
 	return ParseLangFromRequest(action.Object().Request)
 }
 
-// Format 格式化变量
+// Format 鏍煎紡鍖栧彉閲?
 // Format string that contains message variables, such as ${lang.MESSAGE_CODE}
 //
-// 暂时不支持变量中加参数
+// 鏆傛椂涓嶆敮鎸佸彉閲忎腑鍔犲弬鏁?
 func Format(langCode LangCode, varString string) string {
 	return configutils.ParseVariables(varString, func(varName string) (value string) {
 		if !strings.HasPrefix(varName, varPrefix) {
@@ -65,7 +65,7 @@ func Format(langCode LangCode, varString string) string {
 	})
 }
 
-// Load 加载消息定义
+// Load 鍔犺浇娑堟伅瀹氫箟
 // Load message definitions from map
 func Load(langCode LangCode, messageMap map[MessageCode]string) {
 	lang, ok := defaultManager.GetLang(langCode)

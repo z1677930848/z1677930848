@@ -24,7 +24,7 @@ func NewHTTPRewriteRuleDAO() *HTTPRewriteRuleDAO {
 	return dbs.NewDAO(&HTTPRewriteRuleDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingHTTPRewriteRules",
+			Table:  "edgeHTTPRewriteRules",
 			Model:  new(HTTPRewriteRule),
 			PkName: "id",
 		},

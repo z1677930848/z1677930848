@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package shared
 
@@ -16,7 +16,7 @@ func FindAllBodyTypes() []*Definition {
 			Code: BodyTypeHTML,
 		},
 		{
-			Name: "读取URL",
+			Name: "璇诲彇URL",
 			Code: BodyTypeURL,
 		},
 	}

@@ -80,12 +80,16 @@ Tea.context(function () {
 	 */
 	this.userId = 0
 	this.plans = []
+	this.userPlans = []
+	this.planId = 0
 
 	this.changeUserId = function (v) {
 		this.userId = v
 
 		if (this.userId == 0) {
 			this.plans = []
+			this.userPlans = []
+			this.planId = 0
 			return
 		}
 

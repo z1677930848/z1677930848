@@ -25,7 +25,7 @@ func NewNodeLogDAO() *NodeLogDAO {
 	return dbs.NewDAO(&NodeLogDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeLogs",
+			Table:  "edgeNodeLogs",
 			Model:  new(NodeLog),
 			PkName: "id",
 		},
@@ -167,7 +167,7 @@ func (this *NodeLogDAO) CountNodeLogs(tx *dbs.Tx,
 			case nodeconfigs.NodeRoleNode:
 				query.Where("nodeId IN (SELECT id FROM " + SharedNodeDAO.Table + " WHERE state=1 AND clusterId>0)")
 			case nodeconfigs.NodeRoleDNS:
-				query.Where("nodeId IN (SELECT id FROM skNSNodes WHERE state=1 AND clusterId > 0)") // 没有用 SharedNSNodeDAO() 因为有包循环引用的问题
+				query.Where("nodeId IN (SELECT id FROM edgeNSNodes WHERE state=1 AND clusterId > 0)") // 没有用 SharedNSNodeDAO() 因为有包循环引用的问题
 			}
 		}
 	}
@@ -243,7 +243,7 @@ func (this *NodeLogDAO) ListNodeLogs(tx *dbs.Tx,
 			case nodeconfigs.NodeRoleNode:
 				query.Where("nodeId IN (SELECT id FROM " + SharedNodeDAO.Table + " WHERE state=1 AND clusterId>0)")
 			case nodeconfigs.NodeRoleDNS:
-				query.Where("nodeId IN (SELECT id FROM skNSNodes WHERE state=1 AND clusterId>0)") // 没有用 SharedNSNodeDAO() 因为有包循环引用的问题
+				query.Where("nodeId IN (SELECT id FROM edgeNSNodes WHERE state=1 AND clusterId>0)") // 没有用 SharedNSNodeDAO() 因为有包循环引用的问题
 			}
 		}
 	}
@@ -444,7 +444,7 @@ func (this *NodeLogDAO) DeleteMatchedNodeLogs(tx *dbs.Tx,
 			case nodeconfigs.NodeRoleNode:
 				query.Where("nodeId IN (SELECT id FROM " + SharedNodeDAO.Table + " WHERE state=1 AND clusterId>0)")
 			case nodeconfigs.NodeRoleDNS:
-				query.Where("nodeId IN (SELECT id FROM skNSNodes WHERE state=1 AND clusterId>0)") // 没有用 SharedNSNodeDAO() 因为有包循环引用的问题
+				query.Where("nodeId IN (SELECT id FROM edgeNSNodes WHERE state=1 AND clusterId>0)") // 没有用 SharedNSNodeDAO() 因为有包循环引用的问题
 			}
 		}
 	}

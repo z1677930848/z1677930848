@@ -22,7 +22,7 @@ func NewNodeClusterFirewallActionDAO() *NodeClusterFirewallActionDAO {
 	return dbs.NewDAO(&NodeClusterFirewallActionDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeClusterFirewallActions",
+			Table:  "edgeNodeClusterFirewallActions",
 			Model:  new(NodeClusterFirewallAction),
 			PkName: "id",
 		},

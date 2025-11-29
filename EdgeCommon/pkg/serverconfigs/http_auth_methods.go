@@ -1,12 +1,12 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
 type HTTPAuthType = string
 
 const (
-	HTTPAuthTypeBasicAuth  HTTPAuthType = "basicAuth"  // BasicAuth
-	HTTPAuthTypeSubRequest HTTPAuthType = "subRequest" // 子请求
+	HTTPAuthTypeBasicAuth  HTTPAuthType = "basicAuth"
+	HTTPAuthTypeSubRequest HTTPAuthType = "subRequest"
 )
 
 type HTTPAuthTypeDefinition struct {
@@ -17,15 +17,7 @@ type HTTPAuthTypeDefinition struct {
 
 func FindAllHTTPAuthTypes(role string) []*HTTPAuthTypeDefinition {
 	return []*HTTPAuthTypeDefinition{
-		{
-			Name:        "基本认证",
-			Code:        HTTPAuthTypeBasicAuth,
-			Description: "BasicAuth，最简单的HTTP请求认证方式，通过传递<span class=\"ui label tiny basic text\">Authorization: Basic xxx</span> Header认证。",
-		},
-		{
-			Name:        "子请求",
-			Code:        HTTPAuthTypeSubRequest,
-			Description: "通过自定义的URL子请求来认证请求。",
-		},
+		{Name: "Basic Auth", Code: HTTPAuthTypeBasicAuth, Description: "HTTP Basic authorization"},
+		{Name: "Sub Request", Code: HTTPAuthTypeSubRequest, Description: "custom sub-request authentication"},
 	}
 }

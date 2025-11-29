@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package nodeconfigs
 
@@ -15,9 +15,9 @@ const (
 	NetworkSecurityStatusOff  NetworkSecurityStatus = "off"
 )
 
-// NetworkSecurityPolicy 节点网络安全策略
+// NetworkSecurityPolicy 鑺傜偣缃戠粶瀹夊叏绛栫暐
 type NetworkSecurityPolicy struct {
-	Status NetworkSecurityStatus `json:"status"` // 启用状态
+	Status NetworkSecurityStatus `json:"status"` // 鍚敤鐘舵€?
 
 	TCP  struct{} `json:"tcp"`  // TODO
 	UDP  struct{} `json:"udp"`  // TODO

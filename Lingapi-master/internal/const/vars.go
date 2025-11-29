@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	IsPlus             = true  // 修改为true，启用所有功能
-	Edition            = "plus"
+	IsPlus             = false
+	Edition            = ""
 	MaxNodes     int32 = 0
 	NodeId       int64 = 0
 	Debug              = false

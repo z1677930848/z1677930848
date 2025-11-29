@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package langs
 
@@ -36,13 +36,13 @@ func (this *Lang) Has(messageCode MessageCode) bool {
 	return ok
 }
 
-// Get 读取单条消息
+// Get 璇诲彇鍗曟潯娑堟伅
 // get single message with message code
 func (this *Lang) Get(messageCode MessageCode) string {
 	return this.messageMap[messageCode]
 }
 
-// GetAll 读取所有消息
+// GetAll 璇诲彇鎵€鏈夋秷鎭?
 // get all messages
 func (this *Lang) GetAll() map[MessageCode]string {
 	return this.messageMap

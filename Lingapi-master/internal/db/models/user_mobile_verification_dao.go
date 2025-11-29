@@ -12,7 +12,7 @@ func NewUserMobileVerificationDAO() *UserMobileVerificationDAO {
 	return dbs.NewDAO(&UserMobileVerificationDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingUserMobileVerifications",
+			Table:  "edgeUserMobileVerifications",
 			Model:  new(UserMobileVerification),
 			PkName: "id",
 		},

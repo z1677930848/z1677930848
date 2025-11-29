@@ -21,7 +21,7 @@ func NewNSClusterDAO() *NSClusterDAO {
 	return dbs.NewDAO(&NSClusterDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNSClusters",
+			Table:  "edgeNSClusters",
 			Model:  new(NSCluster),
 			PkName: "id",
 		},

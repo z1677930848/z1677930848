@@ -149,7 +149,7 @@ func (this *SQLExecutor) checkData(db *dbs.DB) error {
 
 // 创建初始用户
 func (this *SQLExecutor) checkUser(db *dbs.DB) error {
-	one, err := db.FindOne("SELECT id FROM LingUsers LIMIT 1")
+	one, err := db.FindOne("SELECT id FROM edgeUsers LIMIT 1")
 	if err != nil {
 		return err
 	}
@@ -159,18 +159,18 @@ func (this *SQLExecutor) checkUser(db *dbs.DB) error {
 
 	// 读取默认集群ID
 	// Read default cluster id
-	clusterId, err := db.FindCol(0, "SELECT id FROM LingNodeClusters WHERE state=1 ORDER BY id ASC LIMIT 1")
+	clusterId, err := db.FindCol(0, "SELECT id FROM edgeNodeClusters WHERE state=1 ORDER BY id ASC LIMIT 1")
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Exec("INSERT INTO LingUsers (`username`, `password`, `fullname`, `isOn`, `state`, `createdAt`, `clusterId`) VALUES (?, ?, ?, ?, ?, ?, ?)", "USER_"+rands.HexString(10), stringutil.Md5(rands.HexString(32)), "默认用户", 1, 1, time.Now().Unix(), clusterId)
+	_, err = db.Exec("INSERT INTO edgeUsers (`username`, `password`, `fullname`, `isOn`, `state`, `createdAt`, `clusterId`) VALUES (?, ?, ?, ?, ?, ?, ?)", "USER_"+rands.HexString(10), stringutil.Md5(rands.HexString(32)), "默认用户", 1, 1, time.Now().Unix(), clusterId)
 	return err
 }
 
 // 检查管理员平台节点
 func (this *SQLExecutor) checkAdminNode(db *dbs.DB) error {
-	stmt, err := db.Prepare("SELECT COUNT(*) FROM LingAPITokens WHERE role='admin'")
+	stmt, err := db.Prepare("SELECT COUNT(*) FROM edgeAPITokens WHERE role='admin'")
 	if err != nil {
 		return err
 	}
@@ -188,7 +188,7 @@ func (this *SQLExecutor) checkAdminNode(db *dbs.DB) error {
 
 	var nodeId = rands.HexString(32)
 	var secret = rands.String(32)
-	_, err = db.Exec("INSERT INTO LingAPITokens (nodeId, secret, role) VALUES (?, ?, ?)", nodeId, secret, "admin")
+	_, err = db.Exec("INSERT INTO edgeAPITokens (nodeId, secret, role) VALUES (?, ?, ?)", nodeId, secret, "admin")
 	if err != nil {
 		return err
 	}
@@ -198,7 +198,7 @@ func (this *SQLExecutor) checkAdminNode(db *dbs.DB) error {
 
 // 检查用户平台节点
 func (this *SQLExecutor) checkUserNode(db *dbs.DB) error {
-	stmt, err := db.Prepare("SELECT COUNT(*) FROM LingAPITokens WHERE role='user'")
+	stmt, err := db.Prepare("SELECT COUNT(*) FROM edgeAPITokens WHERE role='user'")
 	if err != nil {
 		return err
 	}
@@ -216,7 +216,7 @@ func (this *SQLExecutor) checkUserNode(db *dbs.DB) error {
 
 	var nodeId = rands.HexString(32)
 	var secret = rands.String(32)
-	_, err = db.Exec("INSERT INTO LingAPITokens (nodeId, secret, role) VALUES (?, ?, ?)", nodeId, secret, "user")
+	_, err = db.Exec("INSERT INTO edgeAPITokens (nodeId, secret, role) VALUES (?, ?, ?)", nodeId, secret, "user")
 	if err != nil {
 		return err
 	}
@@ -227,7 +227,7 @@ func (this *SQLExecutor) checkUserNode(db *dbs.DB) error {
 // 检查集群配置
 func (this *SQLExecutor) checkCluster(db *dbs.DB) error {
 	/// 检查是否有集群数据
-	stmt, err := db.Prepare("SELECT COUNT(*) FROM LingNodeClusters")
+	stmt, err := db.Prepare("SELECT COUNT(*) FROM edgeNodeClusters")
 	if err != nil {
 		return fmt.Errorf("query clusters failed: %w", err)
 	}
@@ -270,13 +270,13 @@ func (this *SQLExecutor) checkCluster(db *dbs.DB) error {
 		}
 	}
 
-	_, err = db.Exec("INSERT INTO LingNodeClusters (name, useAllAPINodes, state, uniqueId, secret, dns, dnsName) VALUES (?, ?, ?, ?, ?, ?, ?)", "默认集群", 1, 1, uniqueId, secret, string(clusterDNSConfigJSON), defaultDNSName)
+	_, err = db.Exec("INSERT INTO edgeNodeClusters (name, useAllAPINodes, state, uniqueId, secret, dns, dnsName) VALUES (?, ?, ?, ?, ?, ?, ?)", "默认集群", 1, 1, uniqueId, secret, string(clusterDNSConfigJSON), defaultDNSName)
 	if err != nil {
 		return err
 	}
 
 	// 创建APIToken
-	_, err = db.Exec("INSERT INTO LingAPITokens (nodeId, secret, role, state) VALUES (?, ?, 'cluster', 1)", uniqueId, secret)
+	_, err = db.Exec("INSERT INTO edgeAPITokens (nodeId, secret, role, state) VALUES (?, ?, 'cluster', 1)", uniqueId, secret)
 	if err != nil {
 		return err
 	}
@@ -289,7 +289,7 @@ func (this *SQLExecutor) checkCluster(db *dbs.DB) error {
 	if err != nil {
 		return err
 	}
-	_, err = db.Exec("UPDATE LingNodeClusters SET cachePolicyId=?", policyId)
+	_, err = db.Exec("UPDATE edgeNodeClusters SET cachePolicyId=?", policyId)
 	if err != nil {
 		return err
 	}
@@ -323,7 +323,7 @@ func (this *SQLExecutor) checkCluster(db *dbs.DB) error {
 	if err != nil {
 		return err
 	}
-	_, err = db.Exec("UPDATE LingNodeClusters SET httpFirewallPolicyId=?", policyId)
+	_, err = db.Exec("UPDATE edgeNodeClusters SET httpFirewallPolicyId=?", policyId)
 	if err != nil {
 		return err
 	}
@@ -333,7 +333,7 @@ func (this *SQLExecutor) checkCluster(db *dbs.DB) error {
 
 // 检查IP名单
 func (this *SQLExecutor) checkIPList(db *dbs.DB) error {
-	stmt, err := db.Prepare("SELECT COUNT(*) FROM LingIPLists")
+	stmt, err := db.Prepare("SELECT COUNT(*) FROM edgeIPLists")
 	if err != nil {
 		return fmt.Errorf("query ip lists failed: %w", err)
 	}
@@ -351,12 +351,12 @@ func (this *SQLExecutor) checkIPList(db *dbs.DB) error {
 	}
 
 	// 创建名单
-	_, err = db.Exec("INSERT INTO LingIPLists(name, type, code, isPublic, isGlobal, createdAt) VALUES (?, ?, ?, ?, ?, ?)", "公共黑名单", "black", "black", 1, 1, time.Now().Unix())
+	_, err = db.Exec("INSERT INTO edgeIPLists(name, type, code, isPublic, isGlobal, createdAt) VALUES (?, ?, ?, ?, ?, ?)", "公共黑名单", "black", "black", 1, 1, time.Now().Unix())
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Exec("INSERT INTO LingIPLists(name, type, code, isPublic, isGlobal, createdAt) VALUES (?, ?, ?, ?, ?, ?)", "公共白名单", "white", "white", 1, 1, time.Now().Unix())
+	_, err = db.Exec("INSERT INTO edgeIPLists(name, type, code, isPublic, isGlobal, createdAt) VALUES (?, ?, ?, ?, ?, ?)", "公共白名单", "white", "white", 1, 1, time.Now().Unix())
 	if err != nil {
 		return err
 	}
@@ -376,7 +376,7 @@ func (this *SQLExecutor) checkMetricItems(db *dbs.DB) error {
 		chartMaps []maps.Map,
 	) error {
 		// 检查是否已创建
-		itemMap, err := db.FindOne("SELECT id FROM LingMetricItems WHERE code=? LIMIT 1", code)
+		itemMap, err := db.FindOne("SELECT id FROM edgeMetricItems WHERE code=? LIMIT 1", code)
 		if err != nil {
 			return err
 		}
@@ -386,13 +386,13 @@ func (this *SQLExecutor) checkMetricItems(db *dbs.DB) error {
 			if err != nil {
 				return err
 			}
-			_, err = db.Exec("INSERT INTO LingMetricItems (isOn, code, category, name, `keys`, period, periodUnit, value, state, isPublic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 1, code, category, name, keysJSON, period, periodUnit, value, 1, 1)
+			_, err = db.Exec("INSERT INTO edgeMetricItems (isOn, code, category, name, `keys`, period, periodUnit, value, state, isPublic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 1, code, category, name, keysJSON, period, periodUnit, value, 1, 1)
 			if err != nil {
 				return err
 			}
 
 			// 再次查询
-			itemMap, err = db.FindOne("SELECT id FROM LingMetricItems WHERE code=? LIMIT 1", code)
+			itemMap, err = db.FindOne("SELECT id FROM edgeMetricItems WHERE code=? LIMIT 1", code)
 			if err != nil {
 				return err
 			}
@@ -403,12 +403,12 @@ func (this *SQLExecutor) checkMetricItems(db *dbs.DB) error {
 		// chart
 		for _, chartMap := range chartMaps {
 			var chartCode = chartMap.GetString("code")
-			one, err := db.FindOne("SELECT id FROM LingMetricCharts WHERE itemId=? AND code=? LIMIT 1", itemId, chartCode)
+			one, err := db.FindOne("SELECT id FROM edgeMetricCharts WHERE itemId=? AND code=? LIMIT 1", itemId, chartCode)
 			if err != nil {
 				return err
 			}
 			if len(one) == 0 {
-				_, err = db.Exec("INSERT INTO LingMetricCharts (itemId, name, code, type, widthDiv, params, isOn, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", itemId, chartMap.GetString("name"), chartCode, chartMap.GetString("type"), chartMap.GetInt("widthDiv"), "{}", 1, 1)
+				_, err = db.Exec("INSERT INTO edgeMetricCharts (itemId, name, code, type, widthDiv, params, isOn, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", itemId, chartMap.GetString("name"), chartCode, chartMap.GetString("type"), chartMap.GetInt("widthDiv"), "{}", 1, 1)
 				if err != nil {
 					return err
 				}
@@ -507,7 +507,7 @@ func (this *SQLExecutor) checkMetricItems(db *dbs.DB) error {
 
 // 更新Agents表
 func (this *SQLExecutor) checkClientAgents(db *dbs.DB) error {
-	ones, _, err := db.FindOnes("SELECT id FROM LingClientAgents")
+	ones, _, err := db.FindOnes("SELECT id FROM edgeClientAgents")
 	if err != nil {
 		return err
 	}
@@ -515,11 +515,11 @@ func (this *SQLExecutor) checkClientAgents(db *dbs.DB) error {
 	for _, one := range ones {
 		var agentId = one.GetInt64("id")
 
-		countIPs, err := db.FindCol(0, "SELECT COUNT(*) FROM LingClientAgentIPs WHERE agentId=?", agentId)
+		countIPs, err := db.FindCol(0, "SELECT COUNT(*) FROM edgeClientAgentIPs WHERE agentId=?", agentId)
 		if err != nil {
 			return err
 		}
-		_, err = db.Exec("UPDATE LingClientAgents SET countIPs=? WHERE id=?", countIPs, agentId)
+		_, err = db.Exec("UPDATE edgeClientAgents SET countIPs=? WHERE id=?", countIPs, agentId)
 		if err != nil {
 			return err
 		}
@@ -530,7 +530,7 @@ func (this *SQLExecutor) checkClientAgents(db *dbs.DB) error {
 
 // 更新版本号
 func (this *SQLExecutor) updateVersion(db *dbs.DB, version string) error {
-	stmt, err := db.Prepare("SELECT COUNT(*) FROM LingVersions")
+	stmt, err := db.Prepare("SELECT COUNT(*) FROM edgeVersions")
 	if err != nil {
 		return fmt.Errorf("query version failed: %w", err)
 	}
@@ -544,14 +544,14 @@ func (this *SQLExecutor) updateVersion(db *dbs.DB, version string) error {
 	}
 	var count = types.Int(col)
 	if count > 0 {
-		_, err = db.Exec("UPDATE LingVersions SET version=?", version)
+		_, err = db.Exec("UPDATE edgeVersions SET version=?", version)
 		if err != nil {
 			return fmt.Errorf("update version failed: %w", err)
 		}
 		return nil
 	}
 
-	_, err = db.Exec("INSERT LingVersions (version) VALUES (?)", version)
+	_, err = db.Exec("INSERT edgeVersions (version) VALUES (?)", version)
 	if err != nil {
 		return fmt.Errorf("create version failed: %w", err)
 	}

@@ -17,7 +17,7 @@ func NewSSLCertGroupDAO() *SSLCertGroupDAO {
 	return dbs.NewDAO(&SSLCertGroupDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingSSLCertGroups",
+			Table:  "edgeSSLCertGroups",
 			Model:  new(SSLCertGroup),
 			PkName: "id",
 		},

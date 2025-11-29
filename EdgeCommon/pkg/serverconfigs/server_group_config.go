@@ -1,14 +1,14 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
-// ServerGroupConfig 服务分组配置
+// ServerGroupConfig 鏈嶅姟鍒嗙粍閰嶇疆
 type ServerGroupConfig struct {
 	Id   int64  `yaml:"id" json:"id"`
 	Name string `yaml:"name" json:"name"`
 	IsOn bool   `yaml:"isOn" json:"isOn"`
 
-	// 反向代理配置
+	// 鍙嶅悜浠ｇ悊閰嶇疆
 	HTTPReverseProxyRef *ReverseProxyRef    `yaml:"httpReverseProxyRef" json:"httpReverseProxyRef"`
 	HTTPReverseProxy    *ReverseProxyConfig `yaml:"httpReverseProxy" json:"httpReverseProxy"`
 	TCPReverseProxyRef  *ReverseProxyRef    `yaml:"tcpReverseProxyRef" json:"tcpReverseProxyRef"`

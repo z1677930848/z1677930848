@@ -1,13 +1,13 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package nodeconfigs
 
 import "github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 
-// HTTPPagesPolicy 全局的HTTP自定义页面设置
+// HTTPPagesPolicy 鍏ㄥ眬鐨凥TTP鑷畾涔夐〉闈㈣缃?
 type HTTPPagesPolicy struct {
-	IsOn  bool                            `json:"isOn" yaml:"isOn"`   // 是否启用
-	Pages []*serverconfigs.HTTPPageConfig `json:"pages" yaml:"pages"` // 自定义页面
+	IsOn  bool                            `json:"isOn" yaml:"isOn"`   // 鏄惁鍚敤
+	Pages []*serverconfigs.HTTPPageConfig `json:"pages" yaml:"pages"` // 鑷畾涔夐〉闈?
 }
 
 func NewHTTPPagesPolicy() *HTTPPagesPolicy {

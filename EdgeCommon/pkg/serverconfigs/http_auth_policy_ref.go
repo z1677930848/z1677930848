@@ -1,8 +1,8 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
-// HTTPAuthPolicyRef 认证策略引用
+// HTTPAuthPolicyRef 璁よ瘉绛栫暐寮曠敤
 type HTTPAuthPolicyRef struct {
 	IsOn         bool            `yaml:"isOn" json:"isOn"`
 	AuthPolicyId int64           `yaml:"authPolicyId" json:"authPolicyId"`

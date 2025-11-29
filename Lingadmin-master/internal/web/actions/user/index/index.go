@@ -23,7 +23,7 @@ func (this *IndexAction) RunGet(params struct {
 	Auth *helpers.UserShouldAuth
 }) {
 	// 已登录跳转到dashboard
-	if params.Auth.IsUser() {
+	if params.Auth.IsUserPortal() {
 		this.RedirectURL("/user/dashboard")
 		return
 	}
@@ -141,7 +141,7 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	// 使用真实的用户ID创建会话
-	params.Auth.StoreAdmin(userId, params.Remember)
+	params.Auth.StoreUser(userId, params.Username, params.Remember)
 
 	this.Success()
 }

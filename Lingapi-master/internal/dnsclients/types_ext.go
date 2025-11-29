@@ -34,10 +34,6 @@ func FindProvider(providerType ProviderType, providerId int64) ProviderInterface
 		return &EdgeDNSAPIProvider{
 			ProviderId: providerId,
 		}
-	case ProviderTypeDNSLA:
-		return &DNSLaProvider{
-			ProviderId: providerId,
-		}
 	}
 
 	return nil

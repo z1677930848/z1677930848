@@ -19,7 +19,7 @@ func NewNSRouteDAO() *NSRouteDAO {
 	return dbs.NewDAO(&NSRouteDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNSRoutes",
+			Table:  "edgeNSRoutes",
 			Model:  new(NSRoute),
 			PkName: "id",
 		},

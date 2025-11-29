@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+// Copyright 2023 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package firewallconfigs
 
@@ -13,53 +13,32 @@ const (
 	CaptchaTypeGeeTest  CaptchaType = "geetest"
 )
 
-// FindAllCaptchaTypes Find all captcha types
+// FindAllCaptchaTypes returns supported captcha implementations
 func FindAllCaptchaTypes() []*shared.Definition {
 	return []*shared.Definition{
-		{
-			Code:        CaptchaTypeDefault,
-			Name:        "验证码",
-			Description: "通过输入验证码来验证人机。",
-		},
-		{
-			Code:        CaptchaTypeOneClick,
-			Name:        "点击验证",
-			Description: "通过点击界面元素来验证人机。",
-		},
-		{
-			Code:        CaptchaTypeSlide,
-			Name:        "滑动解锁",
-			Description: "通过滑动方块解锁来验证人机。",
-		},
-		{
-			Code:        CaptchaTypeGeeTest,
-			Name:        "极验-行为验",
-			Description: "使用极验-行为验提供的人机验证方式。",
-		},
+		{Code: CaptchaTypeDefault, Name: "Text Captcha", Description: "Input text to verify"},
+		{Code: CaptchaTypeOneClick, Name: "One Click", Description: "Click button to verify"},
+		{Code: CaptchaTypeSlide, Name: "Slide", Description: "Slide block to verify"},
+		{Code: CaptchaTypeGeeTest, Name: "Geetest", Description: "Use Geetest service"},
 	}
 }
 
 func DefaultCaptchaType() *shared.Definition {
-	var captchaTypes = FindAllCaptchaTypes()
-	if len(captchaTypes) > 0 {
-		return captchaTypes[0]
+	types := FindAllCaptchaTypes()
+	if len(types) > 0 {
+		return types[0]
 	}
-	return &shared.Definition{
-		Code: CaptchaTypeDefault,
-		Name: "验证码",
-	}
+	return &shared.Definition{Code: CaptchaTypeDefault, Name: "Text Captcha"}
 }
 
 func FindCaptchaType(code CaptchaType) *shared.Definition {
 	if len(code) == 0 {
 		code = CaptchaTypeDefault
 	}
-
 	for _, t := range FindAllCaptchaTypes() {
 		if t.Code == code {
 			return t
 		}
 	}
-
 	return DefaultCaptchaType()
 }

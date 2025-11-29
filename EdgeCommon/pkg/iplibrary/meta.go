@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cloud .
+﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package iplibrary
 
@@ -33,8 +33,8 @@ type Provider struct {
 }
 
 type Meta struct {
-	Version   int         `json:"version"` // IP库版本
-	Code      string      `json:"code"`    // 代号，用来区分不同的IP库
+	Version   int         `json:"version"` // IP搴撶増鏈?
+	Code      string      `json:"code"`    // 浠ｅ彿锛岀敤鏉ュ尯鍒嗕笉鍚岀殑IP搴?
 	Author    string      `json:"author"`
 	Countries []*Country  `json:"countries"`
 	Provinces []*Province `json:"provinces"`

@@ -23,7 +23,7 @@ func NewNodeLoginDAO() *NodeLoginDAO {
 	return dbs.NewDAO(&NodeLoginDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeLogins",
+			Table:  "edgeNodeLogins",
 			Model:  new(NodeLogin),
 			PkName: "id",
 		},

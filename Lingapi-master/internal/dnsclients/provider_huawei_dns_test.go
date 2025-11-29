@@ -140,7 +140,7 @@ func testHuaweiDNSProvider() (ProviderInterface, error) {
 	if err != nil {
 		return nil, err
 	}
-	one, err := db.FindOne("SELECT * FROM skDNSProviders WHERE type='huaweiDNS' AND state=1 ORDER BY id DESC")
+	one, err := db.FindOne("SELECT * FROM edgeDNSProviders WHERE type='huaweiDNS' AND state=1 ORDER BY id DESC")
 	if err != nil {
 		return nil, err
 	}

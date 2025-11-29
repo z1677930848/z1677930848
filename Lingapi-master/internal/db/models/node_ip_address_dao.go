@@ -26,7 +26,7 @@ func NewNodeIPAddressDAO() *NodeIPAddressDAO {
 	return dbs.NewDAO(&NodeIPAddressDAO{
 		DAOObject: dbs.DAOObject{
 			DB:     Tea.Env,
-			Table:  "LingNodeIPAddresses",
+			Table:  "edgeNodeIPAddresses",
 			Model:  new(NodeIPAddress),
 			PkName: "id",
 		},

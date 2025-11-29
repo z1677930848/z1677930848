@@ -1,8 +1,9 @@
-// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
+﻿// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 //go:build !plus
 
 package teaconst
 
-const BuildCommunity = false
-const BuildPlus = true
-const Tag = "plus"
+// 默认视为社区版，关闭 Plus 标识。
+const BuildCommunity = true
+const BuildPlus = false
+const Tag = "community"

@@ -1,10 +1,10 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+﻿// Copyright 2021 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package serverconfigs
 
 import "github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 
-// DefaultTrafficLimitNoticePageBody 达到流量限制时默认提示内容
+// DefaultTrafficLimitNoticePageBody 杈惧埌娴侀噺闄愬埗鏃堕粯璁ゆ彁绀哄唴瀹?
 const DefaultTrafficLimitNoticePageBody = `<!DOCTYPE html>
 <html>
 <head>
@@ -18,23 +18,23 @@ const DefaultTrafficLimitNoticePageBody = `<!DOCTYPE html>
 </body>
 </html>`
 
-// TrafficLimitConfig 流量限制
+// TrafficLimitConfig 娴侀噺闄愬埗
 type TrafficLimitConfig struct {
-	IsOn bool `yaml:"isOn" json:"isOn"` // 是否启用
+	IsOn bool `yaml:"isOn" json:"isOn"` // 鏄惁鍚敤
 
-	DailySize   *shared.SizeCapacity `yaml:"dailySize" json:"dailySize"`     // 每日限制
-	MonthlySize *shared.SizeCapacity `yaml:"monthlySize" json:"monthlySize"` // 每月限制
-	TotalSize   *shared.SizeCapacity `yaml:"totalSize" json:"totalSize"`     // 总限制 TODO 需要实现
+	DailySize   *shared.SizeCapacity `yaml:"dailySize" json:"dailySize"`     // 姣忔棩闄愬埗
+	MonthlySize *shared.SizeCapacity `yaml:"monthlySize" json:"monthlySize"` // 姣忔湀闄愬埗
+	TotalSize   *shared.SizeCapacity `yaml:"totalSize" json:"totalSize"`     // 鎬婚檺鍒?TODO 闇€瑕佸疄鐜?
 
-	NoticePageBody string `yaml:"noticePageBody" json:"noticePageBody"` // 超出限制时的提醒，支持请求变量
+	NoticePageBody string `yaml:"noticePageBody" json:"noticePageBody"` // 瓒呭嚭闄愬埗鏃剁殑鎻愰啋锛屾敮鎸佽姹傚彉閲?
 }
 
 func (this *TrafficLimitConfig) Init() error {
 	return nil
 }
 
-// DailyBytes 每天限制
-// 不使用Init()来初始化数据，是为了让其他地方不经过Init()也能得到计算值
+// DailyBytes 姣忓ぉ闄愬埗
+// 涓嶄娇鐢↖nit()鏉ュ垵濮嬪寲鏁版嵁锛屾槸涓轰簡璁╁叾浠栧湴鏂逛笉缁忚繃Init()涔熻兘寰楀埌璁＄畻鍊?
 func (this *TrafficLimitConfig) DailyBytes() int64 {
 	if this.DailySize != nil {
 		return this.DailySize.Bytes()
@@ -42,7 +42,7 @@ func (this *TrafficLimitConfig) DailyBytes() int64 {
 	return -1
 }
 
-// MonthlyBytes 每月限制
+// MonthlyBytes 姣忔湀闄愬埗
 func (this *TrafficLimitConfig) MonthlyBytes() int64 {
 	if this.MonthlySize != nil {
 		return this.MonthlySize.Bytes()
@@ -50,7 +50,7 @@ func (this *TrafficLimitConfig) MonthlyBytes() int64 {
 	return -1
 }
 
-// TotalBytes 总限制
+// TotalBytes 鎬婚檺鍒?
 func (this *TrafficLimitConfig) TotalBytes() int64 {
 	if this.TotalSize != nil {
 		return this.TotalSize.Bytes()
@@ -58,7 +58,7 @@ func (this *TrafficLimitConfig) TotalBytes() int64 {
 	return -1
 }
 
-// IsEmpty 检查是否有限制值
+// IsEmpty 妫€鏌ユ槸鍚︽湁闄愬埗鍊?
 func (this *TrafficLimitConfig) IsEmpty() bool {
 	return !this.IsOn || (this.DailyBytes() <= 0 && this.MonthlyBytes() <= 0 && this.TotalBytes() <= 0)
 }
