@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y zip unzip
+          sudo apt-get install -y zip unzip gcc g++ build-essential
 
       - name: Extract version from tag
         id: version
@@ -119,7 +119,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y zip unzip
+          sudo apt-get install -y zip unzip gcc g++ build-essential
 
       - name: Extract version from tag
         id: version
