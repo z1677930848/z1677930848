@@ -1,0 +1,122 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # 匹配 v1.0.0, v1.1.6 等
+
+env:
+  GO_VERSION: '1.21'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zip unzip
+
+      - name: Install cross-compile toolchain
+        if: matrix.arch == 'arm64'
+        run: |
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Build EdgeCommon
+        working-directory: EdgeCommon
+        run: go mod tidy
+
+      - name: Build Lingnode
+        working-directory: Lingnode-master/build
+        run: |
+          chmod +x build.sh
+          ./build.sh linux ${{ matrix.arch }} community
+
+      - name: Build Lingapi
+        working-directory: Lingapi-master/build
+        env:
+          EDGENODE_PATH: ${{ github.workspace }}/Lingnode-master
+        run: |
+          chmod +x build.sh
+          ./build.sh linux ${{ matrix.arch }} community
+
+      - name: Build Lingadmin
+        working-directory: Lingadmin-master/build
+        env:
+          EDGEAPI_PATH: ${{ github.workspace }}/Lingapi-master
+        run: |
+          chmod +x build.sh
+          ./build.sh linux ${{ matrix.arch }} community
+
+      - name: List built artifacts
+        run: |
+          echo "=== Lingnode ==="
+          ls -la Lingnode-master/dist/ || true
+          echo "=== Lingapi ==="
+          ls -la Lingapi-master/dist/ || true
+          echo "=== Lingadmin ==="
+          ls -la Lingadmin-master/dist/ || true
+
+      - name: Upload Lingnode artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lingnode-linux-${{ matrix.arch }}
+          path: Lingnode-master/dist/*.zip
+          if-no-files-found: warn
+
+      - name: Upload Lingapi artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lingapi-linux-${{ matrix.arch }}
+          path: Lingapi-master/dist/*.zip
+          if-no-files-found: warn
+
+      - name: Upload Lingadmin artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lingadmin-linux-${{ matrix.arch }}
+          path: Lingadmin-master/dist/*.zip
+          if-no-files-found: warn
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List downloaded artifacts
+        run: find artifacts -type f -name "*.zip"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*.zip
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-beta') || contains(github.ref, '-alpha') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
