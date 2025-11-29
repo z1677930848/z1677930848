@@ -154,11 +154,18 @@ jobs:
       # 上传到下载站
       - name: Upload to Download Server
         env:
-          DL_ADMIN_TOKEN: ${{ secrets.DL_ADMIN_TOKEN }}
+          DL_CI_KEY: ${{ secrets.DL_CI_KEY }}
         run: |
           VERSION=${{ steps.version.outputs.VERSION }}
 
           echo "=== Uploading to download server ==="
+          echo "Version: $VERSION"
+
+          # 检查 CI Key 是否配置
+          if [ -z "$DL_CI_KEY" ]; then
+            echo "WARNING: DL_CI_KEY secret not configured, skipping upload"
+            exit 0
+          fi
 
           # 遍历所有 zip 文件并上传
           for file in $(find artifacts -type f -name "*.zip" | sort); do
@@ -173,18 +180,18 @@ jobs:
 
               echo "  Component: $component"
               echo "  Arch: $arch"
-              echo "  Uploading to: ${{ env.DL_SERVER_URL }}/api/admin/upload.php"
+              echo "  Uploading to: ${{ env.DL_SERVER_URL }}/api/ci/upload.php"
 
-              # 上传文件到下载站
+              # 上传文件到下载站 CI 接口
               response=$(curl -s -w "\n%{http_code}" \
+                --max-time 300 \
                 -X POST \
-                -H "X-Admin-Token: ${DL_ADMIN_TOKEN}" \
+                -H "X-CI-Key: ${DL_CI_KEY}" \
                 -F "file=@${file}" \
                 -F "component=${component}" \
-                -F "os=linux" \
                 -F "arch=${arch}" \
-                -F "overwrite=true" \
-                "${{ env.DL_SERVER_URL }}/api/admin/upload.php")
+                -F "changelog=GitHub Actions 自动发布 v${VERSION}" \
+                "${{ env.DL_SERVER_URL }}/api/ci/upload.php")
 
               http_code=$(echo "$response" | tail -1)
               body=$(echo "$response" | sed '$d')
@@ -193,7 +200,8 @@ jobs:
               echo "  Response: $body"
 
               if [ "$http_code" != "200" ]; then
-                echo "  WARNING: Upload may have failed"
+                echo "  ERROR: Upload failed!"
+                # 不退出，继续上传其他文件
               else
                 echo "  SUCCESS: File uploaded"
               fi
