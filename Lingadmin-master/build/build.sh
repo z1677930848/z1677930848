@@ -44,16 +44,23 @@ function build() {
 
 	if [ -d "${EDGEAPI_PATH}" ]; then
 		APINodeVersion=$(lookup-version "${EDGEAPI_PATH}"/internal/const/const.go)
-		echo "building edge-api v${APINodeVersion} ..."
-		EDGE_API_BUILD_SCRIPT="${EDGEAPI_PATH}/build/build.sh"
-		if [ ! -f "${EDGE_API_BUILD_SCRIPT}" ]; then
-			echo "warning: edge-api build script not found at '${EDGE_API_BUILD_SCRIPT}', skipping edge-api build"
+		# 检查 edge-api zip 是否已存在（CI 环境中可能已经构建好了）
+		EDGE_API_ZIP_CHECK="${EDGEAPI_PATH}/dist/edge-api-${OS}-${ARCH}-${TAG}-v${APINodeVersion}.zip"
+		if [ -f "$EDGE_API_ZIP_CHECK" ]; then
+			echo "edge-api v${APINodeVersion} already built, skipping build"
 		else
-			cd "${EDGEAPI_PATH}/build" || exit
-			echo "=============================="
-			./build.sh "$OS" "$ARCH" $TAG
-			echo "=============================="
-			cd - || exit
+			echo "building edge-api v${APINodeVersion} ..."
+			EDGE_API_BUILD_SCRIPT="${EDGEAPI_PATH}/build/build.sh"
+			if [ ! -f "${EDGE_API_BUILD_SCRIPT}" ]; then
+				echo "warning: edge-api build script not found at '${EDGE_API_BUILD_SCRIPT}', skipping edge-api build"
+			else
+				cd "${EDGEAPI_PATH}/build" || exit
+				chmod +x build.sh
+				echo "=============================="
+				./build.sh "$OS" "$ARCH" $TAG
+				echo "=============================="
+				cd - || exit
+			fi
 		fi
 	else
 		echo "warning: EdgeAPI directory not found at '${EDGEAPI_PATH}', skipping edge-api build"
@@ -65,25 +72,31 @@ function build() {
 	go run -tags $TAG "$ROOT"/../cmd/lingcdnadmin/main.go generate || echo "warning: generate failed, using existing components.src.js"
 
 	# prefer npm-based build if package.json exists in web/
+	JS_BUILD_SUCCESS=false
 	if [ -f "$ROOT"/../web/package.json ] && [ "$(which npm)" ]; then
 		echo "building web assets with npm (terser)..."
-		npm --prefix "$ROOT"/../web run build
-	elif [ "$(which uglifyjs)" ]; then
-		echo "compress to component.js ..."
-		uglifyjs --compress --mangle -- "${JS_ROOT}"/components.src.js > "${JS_ROOT}"/components.js
-	else
-		echo "copy to component.js ..."
-		cp "${JS_ROOT}"/components.src.js "${JS_ROOT}"/components.js
+		# 如未安装依赖，先安装，确保 terser 可用
+		if [ ! -d "$ROOT"/../web/node_modules ]; then
+			npm --prefix "$ROOT"/../web ci || npm --prefix "$ROOT"/../web install || true
+		fi
+		if npm --prefix "$ROOT"/../web run build 2>/dev/null; then
+			JS_BUILD_SUCCESS=true
+		fi
+	fi
+
+	if [ "$JS_BUILD_SUCCESS" = false ]; then
+		if [ "$(which uglifyjs)" ]; then
+			echo "compress to component.js ..."
+			uglifyjs --compress --mangle -- "${JS_ROOT}"/components.src.js > "${JS_ROOT}"/components.js
+		else
+			echo "copy to component.js ..."
+			cp "${JS_ROOT}"/components.src.js "${JS_ROOT}"/components.js
+		fi
 	fi
 
 	# create dir & copy files
 	echo "copying ..."
-	if [ ! -d "$DIST" ]; then
-		mkdir "$DIST"
-		mkdir "$DIST"/bin
-		mkdir "$DIST"/configs
-		mkdir "$DIST"/logs
-	fi
+	mkdir -p "$DIST"/bin "$DIST"/configs "$DIST"/logs
 
 	cp -R "$ROOT"/../web "$DIST"/
 	rm -f "$DIST"/web/tmp/*

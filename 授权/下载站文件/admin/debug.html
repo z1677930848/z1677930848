@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调试工具 - LingCDN</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/auth.js"></script>
+</head>
+<body data-require-auth="true">
+    <div class="content" id="app">
+        <div class="card">
+            <h2>运行环境检查</h2>
+            <div class="panel-grid">
+                <div class="panel">
+                    <h4>Vue 状态</h4>
+                    <p v-if="vueLoaded">✅ Vue 已加载：{{ message }}</p>
+                    <p v-else>❌ 未检测到 Vue</p>
+                </div>
+                <div class="panel">
+                    <h4>Axios 状态</h4>
+                    <p>{{ axiosStatus }}</p>
+                </div>
+                <div class="panel">
+                    <h4>授权 API</h4>
+                    <button class="btn btn-outline" @click="testLicenseApi">调用许可证列表</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>API 调试输出</h2>
+            <pre class="result-box" style="display:block" v-text="apiResult || '尚未发起调用'"></pre>
+        </div>
+    </div>
+
+<script>
+new Vue({
+    el: '#app',
+    data: {
+        vueLoaded: typeof Vue !== 'undefined',
+        message: 'Hello Vue!',
+        axiosStatus: typeof axios !== 'undefined' ? '✅ Axios 可用' : '❌ Axios 未加载',
+        apiResult: ''
+    },
+    methods: {
+        async testLicenseApi() {
+            if (typeof axios === 'undefined') {
+                this.apiResult = '❌ Axios 不可用，无法发起请求';
+                return;
+            }
+            try {
+                const res = await axios.get('../api/admin/licenses.php?action=list&page=1&pageSize=10');
+                this.apiResult = '✅ API 响应成功：\n' + JSON.stringify(res.data, null, 2);
+            } catch (err) {
+                this.apiResult = '❌ API 请求失败：' + (err.response?.data?.message || err.message);
+            }
+        }
+    }
+});
+</script>
+</body>
+</html>

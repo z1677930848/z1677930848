@@ -1,0 +1,33 @@
+# Apache 配置文件
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 重定向更新文件下载请求
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^updates/(.*)$ api/download.php?file=$1 [QSA,L]
+
+    # 禁止直接访问敏感文件
+    RewriteRule ^(config\.php|database\.php|utils\.php)$ - [F,L]
+</IfModule>
+
+# 禁止列目录
+Options -Indexes
+
+# 设置默认文档
+DirectoryIndex index.php index.html
+
+# 保护配置文件
+<FilesMatch "\.(ini|log|sql)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 设置字符编码
+AddDefaultCharset UTF-8
+
+# 启用压缩
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>

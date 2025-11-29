@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据库品牌更新 - LingCDN</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="js/auth.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .tool-card {
+            width: min(700px, 100%);
+            background: #fff;
+            border-radius: 18px;
+            padding: 32px;
+            box-shadow: 0 24px 50px rgba(15,23,42,0.35);
+        }
+        .result-box {
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 16px;
+            border-radius: 10px;
+            max-height: 320px;
+            overflow-y: auto;
+            font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+            font-size: 13px;
+            display: none;
+            margin-top: 18px;
+        }
+        .result-box.show { display: block; }
+        .loading {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+            color: #475569;
+        }
+        .loading.show { display: block; }
+        .spinner {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 3px solid rgba(99,102,241,0.2);
+            border-top-color: #667eea;
+            margin: 0 auto 8px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body data-require-auth="true">
+    <div class="tool-card">
+        <h1>数据库品牌一键更新</h1>
+        <p class="muted">将数据库内所有 “SKCDN” 字样替换为 “LingCDN”，涵盖组件名称、版本描述等字段。执行前请确保已备份数据库。</p>
+
+        <div class="info-box" style="background:#f8fafc;border-left-color:#4338ca;">
+            <h3>将执行的更改</h3>
+            <ul style="list-style: none;padding-left: 0;">
+                <li>SKCDN Admin → LingCDN Admin</li>
+                <li>SKCDN API → LingCDN API</li>
+                <li>SKCDN Node → LingCDN Node</li>
+                <li>版本描述及其他文案中的品牌替换</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            ⚠️ 操作涉及数据库写入，请确保拥有管理员权限并做好备份。
+        </div>
+
+        <button class="btn btn-primary" id="updateBtn" onclick="updateBrand()">开始更新</button>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <span>正在执行脚本，请稍候…</span>
+        </div>
+
+        <div class="result-box" id="resultBox">
+            <pre id="resultContent"></pre>
+        </div>
+    </div>
+
+<script>
+async function updateBrand() {
+    const btn = document.getElementById('updateBtn');
+    const loading = document.getElementById('loading');
+    const box = document.getElementById('resultBox');
+    const content = document.getElementById('resultContent');
+
+    btn.disabled = true;
+    btn.textContent = '执行中…';
+    loading.classList.add('show');
+    box.classList.remove('show');
+
+    try {
+        const response = await AdminAuth.authFetch('update-brand-to-lingcdn.php');
+        const text = await response.text();
+        loading.classList.remove('show');
+        content.textContent = text.trim();
+        box.classList.add('show');
+
+        if (/完成|success/i.test(text)) {
+            btn.textContent = '更新完成';
+            btn.classList.remove('btn-primary');
+            btn.style.background = '#22c55e';
+        } else {
+            throw new Error('返回结果异常，请查看输出');
+        }
+    } catch (err) {
+        loading.classList.remove('show');
+        content.textContent = '执行失败：' + err.message;
+        box.classList.add('show');
+        btn.textContent = '重新执行';
+        btn.disabled = false;
+    }
+}
+</script>
+</body>
+</html>

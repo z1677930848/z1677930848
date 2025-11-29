@@ -1,0 +1,245 @@
+﻿<?php
+/**
+ * 鐗堟湰绠＄悊 API
+ * 绔偣: /api/admin/versions.php
+ *
+ * 鎿嶄綔:
+ * - GET ?action=list - 鑾峰彇鐗堟湰鍒楄〃
+ * - POST action=add - 娣诲姞鐗堟湰
+ * - POST action=update - 鏇存柊鐗堟湰
+ * - POST action=delete - 鍒犻櫎鐗堟湰
+ */
+
+require_once '../../config.php';
+require_once '../../database.php';
+require_once '../../utils.php';
+require_once __DIR__ . '/auth_guard.php';
+
+// 璁剧疆鍝嶅簲澶?header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Admin-Token');
+
+// 澶勭悊 OPTIONS 璇锋眰
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+try {
+    AdminAuth::requireAuth();
+    $db = Database::getInstance()->getConnection();
+
+    // GET 璇锋眰 - 鑾峰彇鐗堟湰鍒楄〃
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $action = $_GET['action'] ?? '';
+
+        if ($action === 'list') {
+            // 鏌ヨ鐗堟湰鍒楄〃锛屾敮鎸?show_all 鍙傛暟
+            $showAll = isset($_GET['show_all']) && $_GET['show_all'] == '1';
+
+            if ($showAll) {
+                // 鏄剧ず鎵€鏈夌増鏈紙鍖呮嫭绂佺敤鐨勶級
+                $sql = "SELECT * FROM versions ORDER BY release_time DESC, id DESC";
+            } else {
+                // 鍙樉绀哄惎鐢ㄧ殑鐗堟湰锛坰tatus=1锛?                $sql = "SELECT * FROM versions WHERE status = 1 ORDER BY release_time DESC, id DESC";
+            }
+
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            $versions = $stmt->fetchAll();
+
+            Utils::jsonResponse(200, 'success', $versions);
+        } else {
+            Utils::jsonResponse(400, '鏃犳晥鐨勬搷浣?);
+        }
+    }
+
+    // POST 璇锋眰 - 娣诲姞銆佹洿鏂般€佸垹闄?    elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+
+        if (!$data) {
+            // 灏濊瘯浠?POST 琛ㄥ崟鑾峰彇
+            $data = $_POST;
+        }
+
+        $action = $data['action'] ?? '';
+
+        // 娣诲姞鐗堟湰
+        if ($action === 'add') {
+            // 楠岃瘉蹇呭～瀛楁
+            $required = ['component_code', 'component_name', 'version', 'os', 'arch', 'filename', 'file_size', 'file_md5', 'release_time'];
+            foreach ($required as $field) {
+                if (empty($data[$field])) {
+                    Utils::jsonResponse(400, "缂哄皯蹇呭～瀛楁: {$field}");
+                }
+            }
+
+            // 妫€鏌ユ槸鍚﹀凡瀛樺湪鐩稿悓鐨勭増鏈?            $checkSql = "SELECT id FROM versions WHERE component_code = :component_code AND version = :version AND os = :os AND arch = :arch";
+            $checkStmt = $db->prepare($checkSql);
+            $checkStmt->execute([
+                'component_code' => $data['component_code'],
+                'version' => $data['version'],
+                'os' => $data['os'],
+                'arch' => $data['arch']
+            ]);
+
+            if ($checkStmt->fetch()) {
+                Utils::jsonResponse(400, '璇ョ増鏈凡瀛樺湪锛堢粍浠躲€佺増鏈彿銆佺郴缁熴€佹灦鏋勭粍鍚堥噸澶嶏級');
+            }
+
+            // 鎻掑叆鏁版嵁
+            $sql = "INSERT INTO versions (
+                component_code, component_name, version, os, arch,
+                filename, file_size, file_md5, file_sha256,
+                description, changelog, release_time,
+                is_required_update, status
+            ) VALUES (
+                :component_code, :component_name, :version, :os, :arch,
+                :filename, :file_size, :file_md5, :file_sha256,
+                :description, :changelog, :release_time,
+                :is_required_update, :status
+            )";
+
+            $stmt = $db->prepare($sql);
+            $result = $stmt->execute([
+                'component_code' => $data['component_code'],
+                'component_name' => $data['component_name'],
+                'version' => $data['version'],
+                'os' => $data['os'],
+                'arch' => $data['arch'],
+                'filename' => $data['filename'],
+                'file_size' => $data['file_size'],
+                'file_md5' => $data['file_md5'],
+                'file_sha256' => $data['file_sha256'] ?? null,
+                'description' => $data['description'] ?? null,
+                'changelog' => $data['changelog'] ?? null,
+                'release_time' => $data['release_time'],
+                'is_required_update' => isset($data['is_required_update']) && $data['is_required_update'] ? 1 : 0,
+                'status' => isset($data['status']) && $data['status'] ? 1 : 0
+            ]);
+
+            if ($result) {
+                $newId = $db->lastInsertId();
+                Utils::log("娣诲姞鐗堟湰: {$data['component_code']} v{$data['version']}", 'INFO');
+                Utils::jsonResponse(200, '娣诲姞鎴愬姛', ['id' => $newId]);
+            } else {
+                Utils::jsonResponse(500, '娣诲姞澶辫触');
+            }
+        }
+
+        // 鏇存柊鐗堟湰
+        elseif ($action === 'update') {
+            if (empty($data['id'])) {
+                Utils::jsonResponse(400, '缂哄皯鐗堟湰ID');
+            }
+
+            // 妫€鏌ョ増鏈槸鍚﹀瓨鍦?            $checkSql = "SELECT id FROM versions WHERE id = :id";
+            $checkStmt = $db->prepare($checkSql);
+            $checkStmt->execute(['id' => $data['id']]);
+
+            if (!$checkStmt->fetch()) {
+                Utils::jsonResponse(404, '鐗堟湰涓嶅瓨鍦?);
+            }
+
+            // 妫€鏌ユ槸鍚︿笌鍏朵粬鐗堟湰鍐茬獊
+            $checkSql = "SELECT id FROM versions WHERE component_code = :component_code AND version = :version AND os = :os AND arch = :arch AND id != :id";
+            $checkStmt = $db->prepare($checkSql);
+            $checkStmt->execute([
+                'component_code' => $data['component_code'],
+                'version' => $data['version'],
+                'os' => $data['os'],
+                'arch' => $data['arch'],
+                'id' => $data['id']
+            ]);
+
+            if ($checkStmt->fetch()) {
+                Utils::jsonResponse(400, '璇ョ増鏈凡瀛樺湪锛堢粍浠躲€佺増鏈彿銆佺郴缁熴€佹灦鏋勭粍鍚堥噸澶嶏級');
+            }
+
+            // 鏇存柊鏁版嵁
+            $sql = "UPDATE versions SET
+                component_code = :component_code,
+                component_name = :component_name,
+                version = :version,
+                os = :os,
+                arch = :arch,
+                filename = :filename,
+                file_size = :file_size,
+                file_md5 = :file_md5,
+                file_sha256 = :file_sha256,
+                description = :description,
+                changelog = :changelog,
+                release_time = :release_time,
+                is_required_update = :is_required_update,
+                status = :status
+            WHERE id = :id";
+
+            $stmt = $db->prepare($sql);
+            $result = $stmt->execute([
+                'id' => $data['id'],
+                'component_code' => $data['component_code'],
+                'component_name' => $data['component_name'],
+                'version' => $data['version'],
+                'os' => $data['os'],
+                'arch' => $data['arch'],
+                'filename' => $data['filename'],
+                'file_size' => $data['file_size'],
+                'file_md5' => $data['file_md5'],
+                'file_sha256' => $data['file_sha256'] ?? null,
+                'description' => $data['description'] ?? null,
+                'changelog' => $data['changelog'] ?? null,
+                'release_time' => $data['release_time'],
+                'is_required_update' => isset($data['is_required_update']) && $data['is_required_update'] ? 1 : 0,
+                'status' => isset($data['status']) && $data['status'] ? 1 : 0
+            ]);
+
+            if ($result) {
+                Utils::log("鏇存柊鐗堟湰: ID={$data['id']}, {$data['component_code']} v{$data['version']}", 'INFO');
+                Utils::jsonResponse(200, '鏇存柊鎴愬姛');
+            } else {
+                Utils::jsonResponse(500, '鏇存柊澶辫触');
+            }
+        }
+
+        // 鍒犻櫎鐗堟湰
+        elseif ($action === 'delete') {
+            if (empty($data['id'])) {
+                Utils::jsonResponse(400, '缂哄皯鐗堟湰ID');
+            }
+
+            // 妫€鏌ョ増鏈槸鍚﹀瓨鍦?            $checkSql = "SELECT component_code, version FROM versions WHERE id = :id";
+            $checkStmt = $db->prepare($checkSql);
+            $checkStmt->execute(['id' => $data['id']]);
+            $version = $checkStmt->fetch();
+
+            if (!$version) {
+                Utils::jsonResponse(404, '鐗堟湰涓嶅瓨鍦?);
+            }
+
+            // 鍒犻櫎鐗堟湰
+            $sql = "DELETE FROM versions WHERE id = :id";
+            $stmt = $db->prepare($sql);
+            $result = $stmt->execute(['id' => $data['id']]);
+
+            if ($result) {
+                Utils::log("鍒犻櫎鐗堟湰: ID={$data['id']}, {$version['component_code']} v{$version['version']}", 'INFO');
+                Utils::jsonResponse(200, '鍒犻櫎鎴愬姛');
+            } else {
+                Utils::jsonResponse(500, '鍒犻櫎澶辫触');
+            }
+        }
+
+        else {
+            Utils::jsonResponse(400, '鏃犳晥鐨勬搷浣?);
+        }
+    }
+
+    else {
+        Utils::jsonResponse(405, '涓嶆敮鎸佺殑璇锋眰鏂规硶');
+    }
+
+} catch (Exception $e) {
+    Utils::log("鐗堟湰绠＄悊API寮傚父: " . $e->getMessage(), 'ERROR');
+    Utils::jsonResponse(500, '鏈嶅姟鍣ㄥ唴閮ㄩ敊璇? ' . $e->getMessage());
+}

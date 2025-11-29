@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LingCDN 授权后台 - 登录</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="js/auth.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .auth-card {
+            width: min(420px, 100%);
+        }
+        .logo-mark {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .form-item input {
+            background: rgba(99, 102, 241, 0.05);
+        }
+        .hint {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+        .alert {
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            display: none;
+        }
+        .alert.show { display: block; }
+        .alert.error {
+            background: rgba(239,68,68,0.1);
+            color: #b91c1c;
+            border: 1px solid rgba(239,68,68,0.3);
+        }
+        .alert.success {
+            background: rgba(34,197,94,0.12);
+            color: #15803d;
+            border: 1px solid rgba(34,197,94,0.35);
+        }
+    </style>
+</head>
+<body data-auth-page="login">
+    <div class="auth-card">
+        <div class="logo-mark">LC</div>
+        <h1>授权后台登录</h1>
+        <p>输入管理员凭证以管理许可证、日志和版本。</p>
+
+        <div id="alert" class="alert"></div>
+
+        <form id="loginForm" class="stack">
+            <div class="form-item">
+                <label for="username">管理员账号</label>
+                <input type="text" id="username" placeholder="例如 admin" required autocomplete="username">
+            </div>
+            <div class="form-item">
+                <label for="password">密码</label>
+                <input type="password" id="password" placeholder="请输入登录密码" required autocomplete="current-password">
+                <div class="hint">默认账号/密码请部署后立刻修改。</div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">登录</button>
+            </div>
+        </form>
+    </div>
+
+<script>
+const form = document.getElementById('loginForm');
+const alertBox = document.getElementById('alert');
+let submitting = false;
+
+function showAlert(message, type) {
+    alertBox.textContent = message;
+    alertBox.className = 'alert show ' + type;
+    clearTimeout(showAlert.timer);
+    showAlert.timer = setTimeout(() => {
+        alertBox.classList.remove('show');
+    }, 4000);
+}
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (submitting) return;
+
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!username || !password) {
+        showAlert('请输入完整的账号与密码。', 'error');
+        return;
+    }
+
+    submitting = true;
+    showAlert('正在校验，请稍候…', 'success');
+
+    try {
+        await AdminAuth.login(username, password);
+        showAlert('登录成功，正在进入控制台。', 'success');
+        setTimeout(() => AdminAuth.redirectToDashboard(), 600);
+    } catch (error) {
+        showAlert(error.message || '登录失败，请检查凭证。', 'error');
+    } finally {
+        submitting = false;
+    }
+});
+</script>
+</body>
+</html>

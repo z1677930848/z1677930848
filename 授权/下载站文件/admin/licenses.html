@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>许可证管理 - LingCDN</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="js/auth.js"></script>
+</head>
+<body data-require-auth="true">
+    <div class="auth-card redirect-card">
+        <h1>许可证管理</h1>
+        <p>许可证的增删改查已经整合到新的控制台中，点击下方按钮立即前往。</p>
+        <div class="stack">
+            <button class="btn btn-primary" onclick="location.href='dashboard.html?tab=licenses'">打开许可证面板</button>
+            <button class="btn btn-outline" onclick="AdminAuth.redirectToDashboard()">返回仪表盘</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,798 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LingCDN 授权控制台</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/auth.js"></script>
+</head>
+<body data-require-auth="true">
+<div id="app">
+    <header class="header">
+        <div>
+            <h1>LingCDN 授权控制台</h1>
+            <p>集中管理许可证、授权日志与版本更新</p>
+        </div>
+        <div class="user-info">
+            <span>当前管理员：{{ username }}</span>
+            <button class="btn btn-outline" @click="loadDashboard">刷新数据</button>
+            <button class="btn btn-danger" @click="logout">退出登录</button>
+        </div>
+    </header>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="nav-item" :class="{active: currentTab === 'dashboard'}" @click="switchTab('dashboard')">仪表盘</div>
+            <div class="nav-item" :class="{active: currentTab === 'licenses'}" @click="switchTab('licenses')">许可证</div>
+            <div class="nav-item" :class="{active: currentTab === 'logs'}" @click="switchTab('logs')">授权日志</div>
+            <div class="nav-item" :class="{active: currentTab === 'versions'}" @click="switchTab('versions')">版本中心</div>
+        </aside>
+
+        <main class="content">
+            <section v-show="currentTab === 'dashboard'">
+                <div class="card">
+                    <h2>实时统计</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>许可证总数</h3>
+                            <p>{{ stats.total_licenses || 0 }}</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>有效许可证</h3>
+                            <p>{{ stats.active_licenses || 0 }}</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>今日验证</h3>
+                            <p>{{ stats.today_auth || 0 }}</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>今日下载次数</h3>
+                            <p>{{ stats.today_download || 0 }}</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>今日新增许可证</h3>
+                            <p>{{ stats.today_issue || 0 }}</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>累计下载次数</h3>
+                            <p>{{ stats.total_downloads || 0 }}</p>
+                        </div>
+                    </div>
+                    <div class="panel-grid" style="margin-top:16px;">
+                        <div class="panel">
+                            <h4>首次授权时间</h4>
+                            <p>{{ formatDateTime(stats.first_auth_time) }}</p>
+                        </div>
+                        <div class="panel">
+                            <h4>最后授权时间</h4>
+                            <p>{{ formatDateTime(stats.last_auth_time) }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>最近授权记录</h2>
+                    <table v-if="recentAuthLogs.length">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>许可证</th>
+                                <th>系统标识</th>
+                                <th>域名</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="log in recentAuthLogs" :key="log.id">
+                                <td>{{ log.created_at }}</td>
+                                <td>{{ log.license_code }}</td>
+                                <td>{{ maskToken(log.system_token) }}</td>
+                                <td>{{ log.domain || '-' }}</td>
+                                <td>{{ log.status }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="empty" v-else>暂时没有授权请求</div>
+                </div>
+
+                <div class="card">
+                    <h2>热门下载版本</h2>
+                    <table v-if="topVersions.length">
+                        <thead>
+                            <tr>
+                                <th>组件</th>
+                                <th>版本</th>
+                                <th>下载次数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in topVersions" :key="item.component_name + item.version">
+                                <td>{{ item.component_name }}</td>
+                                <td>{{ item.version }}</td>
+                                <td>{{ item.download_count }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="empty" v-else>近期暂无下载记录</div>
+                </div>
+            </section>
+
+            <section v-show="currentTab === 'licenses'">
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <h2>许可证列表</h2>
+                        <button class="btn btn-primary" @click="showAddLicenseModal">新增许可证</button>
+                    </div>
+                    <div class="filters">
+                        <input type="text" placeholder="搜索客户姓名/邮箱/许可证" v-model="licensesSearch" @keyup.enter="loadLicenses">
+                        <select v-model="licensesStatusFilter" @change="loadLicenses">
+                            <option value="">全部状态</option>
+                            <option value="1">启用</option>
+                            <option value="0">停用</option>
+                        </select>
+                    </div>
+                    <table v-if="licenses.length">
+                        <thead>
+                            <tr>
+                                <th>客户信息</th>
+                                <th>许可证 ID</th>
+                                <th>类型</th>
+                                <th>最大设备</th>
+                                <th>到期时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in licenses" :key="item.id">
+                                <td>
+                                    <div>{{ item.customer_name }}</div>
+                                    <small class="muted">{{ item.customer_email || '-' }}</small>
+                                </td>
+                                <td>{{ maskLicense(item.license_code) }}</td>
+                                <td>{{ getLicenseTypeName(item.license_type) }}</td>
+                                <td>{{ item.max_devices || 1 }}</td>
+                                <td>{{ item.expire_time || '永久' }}</td>
+                                <td>
+                                    <span class="badge" :class="{'muted': item.status != 1}">{{ item.status == 1 ? '启用' : '停用' }}</span>
+                                </td>
+                                <td class="table-actions">
+                                    <button class="btn btn-outline" @click="viewLicense(item)">详情</button>
+                                    <button class="btn btn-outline" @click="toggleLicenseStatus(item.id)">切换状态</button>
+                                    <button class="btn btn-danger" @click="deleteLicense(item.id)">删除</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="empty" v-else>暂无许可证数据</div>
+                </div>
+            </section>
+
+            <section v-show="currentTab === 'logs'">
+                <div class="card">
+                    <h2>授权日志</h2>
+                    <div class="filters">
+                        <input type="text" placeholder="搜索许可证或域名" v-model="logsSearch" @keyup.enter="loadAuthLogs">
+                        <select v-model="logsStatusFilter" @change="loadAuthLogs">
+                            <option value="">全部状态</option>
+                            <option value="success">成功</option>
+                            <option value="failed">失败</option>
+                        </select>
+                        <input type="date" v-model="logsStartDate" @change="loadAuthLogs">
+                        <input type="date" v-model="logsEndDate" @change="loadAuthLogs">
+                    </div>
+                    <table v-if="authLogs.length">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>许可证</th>
+                                <th>域名</th>
+                                <th>IP</th>
+                                <th>状态</th>
+                                <th>信息</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="log in authLogs" :key="log.id">
+                                <td>{{ log.created_at }}</td>
+                                <td>{{ log.license_code }}</td>
+                                <td>{{ log.domain || '-' }}</td>
+                                <td>{{ log.ip_address }}</td>
+                                <td>{{ log.status }}</td>
+                                <td>{{ log.error_message || '成功' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="empty" v-else>暂无日志记录</div>
+                </div>
+            </section>
+
+            <section v-show="currentTab === 'versions'">
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <h2>版本发布</h2>
+                        <button class="btn btn-primary" @click="showAddVersionModal">新增版本</button>
+                    </div>
+                    <table v-if="versions.length">
+                        <thead>
+                            <tr>
+                                <th>组件</th>
+                                <th>版本</th>
+                                <th>平台</th>
+                                <th>文件名</th>
+                                <th>发布时间</th>
+                                <th>必更</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="ver in versions" :key="ver.id">
+                                <td>{{ ver.component_name }}</td>
+                                <td>{{ ver.version }}</td>
+                                <td>{{ ver.os }}/{{ ver.arch }}</td>
+                                <td>{{ ver.filename }}</td>
+                                <td>{{ ver.release_time }}</td>
+                                <td>{{ ver.is_required_update ? '是' : '否' }}</td>
+                                <td class="table-actions">
+                                    <button class="btn btn-outline" @click="editVersion(ver)">编辑</button>\n                                    <button class="btn btn-outline" @click="verifyVersion(ver.id)">校验</button>
+                                    <button class="btn btn-danger" @click="deleteVersion(ver.id)">删除</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="empty" v-else>暂无版本记录</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-backdrop" v-if="showLicenseModal">
+        <div class="modal">
+            <h3>{{ isEditLicense ? '编辑许可证' : '新增许可证' }}</h3>
+            <form @submit.prevent="saveLicense">
+                <div class="form-grid">
+                    <div class="form-item">
+                        <label>客户名称</label>
+                        <input v-model="licenseForm.customer_name" required>
+                    </div>
+                    <div class="form-item">
+                        <label>客户邮箱</label>
+                        <input v-model="licenseForm.customer_email" type="email">
+                    </div>
+                    <div class="form-item">
+                        <label>联系电话</label>
+                        <input v-model="licenseForm.customer_phone">
+                    </div>
+                    <div class="form-item">
+                        <label>公司名称</label>
+                        <input v-model="licenseForm.company_name">
+                    </div>
+                    <div class="form-item">
+                        <label>许可证类型</label>
+                        <select v-model="licenseForm.license_type">
+                            <option value="trial">试用版</option>
+                            <option value="standard">标准版</option>
+                            <option value="professional">专业版</option>
+                            <option value="enterprise">企业版</option>
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label>最大设备数</label>
+                        <input type="number" min="1" v-model.number="licenseForm.max_devices">
+                    </div>
+                    <div class="form-item">
+                        <label>到期时间</label>
+                        <input type="datetime-local" v-model="licenseForm.expire_time">
+                    </div>
+                    <div class="form-item">
+                        <label>备注</label>
+                        <input v-model="licenseForm.remark">
+                    </div>
+                </div>
+                <div class="form-item" style="margin-top:12px;">
+                    <label>允许域名（每行一个，使用 * 表示通配）</label>
+                    <textarea v-model="allowedDomainsText"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" @click="closeLicenseModal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" v-if="showVersionModal">
+        <div class="modal">
+            <h3>{{ isEditVersion ? '编辑版本' : '新增版本' }}</h3>
+            <form @submit.prevent="saveVersion">
+                <div class="form-grid">
+                    <div class="form-item">
+                        <label>组件编码</label>
+                        <input v-model="versionForm.component_code" required>
+                    </div>
+                    <div class="form-item">
+                        <label>组件名称</label>
+                        <input v-model="versionForm.component_name" required>
+                    </div>
+                    <div class="form-item">
+                        <label>版本号</label>
+                        <input v-model="versionForm.version" required>
+                    </div>
+                    <div class="form-item">
+                        <label>操作系统</label>
+                        <select v-model="versionForm.os">
+                            <option value="linux">Linux</option>
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label>架构</label>
+                        <select v-model="versionForm.arch">
+                            <option value="amd64">amd64</option>
+                            <option value="arm64">arm64</option>
+                            <option value="386">386</option>
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label>文件名</label>
+                        <input v-model="versionForm.filename" required>
+                    </div>
+                    <div class="form-item">
+                        <label>文件大小（字节）</label>
+                        <input type="number" min="0" v-model.number="versionForm.file_size">
+                    </div>
+                    <div class="form-item">
+                        <label>MD5</label>
+                        <input v-model="versionForm.file_md5">
+                    </div>
+                    <div class="form-item">
+                        <label>SHA256</label>
+                        <input v-model="versionForm.file_sha256">
+                    </div>
+                    <div class="form-item">
+                        <label>发布时间</label>
+                        <input type="datetime-local" v-model="versionForm.release_time">
+                    </div>
+                    <div class="form-item">
+                        <label>是否强制更新</label>
+                        <select v-model="versionForm.is_required_update">
+                            <option :value="true">是</option>
+                            <option :value="false">否</option>
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label>状态</label>
+                        <select v-model="versionForm.status">
+                            <option :value="true">启用</option>
+                            <option :value="false">停用</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-item" style="margin-top:12px;">
+                    <label>更新说明</label>
+                    <textarea v-model="versionForm.changelog"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" @click="closeVersionModal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" v-if="showLicenseDetail">
+        <div class="modal">
+            <h3>许可证详情</h3>
+            <div v-if="activeLicense" class="stack">
+                <p><strong>许可证：</strong>{{ activeLicense.license_code }}</p>
+                <p><strong>客户名称：</strong>{{ activeLicense.customer_name }}</p>
+                <p><strong>邮箱：</strong>{{ activeLicense.customer_email || '—' }}</p>
+                <p><strong>电话：</strong>{{ activeLicense.customer_phone || '—' }}</p>
+                <p><strong>类型：</strong>{{ getLicenseTypeName(activeLicense.license_type) }}</p>
+                <p><strong>允许域名：</strong>{{ formatArray(activeLicense.allowed_domains) }}</p>
+                <p><strong>已绑系统：</strong>{{ formatArray(activeLicense.bound_system_tokens) }}</p>
+                <p><strong>最大设备：</strong>{{ activeLicense.max_devices || 1 }}</p>
+                <p><strong>到期时间：</strong>{{ activeLicense.expire_time || '永久' }}</p>
+                <p><strong>备注：</strong>{{ activeLicense.remark || '—' }}</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" @click="closeLicenseDetail">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const initialTab = new URLSearchParams(window.location.search).get('tab') || 'dashboard';
+
+new Vue({
+    el: '#app',
+    data: {
+        username: AdminAuth.getUsername(),
+        currentTab: initialTab,
+        stats: {},
+        recentAuthLogs: [],
+        topVersions: [],
+        licenses: [],
+        licensesLoading: false,
+        licensesPage: 1,
+        licensesPageSize: 20,
+        licensesTotal: 0,
+        licensesSearch: '',
+        licensesStatusFilter: '',
+        showLicenseModal: false,
+        isEditLicense: false,
+        showLicenseDetail: false,
+        activeLicense: null,
+        licenseForm: {
+            license_code: '',
+            customer_name: '',
+            customer_email: '',
+            customer_phone: '',
+            company_name: '',
+            license_type: 'standard',
+            allowed_domains: ['*'],
+            max_devices: 1,
+            expire_time: '',
+            remark: ''
+        },
+        allowedDomainsText: '*',
+        authLogs: [],
+        logsLoading: false,
+        logsPage: 1,
+        logsPageSize: 20,
+        logsTotal: 0,
+        logsSearch: '',
+        logsStatusFilter: '',
+        logsStartDate: '',
+        logsEndDate: '',
+        versions: [],
+        versionsLoading: false,
+        showVersionModal: false,
+        isEditVersion: false,
+        versionForm: {
+            id: null,
+            component_code: '',
+            component_name: '',
+            version: '',
+            os: 'linux',
+            arch: 'amd64',
+            filename: '',
+            file_size: '',
+            file_md5: '',
+            file_sha256: '',
+            description: '',
+            changelog: '',
+            release_time: '',
+            is_required_update: false,
+            status: true
+        }
+    },
+    watch: {
+        currentTab(value) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('tab', value);
+            history.replaceState(null, '', url);
+        }
+    },
+    mounted() {
+        this.loadDashboard();
+    },
+    methods: {
+        getDefaultLicenseForm() {
+            return {
+                license_code: '',
+                customer_name: '',
+                customer_email: '',
+                customer_phone: '',
+                company_name: '',
+                license_type: 'standard',
+                allowed_domains: ['*'],
+                max_devices: 1,
+                expire_time: '',
+                remark: ''
+            };
+        },
+        switchTab(tab) {
+            this.currentTab = tab;
+            if (tab === 'dashboard') this.loadDashboard();
+            if (tab === 'licenses') this.loadLicenses();
+            if (tab === 'logs') this.loadAuthLogs();
+            if (tab === 'versions') this.loadVersions();
+        },
+        async loadDashboard() {
+            try {
+                const res = await axios.get('../api/admin/logs.php?action=stats');
+                if (res.data.code === 200) {
+                    const payload = res.data.data || {};
+                    this.stats = payload.today || {};
+                    this.topVersions = payload.top_versions || [];
+                }
+                const logsRes = await axios.get('../api/admin/logs.php?action=auth_logs&pageSize=10');
+                if (logsRes.data.code === 200) {
+                    this.recentAuthLogs = logsRes.data.data.list;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        },
+        async loadLicenses() {
+            this.licensesLoading = true;
+            try {
+                const params = {
+                    action: 'list',
+                    page: this.licensesPage,
+                    pageSize: this.licensesPageSize,
+                    search: this.licensesSearch,
+                    status: this.licensesStatusFilter
+                };
+                const res = await axios.get('../api/admin/licenses.php', { params });
+                if (res.data.code === 200) {
+                    this.licenses = res.data.data.list;
+                    this.licensesTotal = res.data.data.total;
+                }
+            } catch (e) {
+                alert('加载许可证失败：' + (e.response?.data?.message || e.message));
+            } finally {
+                this.licensesLoading = false;
+            }
+        },
+        async loadAuthLogs() {
+            this.logsLoading = true;
+            try {
+                const params = {
+                    action: 'auth_logs',
+                    page: this.logsPage,
+                    pageSize: this.logsPageSize,
+                    search: this.logsSearch,
+                    status: this.logsStatusFilter,
+                    start_date: this.logsStartDate,
+                    end_date: this.logsEndDate
+                };
+                const res = await axios.get('../api/admin/logs.php', { params });
+                if (res.data.code === 200) {
+                    this.authLogs = res.data.data.list;
+                    this.logsTotal = res.data.data.total;
+                }
+            } catch (e) {
+                alert('加载日志失败：' + (e.response?.data?.message || e.message));
+            } finally {
+                this.logsLoading = false;
+            }
+        },
+        showAddLicenseModal() {
+            this.isEditLicense = false;
+            this.licenseForm = this.getDefaultLicenseForm();
+            this.allowedDomainsText = '*';
+            this.showLicenseModal = true;
+        },
+        viewLicense(license) {
+            const detail = JSON.parse(JSON.stringify(license));
+            if (typeof detail.allowed_domains === 'string') {
+                try {
+                    detail.allowed_domains = JSON.parse(detail.allowed_domains);
+                } catch (err) {
+                    detail.allowed_domains = detail.allowed_domains.split(',').map(s => s.trim());
+                }
+            }
+            if (typeof detail.bound_system_tokens === 'string') {
+                try {
+                    detail.bound_system_tokens = JSON.parse(detail.bound_system_tokens);
+                } catch (err) {
+                    detail.bound_system_tokens = [];
+                }
+            }
+            this.activeLicense = detail;
+            this.showLicenseDetail = true;
+        },
+        closeLicenseModal() {
+            this.showLicenseModal = false;
+        },
+        closeLicenseDetail() {
+            this.showLicenseDetail = false;
+            this.activeLicense = null;
+        },
+        async saveLicense() {
+            this.licenseForm.allowed_domains = this.allowedDomainsText.split('\n').map(d => d.trim()).filter(Boolean);
+            try {
+                const res = await axios.post('../api/admin/licenses.php?action=add', this.licenseForm);
+                if (res.data.code === 200) {
+                    alert('新增成功，许可证密钥：' + res.data.data.license_code);
+                    this.closeLicenseModal();
+                    this.loadLicenses();
+                } else {
+                    alert('保存失败：' + res.data.message);
+                }
+            } catch (e) {
+                alert('保存失败：' + (e.response?.data?.message || e.message));
+            }
+        },
+        async toggleLicenseStatus(id) {
+            if (!confirm('确认切换该许可证的启用状态吗？')) return;
+            try {
+                const res = await axios.get('../api/admin/licenses.php?action=toggle_status&id=' + id);
+                if (res.data.code === 200) {
+                    alert('状态更新成功');
+                    this.loadLicenses();
+                } else {
+                    alert('状态更新失败：' + res.data.message);
+                }
+            } catch (e) {
+                alert('状态更新失败：' + (e.response?.data?.message || e.message));
+            }
+        },
+        async deleteLicense(id) {
+            if (!confirm('确定要删除该许可证？该操作不可恢复。')) return;
+            try {
+                const res = await axios.get('../api/admin/licenses.php?action=delete&id=' + id);
+                if (res.data.code === 200) {
+                    alert('删除成功');
+                    this.loadLicenses();
+                } else {
+                    alert('删除失败：' + res.data.message);
+                }
+            } catch (e) {
+                alert('删除失败：' + (e.response?.data?.message || e.message));
+            }
+        },
+        getLicenseTypeName(type) {
+            const types = { trial: '试用版', standard: '标准版', professional: '专业版', enterprise: '企业版' };
+            return types[type] || type;
+        },
+        maskLicense(code) {
+            if (!code) return '';
+            const parts = code.split('-');
+            if (parts.length > 2) {
+                return parts.slice(0, 2).join('-') + '-****-****';
+            }
+            return code;
+        },
+        maskToken(token) {
+            if (!token) return '';
+            if (token.length > 16) {
+                return token.substring(0, 6) + '...' + token.substring(token.length - 6);
+            }
+            return token;
+        },
+        async loadVersions() {
+            this.versionsLoading = true;
+            try {
+                const res = await axios.get('../api/admin/versions.php?action=list');
+                if (res.data.code === 200) {
+                    this.versions = res.data.data;
+                } else {
+                    alert('加载版本失败：' + (res.data?.message || '接口异常'));
+                }
+            } catch (e) {
+                alert('加载版本失败：' + (e.response?.data?.message || e.message));
+            } finally {
+                this.versionsLoading = false;
+            }
+        },
+        showAddVersionModal() {
+            this.isEditVersion = false;
+            this.resetVersionForm();
+            this.showVersionModal = true;
+        },
+        editVersion(version) {
+            this.isEditVersion = true;
+            this.versionForm = {
+                id: version.id,
+                component_code: version.component_code,
+                component_name: version.component_name,
+                version: version.version,
+                os: version.os,
+                arch: version.arch,
+                filename: version.filename,
+                file_size: version.file_size,
+                file_md5: version.file_md5,
+                file_sha256: version.file_sha256 || '',
+                description: version.description || '',
+                changelog: version.changelog || '',
+                release_time: version.release_time.replace(' ', 'T').slice(0, 16),
+                is_required_update: !!version.is_required_update,
+                status: !!version.status
+            };
+            this.showVersionModal = true;
+        },
+        async saveVersion() {
+            const action = this.isEditVersion ? 'update' : 'add';
+            try {
+                const res = await axios.post('../api/admin/versions.php', { ...this.versionForm, action });
+                if (res.data.code === 200) {
+                    alert(this.isEditVersion ? '版本更新成功' : '版本发布成功');
+                    this.closeVersionModal();
+                    this.loadVersions();
+                } else {
+                    alert('保存失败：' + res.data.message);
+                }
+            } catch (e) {
+                alert('保存失败：' + (e.response?.data?.message || e.message));
+            }
+        },        async deleteVersion(id) {
+            if (!confirm("确认删除该版本记录？")) return;
+            try {
+                const res = await axios.post("../api/admin/versions.php", { action: "delete", id });
+                if (res.data.code === 200) {
+                    alert("删除成功");
+                    this.loadVersions();
+                } else {
+                    alert("删除失败：" + res.data.message);
+                }
+            } catch (e) {
+                alert("删除失败：" + (e.response?.data?.message || e.message));
+            }
+        },
+        async verifyVersion(id) {
+            try {
+                const res = await axios.post("../api/admin/versions.php", { action: "verify", id });
+                if (res.data.code === 200) {
+                    const d = res.data.data;
+                    alert(`校验完成\n文件: ${d.file}\n大小: ${d.sizeFormatted}\nMD5: ${d.md5}\nSHA256: ${d.sha256}`);
+                    this.loadVersions();
+                } else {
+                    alert("校验失败：" + res.data.message);
+                }
+            } catch (e) {
+                alert("校验失败：" + (e.response?.data?.message || e.message));
+            }
+        },
+        closeVersionModal() {
+            this.showVersionModal = false;
+            this.resetVersionForm();
+        },
+        resetVersionForm() {
+            const now = new Date();
+            const offset = now.getTimezoneOffset() * 60000;
+            const localTime = new Date(now - offset).toISOString().slice(0, 16);
+            this.versionForm = {
+                id: null,
+                component_code: '',
+                component_name: '',
+                version: '',
+                os: 'linux',
+                arch: 'amd64',
+                filename: '',
+                file_size: '',
+                file_md5: '',
+                file_sha256: '',
+                description: '',
+                changelog: '',
+                release_time: localTime,
+                is_required_update: false,
+                status: true
+            };
+        },
+        logout() {
+            if (confirm('确定要退出登录吗？')) {
+                AdminAuth.logout();
+            }
+        },
+        formatArray(list) {
+            if (Array.isArray(list)) {
+                return list.length ? list.join('、') : '—';
+            }
+            return list || '—';
+        },
+        formatDateTime(value) {
+            if (!value) return '—';
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) {
+                return value;
+            }
+            return date.toLocaleString('zh-CN');
+        }
+    }
+});
+</script>
+</body>
+</html>
+
+
+
+
+

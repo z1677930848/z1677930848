@@ -1,0 +1,95 @@
+[2025-10-18 01:13:26] [INFO] 添加许可证: KOZU-5AKO-VVEO-5C1R-6CNE-1LR6-YD0N-NQ0J - 客户: 测试用户
+[2025-10-18 13:54:54] [ERROR] 许可证管理异常: SQLSTATE[22007]: Invalid datetime format: 1292 Incorrect datetime value: '' for column 'expire_time' at row 1
+[2025-10-18 13:54:58] [ERROR] 许可证管理异常: SQLSTATE[22007]: Invalid datetime format: 1292 Incorrect datetime value: '' for column 'expire_time' at row 1
+[2025-10-18 13:56:51] [INFO] 添加许可证: IQGI-OJ7Z-ABMK-O3LA-22OO-0I2W-ABFB-T8EG - 客户: 新客户测试
+[2025-10-18 13:58:33] [ERROR] 许可证管理异常: SQLSTATE[22007]: Invalid datetime format: 1292 Incorrect datetime value: '' for column 'expire_time' at row 1
+[2025-10-18 14:00:01] [INFO] 添加许可证: GOGA-V2IZ-00ID-Y7WV-UJ1A-F4FC-43A1-CLMN - 客户: 调试测试
+[2025-10-18 14:02:12] [ERROR] 许可证管理异常: SQLSTATE[22007]: Invalid datetime format: 1292 Incorrect datetime value: '' for column 'expire_time' at row 1
+[2025-10-18 14:02:46] [ERROR] 许可证管理异常: SQLSTATE[22007]: Invalid datetime format: 1292 Incorrect datetime value: '' for column 'expire_time' at row 1
+[2025-10-18 14:04:43] [INFO] 添加许可证:  - 客户: 前端测试客户
+[2025-10-18 14:05:15] [INFO] 添加许可证: VZKO-NKPL-5VQT-DU5J-EY2Z-H023-8NWW-NFGP - 客户: 最终测试
+[2025-10-18 14:08:11] [INFO] 添加许可证: AOLN-7C8E-622C-O06G-SAIF-4LI9-7WQN-7J8P - 客户: 123
+[2025-10-18 14:08:26] [INFO] 更新许可证ID: 7
+[2025-10-18 14:12:18] [WARNING] 删除许可证ID: 5
+[2025-10-18 14:12:23] [WARNING] 删除许可证ID: 6
+[2025-10-18 14:12:27] [WARNING] 删除许可证ID: 4
+[2025-10-18 15:34:39] [INFO] 更新版本: ID=1, admin v1.0.0
+[2025-10-18 15:35:20] [INFO] 更新版本: ID=2, node v1.0.0
+[2025-10-18 15:35:27] [INFO] 更新版本: ID=3, api v1.0.0
+[2025-10-18 15:35:58] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=154.201.73.121
+[2025-10-18 15:45:08] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=154.201.73.121
+[2025-10-18 15:46:29] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=154.201.73.121
+[2025-10-18 15:46:29] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=154.201.73.121
+[2025-10-18 15:47:23] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=154.201.73.121
+[2025-10-18 15:48:06] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=154.201.73.121
+[2025-10-18 15:48:34] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 15:50:12] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 15:50:21] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 15:50:38] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 15:50:50] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 15:51:03] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 15:51:17] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 15:53:09] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 15:53:38] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 15:58:27] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 15:58:52] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 16:17:34] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 16:30:01] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 16:38:12] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 16:38:13] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 16:38:55] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 16:41:54] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=2409:894d:3a72:155:c12a:49bc:75ab:9682
+[2025-10-18 16:44:54] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 16:46:04] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=2409:894d:3a72:155:c12a:49bc:75ab:9682
+[2025-10-18 16:48:03] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 16:48:03] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 16:48:29] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=38.12.18.135
+[2025-10-18 16:50:33] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 16:50:33] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 16:50:34] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=127.0.0.1
+[2025-10-18 17:05:04] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 17:05:04] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 17:05:05] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=127.0.0.1
+[2025-10-18 17:21:19] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 17:21:19] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 17:21:24] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=38.12.18.135
+[2025-10-18 22:16:56] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 22:16:56] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 22:17:03] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=38.12.18.135
+[2025-10-18 22:20:03] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 22:20:04] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 22:20:40] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=38.12.18.135
+[2025-10-18 22:26:48] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 22:26:48] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 22:26:58] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=38.12.18.135
+[2025-10-18 22:34:45] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 22:34:46] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 22:35:05] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=38.12.18.135
+[2025-10-18 22:43:01] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 22:43:02] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 22:43:13] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=38.12.18.135
+[2025-10-18 23:01:43] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 23:01:55] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 23:02:02] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=38.12.18.135
+[2025-10-18 23:14:37] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 23:14:37] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 23:14:45] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=38.12.18.135
+[2025-10-18 23:24:53] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 23:24:53] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 23:24:54] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=127.0.0.1
+[2025-10-18 23:33:27] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 23:33:27] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=38.12.18.135
+[2025-10-18 23:33:37] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=38.12.18.135
+[2025-10-18 23:35:53] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 23:35:53] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 23:35:54] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=127.0.0.1
+[2025-10-18 23:43:54] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 23:43:54] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 23:43:55] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=127.0.0.1
+[2025-10-18 23:47:18] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 23:47:18] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 23:47:19] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=api, IP=127.0.0.1
+[2025-10-18 23:57:49] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 23:57:49] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 23:59:16] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1
+[2025-10-18 23:59:16] [INFO] 版本查询: OS=linux, ARCH=amd64, Component=admin, IP=127.0.0.1

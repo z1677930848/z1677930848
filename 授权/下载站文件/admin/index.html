@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LingCDN 授权后台</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="js/auth.js"></script>
+    <style>
+        body {
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+        }
+        .redirect-card {
+            text-align: center;
+            width: min(420px, 100%);
+        }
+        .redirect-card h1 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+        .redirect-card p {
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body data-auth-page="gateway">
+    <div class="auth-card redirect-card">
+        <h1>正在检测登录状态…</h1>
+        <p>若浏览器没有自动跳转，请使用下方按钮进入对应页面。</p>
+        <div class="stack">
+            <button class="btn btn-primary" onclick="AdminAuth.redirectToDashboard()">进入仪表盘</button>
+            <button class="btn btn-outline" onclick="location.href='login.html'">前往登录页</button>
+        </div>
+    </div>
+</body>
+</html>

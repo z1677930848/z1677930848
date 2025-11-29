@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>LingCDN v1.2.0 更新日志</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #1890ff;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1890ff;
+            margin-top: 30px;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            padding: 5px 0;
+            padding-left: 20px;
+        }
+        li:before {
+            content: "✓ ";
+            color: #52c41a;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .version-info {
+            background: #f0f2f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .feature {
+            color: #52c41a;
+        }
+        .improvement {
+            color: #1890ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>LingCDN v1.2.0 更新日志</h1>
+
+    <div class="version-info">
+        <strong>版本号:</strong> v1.2.0<br>
+        <strong>发布日期:</strong> 2025-11-14<br>
+        <strong>更新类型:</strong> 功能增强<br>
+    </div>
+
+    <h2 class="feature">🎉 新增功能</h2>
+    <ul>
+        <li><strong>支付系统集成</strong> - 完整的易支付(YiPay)对接功能</li>
+        <li><strong>用户充值功能</strong> - 支持支付宝、微信支付在线充值</li>
+        <li><strong>充值赠送系统</strong> - 可配置充值赠送规则，支持固定金额和百分比赠送</li>
+        <li><strong>账户余额管理</strong> - 用户账户余额查询和交易记录</li>
+        <li><strong>支付回调处理</strong> - 完整的支付异步通知和同步返回处理</li>
+        <li><strong>支付日志系统</strong> - 详细的支付回调日志记录，便于问题排查</li>
+    </ul>
+
+    <h2 class="improvement">🔧 系统改进</h2>
+    <ul>
+        <li>新增 <code>/user/billing/recharge</code> 充值页面路由</li>
+        <li>新增 <code>/user/billing/create-recharge</code> 创建充值订单接口</li>
+        <li>新增 <code>/user/billing/recharge-result</code> 充值结果页面</li>
+        <li>新增 <code>/api/payment/yipay/notify</code> 易支付异步回调接口</li>
+        <li>新增 <code>/api/payment/yipay/return</code> 易支付同步返回接口</li>
+        <li>优化数据库连接管理，支付模块使用独立连接池</li>
+        <li>增强安全性，支付签名使用MD5加密验证</li>
+    </ul>
+
+    <h2>📊 数据库更新</h2>
+    <ul>
+        <li>新增 <code>LingUserRecharges</code> 表 - 用户充值记录</li>
+        <li>新增 <code>LingUserWithdrawals</code> 表 - 用户提现记录</li>
+        <li>新增 <code>LingPaymentCallbacks</code> 表 - 支付回调日志</li>
+        <li>新增 <code>LingRechargeBonus</code> 表 - 充值赠送配置</li>
+        <li>更新 <code>LingOrderMethods</code> 表 - 支付方式配置</li>
+        <li>新增 <code>LingUserAccounts</code> 表 - 用户账户余额</li>
+        <li>新增 <code>LingUserAccountLogs</code> 表 - 账户交易日志</li>
+    </ul>
+
+    <h2>⚙️ 技术细节</h2>
+    <ul>
+        <li>新增 <code>internal/payment</code> 包 - 支付管理核心功能</li>
+        <li>新增 <code>internal/utils/yipay_sdk.go</code> - 易支付SDK实现</li>
+        <li>实现支付订单过期机制 (30分钟)</li>
+        <li>支持充值赠送优先级和时间段控制</li>
+        <li>完整的事务处理确保数据一致性</li>
+    </ul>
+
+    <h2>📦 升级说明</h2>
+    <ul>
+        <li>本次升级需要执行数据库迁移脚本</li>
+        <li>新增表结构会在首次启动时自动创建</li>
+        <li>支付功能需要在系统设置中配置易支付参数</li>
+        <li>建议升级前备份数据库</li>
+    </ul>
+
+    <h2>🔗 下载地址</h2>
+    <ul>
+        <li><a href="http://dl.lingcdn.cloud/ling-admin-v1.2.0-linux-amd64">ling-admin-v1.2.0-linux-amd64</a></li>
+        <li><a href="http://dl.lingcdn.cloud/ling-admin-v1.2.0-linux-amd64.md5">MD5校验</a></li>
+        <li><a href="http://dl.lingcdn.cloud/ling-admin-v1.2.0-linux-amd64.sha256">SHA256校验</a></li>
+    </ul>
+
+    <h2>📝 注意事项</h2>
+    <ul>
+        <li>易支付配置需要在 <code>LingOrderMethods</code> 表中添加</li>
+        <li>支付回调URL需要在易支付后台正确配置</li>
+        <li>建议在测试环境先验证支付流程</li>
+        <li>充值赠送活动需要在 <code>LingRechargeBonus</code> 表中配置</li>
+    </ul>
+
+    <hr style="margin-top: 40px; border: none; border-top: 1px solid #d9d9d9;">
+    <p style="text-align: center; color: #999; font-size: 14px;">
+        LingCDN 开发团队 | 2025-11-14
+    </p>
+</body>
+</html>

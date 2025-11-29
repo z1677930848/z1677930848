@@ -1,0 +1,13 @@
+[2025-10-31 05:31:37] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-31 11:31:37] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-31 17:31:37] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-31 23:10:07] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-31 23:12:11] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-31 23:12:12] [INFO] 版本检查: admin v1.0.7 -> v1.0.10, needUpdate: YES
+[2025-10-31 23:29:53] [INFO] 版本检查: admin v1.0.10 -> v1.0.11, needUpdate: YES
+[2025-10-31 23:31:37] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-31 23:34:47] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-31 23:35:06] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-31 23:35:09] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-31 23:37:28] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-31 23:45:08] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件

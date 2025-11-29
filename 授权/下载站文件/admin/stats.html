@@ -1,0 +1,286 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安装统计 - LingCDN 管理后台</title>
+    <script src="js/auth.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1f2933;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            padding: 16px 32px;
+            box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            color: #3b82f6;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info span {
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            box-shadow: 0 10px 15px rgba(102, 126, 234, 0.25);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .main {
+            max-width: 1200px;
+            margin: 32px auto;
+            padding: 0 20px 40px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.08);
+        }
+
+        .card h3 {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .card .value {
+            font-size: 32px;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .panel h3 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: #111827;
+        }
+
+        .distribution-list {
+            list-style: none;
+        }
+
+        .distribution-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+
+        .distribution-item:last-child {
+            border-bottom: none;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status.loading {
+            display: block;
+            background: #eef2ff;
+            color: #3730a3;
+        }
+
+        .status.error {
+            display: block;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .user-info {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body data-require-auth="true">
+    <header class="header">
+        <h1>LingCDN 管理后台 �� 安装统计</h1>
+        <div class="user-info">
+            <span>用户: <strong id="username">-</strong></span>
+            <button class="btn btn-primary" onclick="window.location.href='dashboard.html'">进入管理告诉</button>
+            <button class="btn btn-danger" onclick="logout()">退出登�?</button>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="status loading" id="loading">正在加载统计数据...</div>
+        <div class="status error" id="error"></div>
+
+        <section class="card-grid" id="summaryCards" style="display: none;">
+            <div class="card">
+                <h3>总数</h3>
+                <div class="value" id="total">0</div>
+            </div>
+            <div class="card">
+                <h3>今天新增</h3>
+                <div class="value" id="today">0</div>
+            </div>
+            <div class="card">
+                <h3>最近一周算�?</h3>
+                <div class="value" id="week">0</div>
+            </div>
+            <div class="card">
+                <h3>最近一月代�?</h3>
+                <div class="value" id="month">0</div>
+            </div>
+        </section>
+
+        <section class="panel" id="osPanel" style="display: none;">
+            <h3>操作系统分布</h3>
+            <ul class="distribution-list" id="osDistribution"></ul>
+        </section>
+
+        <section class="panel" id="archPanel" style="display: none;">
+            <h3>架构分布</h3>
+            <ul class="distribution-list" id="archDistribution"></ul>
+        </section>
+    </main>
+
+    <script>
+        document.getElementById('username').textContent = AdminAuth.getUsername();
+
+        function logout() {
+            if (confirm('确定要退出登录吗�?)) {
+                AdminAuth.logout();
+            }
+        }
+
+        function renderDistribution(containerId, data) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            if (!data || data.length === 0) {
+                const li = document.createElement('li');
+                li.className = 'distribution-item';
+                li.textContent = '未找到应有数据！';
+                container.appendChild(li);
+                return;
+            }
+            data.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'distribution-item';
+                li.innerHTML = `<span>${item.name || '-'} (${item.percent || '0%'})</span><span>${item.count || 0}</span>`;
+                container.appendChild(li);
+            });
+        }
+
+        async function loadStats() {
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const cards = document.getElementById('summaryCards');
+            const osPanel = document.getElementById('osPanel');
+            const archPanel = document.getElementById('archPanel');
+
+            loading.style.display = 'block';
+            error.style.display = 'none';
+            cards.style.display = 'none';
+            osPanel.style.display = 'none';
+            archPanel.style.display = 'none';
+
+            try {
+                const response = await AdminAuth.authFetch('/api/stats/query.php?type=stats');
+                const result = await response.json();
+                if (result.code !== 200) {
+                    throw new Error(result.message || '发送数据失�?');
+                }
+
+                const data = result.data || {};
+                document.getElementById('total').textContent = data.total || 0;
+                document.getElementById('today').textContent = data.today || 0;
+                document.getElementById('week').textContent = data.week || 0;
+                document.getElementById('month').textContent = data.month || 0;
+                cards.style.display = 'grid';
+
+                renderDistribution('osDistribution', data.by_os || []);
+                osPanel.style.display = 'block';
+                renderDistribution('archDistribution', data.by_arch || []);
+                archPanel.style.display = 'block';
+
+                loading.style.display = 'none';
+            } catch (err) {
+                loading.style.display = 'none';
+                error.style.display = 'block';
+                error.textContent = '加载失败: ' + err.message;
+            }
+        }
+
+        loadStats();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "servers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem", "."]
+    },
+    "shell": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-shell", "powershell"]
+    },
+    "git": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-git"]
+    },
+    "http": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-http"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "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"
+      }
+    },
+    "docker": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-docker"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-playwright"]
+    },
+    "chromium": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-chromium"]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>版本发布 - LingCDN</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="js/auth.js"></script>
+</head>
+<body data-require-auth="true">
+    <div class="auth-card redirect-card">
+        <h1>版本发布中心</h1>
+        <p>从这里进入新的版本管理面板，上传安装包、维护版本信息。</p>
+        <div class="stack">
+            <button class="btn btn-primary" onclick="location.href='dashboard.html?tab=versions'">打开版本中心</button>
+            <button class="btn btn-outline" onclick="AdminAuth.redirectToDashboard()">返回仪表盘</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+[2025-10-25 11:58:03] [INFO] 版本检查: admin v -> v1.0.2, needUpdate: NO
+[2025-10-25 12:44:17] [INFO] 删除版本: ID=1, admin v1.0.0
+[2025-10-25 12:44:20] [INFO] 删除版本: ID=6, admin v1.0.2
+[2025-10-25 12:44:23] [INFO] 删除版本: ID=4, admin v1.0.1
+[2025-10-25 12:44:25] [INFO] 删除版本: ID=3, api v1.0.0
+[2025-10-25 12:44:28] [INFO] 删除版本: ID=2, node v1.0.0
+[2025-10-25 13:17:01] [INFO] 版本检查: admin v1.0.0 -> v1.0.5, needUpdate: YES
+[2025-10-25 13:38:53] [INFO] 版本检查: admin v -> v1.0.5, needUpdate: NO
+[2025-10-25 13:40:21] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 14:15:42] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 16:19:04] [INFO] 删除版本: ID=1, admin v1.0.0
+[2025-10-25 16:19:08] [INFO] 删除版本: ID=3, api v1.0.0
+[2025-10-25 16:19:10] [INFO] 删除版本: ID=2, node v1.0.0
+[2025-10-25 16:19:20] [INFO] 删除版本: ID=10, api v1.0.1
+[2025-10-25 16:19:26] [INFO] 删除版本: ID=7, admin v1.0.5
+[2025-10-25 16:19:31] [INFO] 删除版本: ID=5, admin v1.0.3
+[2025-10-25 16:27:06] [INFO] 添加许可证: 9HD5-NLII-NGQT-QPIG-2FGW-YMSZ - 客户: 测试客户
+[2025-10-25 16:30:21] [INFO] 添加许可证: N9YH-FB7L-642N-F7IX-7V3X-LOFU - 客户: 123
+[2025-10-25 16:33:57] [ERROR] 查询统计异常: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'lingcdn.install_stats' doesn't exist
+[2025-10-25 16:34:27] [ERROR] 查询统计异常: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'lingcdn.install_stats' doesn't exist
+[2025-10-25 16:34:41] [ERROR] 查询统计异常: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'lingcdn.install_stats' doesn't exist
+[2025-10-25 16:34:57] [ERROR] 查询统计异常: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'lingcdn.install_stats' doesn't exist
+[2025-10-25 16:35:27] [ERROR] 查询统计异常: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'lingcdn.install_stats' doesn't exist
+[2025-10-25 16:43:45] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 16:45:30] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 16:45:47] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 16:46:27] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 16:46:34] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 16:46:42] [INFO] 安装统计: IP=154.201.73.121, OS=linux, ARCH=amd64, VERSION=1.0.3
+[2025-10-25 20:37:57] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 20:39:19] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 20:40:03] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 20:40:51] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 20:41:56] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 20:43:23] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 20:49:06] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 20:56:53] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 21:04:10] [INFO] 添加许可证: 50CR-QN3B-HMRW-VJFD-K5NI-FS6V - 客户: 自己
+[2025-10-25 21:30:32] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 21:38:32] [INFO] 更新许可证ID: 4
+[2025-10-25 21:53:12] [INFO] 更新许可证ID: 4
+[2025-10-25 21:54:34] [INFO] 更新许可证ID: 3
+[2025-10-25 21:56:30] [INFO] 更新许可证ID: 3
+[2025-10-25 22:05:12] [INFO] 添加许可证: MXIC-KBS5-U30Z-BB2H-KYH1-OWOX - 客户: 2
+[2025-10-25 23:22:59] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:23:35] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:48:27] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:49:07] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:51:33] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:53:32] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:53:33] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:53:41] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:54:40] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:54:52] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:55:02] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:55:12] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:56:00] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:56:14] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:57:00] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:58:40] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:59:29] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件
+[2025-10-25 23:59:41] [INFO] 版本列表查询: os=linux, arch=amd64, 找到 3 个组件

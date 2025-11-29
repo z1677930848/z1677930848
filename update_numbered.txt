@@ -1,0 +1,628 @@
+0001:#!/bin/bash
+0002:
+0003:# ==========================================
+0004:# LingCDN 一键更新脚�?# 域名: dl.lingcdn.cloud
+0005:# 支持组件: LingCDN Admin, API, Node
+0006:# ==========================================
+0007:
+0008:set -e
+0009:
+0010:# 颜色定义
+0011:RED='\033[0;31m'
+0012:GREEN='\033[0;32m'
+0013:YELLOW='\033[1;33m'
+0014:BLUE='\033[0;34m'
+0015:NC='\033[0m' # No Color
+0016:
+0017:# 配置变量
+0018:DOWNLOAD_HOST="http://dl.lingcdn.cloud"
+0019:API_VERSION_URL="${DOWNLOAD_HOST}/api/boot/versions"
+0020:INSTALL_DIR="/opt/lingcdn"
+0021:BACKUP_DIR="/opt/lingcdn/backups"
+0022:
+0023:# 打印带颜色的消息
+0024:print_info() {
+0025:    echo -e "${BLUE}[INFO]${NC} $1"
+0026:}
+0027:
+0028:print_success() {
+0029:    echo -e "${GREEN}[SUCCESS]${NC} $1"
+0030:}
+0031:
+0032:print_warning() {
+0033:    echo -e "${YELLOW}[WARNING]${NC} $1"
+0034:}
+0035:
+0036:print_error() {
+0037:    echo -e "${RED}[ERROR]${NC} $1"
+0038:}
+0039:
+0040:# 显示 Logo
+0041:show_logo() {
+0042:    cat << "EOF"
+0043:
+0044: ╔═══════════════════════════════════════�? �?                                      �? �?      LingCDN 一键更新脚�?            �? �?                                      �? �?      https://dl.lingcdn.cloud        �? �?                                      �? ╚═══════════════════════════════════════�?
+0045:EOF
+0046:}
+0047:
+0048:# 检查是否为 root 用户
+0049:check_root() {
+0050:    if [ "$EUID" -ne 0 ]; then
+0051:        print_error "请使�?root 权限运行此脚�?
+0052:        print_info "使用命令: sudo $0"
+0053:        exit 1
+0054:    fi
+0055:}
+0056:
+0057:# 检测操作系统和架构
+0058:detect_system() {
+0059:    print_info "检测系统信�?.."
+0060:
+0061:    OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+0062:    ARCH=$(uname -m)
+0063:
+0064:    case "$ARCH" in
+0065:        x86_64)
+0066:            ARCH="amd64"
+0067:            ;;
+0068:        aarch64|arm64)
+0069:            ARCH="arm64"
+0070:            ;;
+0071:        i386|i686)
+0072:            ARCH="386"
+0073:            ;;
+0074:        *)
+0075:            print_error "不支持的架构: $ARCH"
+0076:            exit 1
+0077:            ;;
+0078:    esac
+0079:
+0080:    print_success "系统: $OS, 架构: $ARCH"
+0081:}
+0082:
+0083:# 检查必要的命令
+0084:check_commands() {
+0085:    print_info "检查必要的工具..."
+0086:
+0087:    local commands=("curl" "tar")
+0088:    local missing=()
+0089:
+0090:    for cmd in "${commands[@]}"; do
+0091:        if ! command -v "$cmd" &> /dev/null; then
+0092:            missing+=("$cmd")
+0093:        fi
+0094:    done
+0095:
+0096:    if [ ${#missing[@]} -ne 0 ]; then
+0097:        print_warning "缺少以下工具: ${missing[*]}"
+0098:        print_info "正在安装..."
+0099:
+0100:        if command -v apt-get &> /dev/null; then
+0101:            apt-get update -qq
+0102:            apt-get install -y curl tar
+0103:        elif command -v yum &> /dev/null; then
+0104:            yum install -y curl tar
+0105:        else
+0106:            print_error "无法自动安装依赖，请手动安装: ${missing[*]}"
+0107:            exit 1
+0108:        fi
+0109:    fi
+0110:
+0111:    print_success "所有必要工具已就绪"
+0112:}
+0113:
+0114:# 检测已安装的组件及版本
+0115:detect_installed_components() {
+0116:    print_info "检测已安装的组�?.."
+0117:
+0118:    INSTALLED_COMPONENTS=()
+0119:
+0120:    # 检�?Admin
+0121:    if [ -f "${INSTALL_DIR}/bin/ling-admin" ]; then
+0122:        ADMIN_CURRENT_VERSION=$("${INSTALL_DIR}/bin/ling-admin" version 2>&1 | grep -oP 'v\K[0-9.]+' | head -1 || echo "unknown")
+0123:        INSTALLED_COMPONENTS+=("admin")
+0124:        print_success "检测到 LingCDN Admin v${ADMIN_CURRENT_VERSION}"
+0125:    fi
+0126:
+0127:    # 检�?API
+0128:    if [ -f "${INSTALL_DIR}/ling-api/bin/ling-api" ]; then
+0129:        API_CURRENT_VERSION=$("${INSTALL_DIR}/ling-api/bin/ling-api" version 2>&1 | grep -oP 'v\K[0-9.]+' | head -1 || echo "unknown")
+0130:        INSTALLED_COMPONENTS+=("api")
+0131:        print_success "检测到 LingCDN API v${API_CURRENT_VERSION}"
+0132:    fi
+0133:
+0134:    # 检�?Node
+0135:    if [ -f "${INSTALL_DIR}/ling-node/bin/ling-node" ] || [ -f "/usr/local/bin/ling-node" ]; then
+0136:        local node_bin="${INSTALL_DIR}/ling-node/bin/ling-node"
+0137:        [ ! -f "$node_bin" ] && node_bin="/usr/local/bin/ling-node"
+0138:
+0139:        NODE_CURRENT_VERSION=$("$node_bin" version 2>&1 | grep -oP 'v\K[0-9.]+' | head -1 || echo "unknown")
+0140:        INSTALLED_COMPONENTS+=("node")
+0141:        print_success "检测到 LingCDN Node v${NODE_CURRENT_VERSION}"
+0142:    fi
+0143:
+0144:    if [ ${#INSTALLED_COMPONENTS[@]} -eq 0 ]; then
+0145:        print_error "未检测到已安装的 LingCDN 组件"
+0146:        print_info "如果您是首次安装，请使用安装脚本:"
+0147:        print_info "curl -sSL http://dl.lingcdn.cloud/install.sh | bash"
+0148:        exit 1
+0149:    fi
+0150:
+0151:    echo ""
+0152:    print_info "已安装的组件: ${INSTALLED_COMPONENTS[*]}"
+0153:    echo ""
+0154:}
+0155:
+0156:# 获取最新版本信�?get_latest_version() {
+0157:    local component=$1
+0158:    print_info "正在获取 ${component} 最新版本信�?.."
+0159:
+0160:    local url="${API_VERSION_URL}?os=${OS}&arch=${ARCH}"
+0161:    local response=$(curl -s "$url")
+0162:
+0163:    if [ $? -ne 0 ]; then
+0164:        print_error "无法连接到服务器: $DOWNLOAD_HOST"
+0165:        exit 1
+0166:    fi
+0167:
+0168:    # 保存响应到临时文件以便多次读�?    local tmp_json=$(mktemp)
+0169:    echo "$response" > "$tmp_json"
+0170:
+0171:    # 解析 JSON - 优先使用jq，其次使用awk
+0172:    if command -v jq &> /dev/null; then
+0173:        VERSION=$(jq -r ".data.versions[] | select(.code==\"${component}\") | .version" "$tmp_json")
+0174:        local path=$(jq -r ".data.versions[] | select(.code==\"${component}\") | .url" "$tmp_json")
+0175:        DOWNLOAD_URL="${DOWNLOAD_HOST}${path}"
+0176:        FILE_MD5=$(jq -r ".data.versions[] | select(.code==\"${component}\") | .md5" "$tmp_json")
+0177:    else
+0178:        # 使用awk解析JSON
+0179:        local in_target=0
+0180:        while IFS= read -r line; do
+0181:            if echo "$line" | grep -q "\"code\".*:.*\"${component}\""; then
+0182:                in_target=1
+0183:            fi
+0184:
+0185:            if [ $in_target -eq 1 ]; then
+0186:                if echo "$line" | grep -q "\"version\""; then
+0187:                    VERSION=$(echo "$line" | awk -F'"' '{print $4}')
+0188:                elif echo "$line" | grep -q "\"url\""; then
+0189:                    local path=$(echo "$line" | awk -F'"' '{print $4}' | sed 's|\\/|/|g')
+0190:                    DOWNLOAD_URL="${DOWNLOAD_HOST}${path}"
+0191:                elif echo "$line" | grep -q "\"md5\""; then
+0192:                    FILE_MD5=$(echo "$line" | awk -F'"' '{print $4}')
+0193:                fi
+0194:
+0195:                if echo "$line" | grep -q "^[[:space:]]*}"; then
+0196:                    break
+0197:                fi
+0198:            fi
+0199:        done < "$tmp_json"
+0200:    fi
+0201:
+0202:    rm -f "$tmp_json"
+0203:
+0204:    if [ -z "$VERSION" ]; then
+0205:        print_error "未找到适用的版�?
+0206:        exit 1
+0207:    fi
+0208:
+0209:    print_success "最新版�? $VERSION"
+0210:}
+0211:
+0212:# 比较版本�?version_compare() {
+0213:    local ver1=$1
+0214:    local ver2=$2
+0215:
+0216:    # 移除 'v' 前缀
+0217:    ver1=${ver1#v}
+0218:    ver2=${ver2#v}
+0219:
+0220:    if [ "$ver1" = "$ver2" ]; then
+0221:        return 0
+0222:    fi
+0223:
+0224:    # 使用 sort -V 进行版本比较
+0225:    local higher=$(echo -e "$ver1\n$ver2" | sort -V | tail -n1)
+0226:
+0227:    if [ "$higher" = "$ver2" ]; then
+0228:        return 1  # ver2 > ver1, 需要更�?    else
+0229:        return 2  # ver1 > ver2, 无需更新
+0230:    fi
+0231:}
+0232:
+0233:# 检查是否需要更�?check_update_needed() {
+0234:    local component=$1
+0235:    local current_version=$2
+0236:    local latest_version=$3
+0237:
+0238:    print_info "版本对比: 当前 v${current_version} -> 最�?v${latest_version}"
+0239:
+0240:    version_compare "$current_version" "$latest_version"
+0241:    local result=$?
+0242:
+0243:    if [ $result -eq 0 ]; then
+0244:        print_success "${component} 已是最新版�?
+0245:        return 1
+0246:    elif [ $result -eq 1 ]; then
+0247:        print_warning "${component} 有新版本可用"
+0248:        return 0
+0249:    else
+0250:        print_info "${component} 当前版本高于线上版本，跳过更�?
+0251:        return 1
+0252:    fi
+0253:}
+0254:
+0255:# 创建备份
+0256:create_backup() {
+0257:    local component=$1
+0258:    print_info "创建备份..."
+0259:
+0260:    mkdir -p "${BACKUP_DIR}"
+0261:
+0262:    local timestamp=$(date +%Y%m%d_%H%M%S)
+0263:    local backup_file="${BACKUP_DIR}/ling-${component}-${timestamp}.tar.gz"
+0264:
+0265:    if [ "$component" = "admin" ]; then
+0266:        tar -czf "$backup_file" -C "${INSTALL_DIR}" bin/ling-admin web configs 2>/dev/null || \
+0267:        tar -czf "$backup_file" -C "${INSTALL_DIR}" bin/ling-admin web 2>/dev/null || \
+0268:        tar -czf "$backup_file" -C "${INSTALL_DIR}" bin/ling-admin 2>/dev/null
+0269:    elif [ "$component" = "api" ]; then
+0270:        tar -czf "$backup_file" -C "${INSTALL_DIR}" ling-api 2>/dev/null
+0271:    elif [ "$component" = "node" ]; then
+0272:        if [ -d "${INSTALL_DIR}/ling-node" ]; then
+0273:            tar -czf "$backup_file" -C "${INSTALL_DIR}" ling-node 2>/dev/null
+0274:        else
+0275:            tar -czf "$backup_file" -C "/usr/local/bin" ling-node 2>/dev/null
+0276:        fi
+0277:    fi
+0278:
+0279:    if [ -f "$backup_file" ]; then
+0280:        print_success "备份已创�? $backup_file"
+0281:    else
+0282:        print_warning "备份创建失败，但继续更新"
+0283:    fi
+0284:
+0285:    # 清理旧备份（保留最�?个）
+0286:    ls -t "${BACKUP_DIR}"/ling-${component}-*.tar.gz 2>/dev/null | tail -n +6 | xargs rm -f 2>/dev/null || true
+0287:}
+0288:
+0289:# 停止服务
+0290:stop_service() {
+0291:    local component=$1
+0292:    print_info "停止 ${component} 服务..."
+0293:
+0294:    local service_name="ling-${component}"
+0295:
+0296:    # 尝试通过 systemd 停止
+0297:    if systemctl list-unit-files | grep -q "^${service_name}.service"; then
+0298:        if systemctl is-active --quiet "$service_name" 2>/dev/null; then
+0299:            systemctl stop "$service_name"
+0300:            print_success "${component} 服务已通过 systemd 停止"
+0301:        else
+0302:            print_info "${component} systemd 服务未运�?
+0303:        fi
+0304:    else
+0305:        print_warning "${component} 未配�?systemd 服务"
+0306:    fi
+0307:
+0308:    # 额外检查：查找并停止直接运行的进程
+0309:    local process_count=$(ps aux | grep "ling-${component}" | grep -v grep | grep -v defunct | wc -l)
+0310:    if [ "$process_count" -gt 0 ]; then
+0311:        print_info "发现 ${process_count} �?${component} 进程正在运行，正在停�?.."
+0312:        pkill -9 "ling-${component}" 2>/dev/null || true
+0313:        sleep 2
+0314:        print_success "${component} 进程已停�?
+0315:    fi
+0316:}
+0317:
+0318:# 下载并安装组�?download_and_install() {
+0319:    local component=$1
+0320:    local component_name=$2
+0321:
+0322:    print_info "开始下�?${component_name} v${VERSION}..."
+0323:
+0324:    local tmp_dir=$(mktemp -d)
+0325:
+0326:    local file_ext=""
+0327:    if [[ "$DOWNLOAD_URL" == *.tar.gz ]]; then
+0328:        file_ext=".tar.gz"
+0329:    elif [[ "$DOWNLOAD_URL" == *.zip ]]; then
+0330:        file_ext=".zip"
+0331:    else
+0332:        file_ext=".zip"  # 默认使用 zip
+0333:    fi
+0334:
+0335:    local filename="ling-${component}-v${VERSION}-${OS}-${ARCH}${file_ext}"
+0336:    local download_file="${tmp_dir}/${filename}"
+0337:
+0338:    print_info "下载地址: $DOWNLOAD_URL"
+0339:
+0340:    if ! curl -L -o "$download_file" "$DOWNLOAD_URL" --progress-bar; then
+0341:        print_error "下载失败: $DOWNLOAD_URL"
+0342:        rm -rf "$tmp_dir"
+0343:        exit 1
+0344:    fi
+0345:
+0346:    print_success "下载完成"
+0347:
+0348:    # 验证 MD5
+0349:    if [ -n "$FILE_MD5" ] && [ "$FILE_MD5" != "null" ]; then
+0350:        local actual_md5=$(md5sum "$download_file" | awk '{print $1}')
+0351:        if [ "$actual_md5" != "$FILE_MD5" ]; then
+0352:            print_warning "MD5 校验失败！预�? $FILE_MD5, 实际: $actual_md5"
+0353:            print_warning "继续更新可能存在风险，但不中断更新流�?
+0354:        else
+0355:            print_success "MD5 校验通过"
+0356:        fi
+0357:    else
+0358:        print_info "跳过 MD5 校验"
+0359:    fi
+0360:
+0361:    # 解压
+0362:    print_info "正在解压..."
+0363:    if [[ "$file_ext" == ".tar.gz" ]]; then
+0364:        if ! tar -xzf "$download_file" -C "$tmp_dir"; then
+0365:            print_error "解压失败！文件可能已损坏"
+0366:            rm -rf "$tmp_dir"
+0367:            exit 1
+0368:        fi
+0369:    else
+0370:        if ! unzip -q "$download_file" -d "$tmp_dir"; then
+0371:            print_error "解压失败�?
+0372:            rm -rf "$tmp_dir"
+0373:            exit 1
+0374:        fi
+0375:    fi
+0376:
+0377:    print_success "解压完成"
+0378:
+0379:    # 安装文件
+0380:    print_info "正在安装到系�?.."
+0381:
+0382:    local install_path="${INSTALL_DIR}"
+0383:    if [ "$component" == "api" ]; then
+0384:        install_path="${INSTALL_DIR}/ling-api"
+0385:    elif [ "$component" == "node" ]; then
+0386:        install_path="${INSTALL_DIR}/ling-node"
+0387:    fi
+0388:
+0389:    mkdir -p "$install_path/bin"
+0390:
+0391:    # 查找并安装二进制文件
+0392:    local binary_file=$(find "$tmp_dir" -name "ling-${component}" -type f | head -1)
+0393:    if [ -z "$binary_file" ]; then
+0394:        binary_file=$(find "$tmp_dir" -name "sk-${component}" -type f | head -1)
+0395:    fi
+0396:    if [ -z "$binary_file" ]; then
+0397:        binary_file=$(find "$tmp_dir" -name "edge-${component}" -type f | head -1)
+0398:    fi
+0399:
+0400:    if [ -n "$binary_file" ]; then
+0401:        cp "$binary_file" "${install_path}/bin/ling-${component}"
+0402:        chmod +x "${install_path}/bin/ling-${component}"
+0403:        print_success "二进制文件已安装"
+0404:    else
+0405:        print_error "未找到二进制文件"
+0406:        rm -rf "$tmp_dir"
+0407:        exit 1
+0408:    fi
+0409:
+0410:    # 处理 web 目录 (Admin 需�?
+0411:    if [ "$component" == "admin" ]; then
+0412:        print_info "正在更新 web 视图文件..."
+0413:
+0414:        local web_dir=$(find "$tmp_dir" -type d -name "web" -path "*/web" | head -1)
+0415:
+0416:        if [ -n "$web_dir" ] && [ -d "$web_dir/views" ]; then
+0417:            rm -rf "${install_path}/web"
+0418:            cp -r "$web_dir" "${install_path}/"
+0419:            print_success "web 目录已更�?
+0420:        else
+0421:            print_warning "未找�?web 目录，跳�?
+0422:        fi
+0423:    fi
+0424:
+0425:    rm -rf "$tmp_dir"
+0426:    print_success "${component_name} 更新完成"
+0427:}
+0428:
+0429:# 启动服务
+0430:start_service() {
+0431:    local component=$1
+0432:    print_info "启动 ${component} 服务..."
+0433:
+0434:    local service_name="ling-${component}"
+0435:
+0436:    if systemctl list-unit-files | grep -q "^${service_name}.service"; then
+0437:        # 通过 systemd 启动
+0438:        if systemctl start "$service_name"; then
+0439:            sleep 3
+0440:            if systemctl is-active --quiet "$service_name"; then
+0441:                print_success "${component} 服务启动成功"
+0442:                return 0
+0443:            else
+0444:                print_error "${component} 服务启动失败"
+0445:                print_info "查看日志: journalctl -u ${service_name} -n 50"
+0446:                return 1
+0447:            fi
+0448:        else
+0449:            print_error "${component} 服务启动失败"
+0450:            return 1
+0451:        fi
+0452:    else
+0453:        # 如果没有 systemd 配置，尝试直接启�?        print_warning "${component} 未配�?systemd 服务，尝试直接启�?.."
+0454:
+0455:        local install_path="${INSTALL_DIR}"
+0456:        if [ "$component" == "api" ]; then
+0457:            install_path="${INSTALL_DIR}/ling-api"
+0458:        elif [ "$component" == "node" ]; then
+0459:            install_path="${INSTALL_DIR}/ling-node"
+0460:        fi
+0461:
+0462:        if [ -f "${install_path}/bin/ling-${component}" ]; then
+0463:            nohup "${install_path}/bin/ling-${component}" > "${install_path}/logs/ling-${component}.log" 2>&1 &
+0464:            sleep 3
+0465:
+0466:            # 检查进程是否启�?            if ps aux | grep "ling-${component}" | grep -v grep | grep -v defunct > /dev/null; then
+0467:                print_success "${component} 已直接启�?
+0468:                print_warning "建议配置 systemd 服务以便更好地管�?
+0469:                return 0
+0470:            else
+0471:                print_error "${component} 启动失败"
+0472:                return 1
+0473:            fi
+0474:        else
+0475:            print_error "未找�?${component} 二进制文�?
+0476:            return 1
+0477:        fi
+0478:    fi
+0479:}
+0480:
+0481:# 验证更新
+0482:verify_update() {
+0483:    local component=$1
+0484:    local expected_version=$2
+0485:
+0486:    print_info "验证更新结果..."
+0487:
+0488:    local installed_version=""
+0489:
+0490:    if [ "$component" = "admin" ]; then
+0491:        installed_version=$("${INSTALL_DIR}/bin/ling-admin" version 2>&1 | grep -oP 'v\K[0-9.]+' | head -1 || echo "unknown")
+0492:    elif [ "$component" = "api" ]; then
+0493:        installed_version=$("${INSTALL_DIR}/ling-api/bin/ling-api" version 2>&1 | grep -oP 'v\K[0-9.]+' | head -1 || echo "unknown")
+0494:    elif [ "$component" = "node" ]; then
+0495:        local node_bin="${INSTALL_DIR}/ling-node/bin/ling-node"
+0496:        [ ! -f "$node_bin" ] && node_bin="/usr/local/bin/ling-node"
+0497:        installed_version=$("$node_bin" version 2>&1 | grep -oP 'v\K[0-9.]+' | head -1 || echo "unknown")
+0498:    fi
+0499:
+0500:    if [ "$installed_version" = "$expected_version" ]; then
+0501:        print_success "更新验证成功: v${installed_version}"
+0502:        return 0
+0503:    else
+0504:        print_warning "版本验证异常: 预期 v${expected_version}, 实际 v${installed_version}"
+0505:        return 1
+0506:    fi
+0507:}
+0508:
+0509:# 更新单个组件
+0510:update_component() {
+0511:    local component=$1
+0512:    local current_version=$2
+0513:
+0514:    echo ""
+0515:    echo "=========================================="
+0516:    print_info "开始更�?${component}"
+0517:    echo "=========================================="
+0518:
+0519:    # 获取最新版�?    get_latest_version "$component"
+0520:
+0521:    # 检查是否需要更�?    if ! check_update_needed "$component" "$current_version" "$VERSION"; then
+0522:        return 0
+0523:    fi
+0524:
+0525:    # 创建备份
+0526:    create_backup "$component"
+0527:
+0528:    # 停止服务
+0529:    stop_service "$component"
+0530:
+0531:    # 下载并安�?    download_and_install "$component" "LingCDN ${component^}"
+0532:
+0533:    # 启动服务
+0534:    start_service "$component"
+0535:
+0536:    # 验证更新
+0537:    verify_update "$component" "$VERSION"
+0538:
+0539:    print_success "${component} 更新完成: v${current_version} -> v${VERSION}"
+0540:}
+0541:
+0542:# 显示更新摘要
+0543:show_summary() {
+0544:    echo ""
+0545:    echo "=========================================="
+0546:    print_success "更新完成�?
+0547:    echo "=========================================="
+0548:    echo ""
+0549:
+0550:    for component in "${INSTALLED_COMPONENTS[@]}"; do
+0551:        local service_name="ling-${component}"
+0552:        local status="未知"
+0553:
+0554:        # 检�?systemd 服务状�?        if systemctl list-unit-files 2>/dev/null | grep -q "^${service_name}.service"; then
+0555:            if systemctl is-active --quiet "$service_name" 2>/dev/null; then
+0556:                status="${GREEN}运行�?{NC}"
+0557:            else
+0558:                status="${RED}已停�?{NC}"
+0559:            fi
+0560:        else
+0561:            # 如果没有 systemd，检查进�?            if ps aux | grep "ling-${component}" | grep -v grep | grep -v defunct > /dev/null 2>&1; then
+0562:                status="${GREEN}运行�?{NC}"
+0563:            else
+0564:                status="${RED}已停�?{NC}"
+0565:            fi
+0566:        fi
+0567:
+0568:        echo -e "${component^}: ${status}"
+0569:    done
+0570:
+0571:    echo ""
+0572:    echo "服务管理命令:"
+0573:    echo "  查看状�? systemctl status ling-admin"
+0574:    echo "  重启服务: systemctl restart ling-admin"
+0575:    echo "  查看日志: journalctl -u ling-admin -f"
+0576:    echo ""
+0577:    echo "备份目录: ${BACKUP_DIR}"
+0578:    echo ""
+0579:    echo "=========================================="
+0580:}
+0581:
+0582:# 上报更新统计
+0583:report_update() {
+0584:    curl -s -X POST "${DOWNLOAD_HOST}/api/stats/update.php" \
+0585:        -d "os=${OS}" \
+0586:        -d "arch=${ARCH}" \
+0587:        -d "components=${INSTALLED_COMPONENTS[*]}" \
+0588:        -d "update_type=script" \
+0589:        --max-time 3 &>/dev/null || true
+0590:}
+0591:
+0592:# 主函�?main() {
+0593:    show_logo
+0594:    check_root
+0595:    detect_system
+0596:    check_commands
+0597:    detect_installed_components
+0598:
+0599:    echo ""
+0600:    print_info "准备更新 LingCDN 组件..."
+0601:    echo ""
+0602:
+0603:    # 更新每个已安装的组件
+0604:    for component in "${INSTALLED_COMPONENTS[@]}"; do
+0605:        if [ "$component" = "admin" ]; then
+0606:            update_component "admin" "$ADMIN_CURRENT_VERSION"
+0607:        elif [ "$component" = "api" ]; then
+0608:            update_component "api" "$API_CURRENT_VERSION"
+0609:        elif [ "$component" = "node" ]; then
+0610:            update_component "node" "$NODE_CURRENT_VERSION"
+0611:        fi
+0612:    done
+0613:
+0614:    # 上报更新统计
+0615:    report_update
+0616:
+0617:    # 显示摘要
+0618:    show_summary
+0619:
+0620:    echo ""
+0621:    print_success "感谢使用 LingCDN�?
+0622:    echo ""
+0623:}
+0624:
+0625:# 错误处理
+0626:trap 'print_error "更新过程中出现错误，请检查日�?; exit 1' ERR
+0627:
+0628:# 执行主函�?main "$@"

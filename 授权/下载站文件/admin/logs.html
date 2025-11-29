@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>授权日志 - LingCDN</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="js/auth.js"></script>
+</head>
+<body data-require-auth="true">
+    <div class="auth-card redirect-card">
+        <h1>授权日志控制台</h1>
+        <p>所有授权请求、状态过滤和时间筛选都已整合在新的仪表盘里。</p>
+        <div class="stack">
+            <button class="btn btn-primary" onclick="location.href='dashboard.html?tab=logs'">查看授权日志</button>
+            <button class="btn btn-outline" onclick="AdminAuth.redirectToDashboard()">返回仪表盘</button>
+        </div>
+    </div>
+</body>
+</html>

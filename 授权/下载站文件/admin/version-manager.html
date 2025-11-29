@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>版本管理工具 - LingCDN</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="js/auth.js"></script>
+</head>
+<body data-require-auth="true">
+    <div class="auth-card redirect-card">
+        <h1>版本管理工具</h1>
+        <p>旧版版本管理页已经下线，所有功能均集中在“版本中心”面板。</p>
+        <div class="stack">
+            <button class="btn btn-primary" onclick="location.href='dashboard.html?tab=versions'">前往版本中心</button>
+            <button class="btn btn-outline" onclick="AdminAuth.redirectToDashboard()">回到仪表盘</button>
+        </div>
+    </div>
+</body>
+</html>
