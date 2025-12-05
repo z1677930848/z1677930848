@@ -40,7 +40,7 @@
           <ReloadOutlined />
         </n-icon>
       </div>
-      <!-- 面包�?-->
+      <!-- 面包�?-->
       <n-breadcrumb v-if="crumbsSetting.show">
         <template v-for="routeItem in breadcrumbList" :key="routeItem.name">
           <n-breadcrumb-item>
@@ -135,7 +135,7 @@
         </n-tooltip>
       </div>
 
-      <!-- 国际�?-->
+      <!-- 国际�?-->
       <div
         class="layout-header-trigger layout-header-trigger-min"
         v-if="userStore.loginConfig?.i18nSwitch"
@@ -338,13 +338,14 @@
       const doLogout = () => {
         dialog.info({
           title: '提示',
-          content: '您确定要注销登录�?,
+          content: '您确定要注销登录吗？',
           positiveText: '确定',
           negativeText: '取消',
           onPositiveClick: () => {
             userStore.logout().then(() => {
               message.success('成功注销登录');
-              // 移除标签�?              localStorage.removeItem(TABS_ROUTES);
+              // 移除标签页
+              localStorage.removeItem(TABS_ROUTES);
               router
                 .replace({
                   name: 'Login',
