@@ -103,9 +103,9 @@ jobs:
           path: dist/*.zip
           if-no-files-found: warn
 
-  # ARM64 构建 - 在 ARM64 runner 上原生编译
+  # ARM64 构建 - 使用交叉编译（私有仓库不支持 ARM64 runner）
   build-arm64:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -117,10 +117,10 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
-      - name: Install dependencies
+      - name: Install cross-compilation dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y zip unzip gcc g++ build-essential
+          sudo apt-get install -y zip unzip gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 
       - name: Extract version from tag
         id: version
@@ -130,25 +130,32 @@ jobs:
         working-directory: EdgeCommon
         run: go mod tidy
 
-      - name: Build Lingnode
+      - name: Build Lingnode (ARM64)
         working-directory: Lingnode-master/build
+        env:
+          CC: aarch64-linux-gnu-gcc
+          CXX: aarch64-linux-gnu-g++
         run: |
           chmod +x build.sh
           ./build.sh linux arm64 community
 
-      - name: Build Lingapi
+      - name: Build Lingapi (ARM64)
         working-directory: Lingapi-master/build
         env:
           EDGENODE_PATH: ${{ github.workspace }}/Lingnode-master
+          CC: aarch64-linux-gnu-gcc
+          CXX: aarch64-linux-gnu-g++
         run: |
           chmod +x build.sh
           ./build.sh linux arm64 community
 
-      - name: Build Lingadmin
+      - name: Build Lingadmin (ARM64)
         working-directory: Lingadmin-master/build
         env:
           EDGEAPI_PATH: ${{ github.workspace }}/Lingapi-master
           EDGENODE_PATH: ${{ github.workspace }}/Lingnode-master
+          CC: aarch64-linux-gnu-gcc
+          CXX: aarch64-linux-gnu-g++
         run: |
           chmod +x build.sh
           ./build.sh linux arm64 community
