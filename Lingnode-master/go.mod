@@ -1,6 +1,6 @@
 module github.com/TeaOSLab/EdgeNode
 
-go 1.22
+go 1.25
 
 replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 

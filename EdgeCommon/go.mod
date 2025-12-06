@@ -1,6 +1,6 @@
 module github.com/TeaOSLab/EdgeCommon
 
-go 1.22
+go 1.25
 
 require (
 	github.com/iwind/TeaGo v0.0.0-20240508072741-7647e70b7070

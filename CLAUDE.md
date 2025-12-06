@@ -32,7 +32,7 @@ Lingcdn 是一个 CDN 系统，包含四个核心组件，通过 gRPC 进行通�
 
 ## 构建命令
 
-**前置要求：** Go 1.22+、bash (WSL/Linux/macOS)、zip、unzip
+**前置要求：** Go 1.25+、bash (WSL/Linux/macOS)、zip、unzip
 
 ```bash
 # 构建边缘节点 (输出: dist/ling-node-linux-amd64-v*.zip)

@@ -1,6 +1,6 @@
 module github.com/TeaOSLab/EdgeAdmin
 
-go 1.22
+go 1.25
 
 // 注意: EdgeCommon 依赖需要在父目录中克隆
 // git clone https://github.com/TeaOSLab/EdgeCommon.git ../EdgeCommon

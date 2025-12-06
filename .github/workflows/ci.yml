@@ -7,7 +7,7 @@ on:
     branches: [ main, master ]
 
 env:
-  GO_VERSION: '1.22'
+  GO_VERSION: '1.25'
 
 jobs:
   build:
@@ -35,7 +35,7 @@ jobs:
         path: |
           ~/.cache/go-build
           ${{ steps.goenv.outputs.gomod }}
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        key: ${{ runner.os }}-go-${{ hashFiles('EdgeCommon/go.sum', 'Lingadmin-master/go.sum', 'Lingapi-master/go.sum', 'Lingnode-master/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-
 
