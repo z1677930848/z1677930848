@@ -45,4 +45,7 @@ type RPCClient interface {
 	ACMEUserRPC() pb.ACMEUserServiceClient
 	ACMETaskRPC() pb.ACMETaskServiceClient
 	UserRPC() pb.UserServiceClient
+	UserTicketRPC() pb.UserTicketServiceClient
+	UserTicketCategoryRPC() pb.UserTicketCategoryServiceClient
+	UserTicketLogRPC() pb.UserTicketLogServiceClient
 }

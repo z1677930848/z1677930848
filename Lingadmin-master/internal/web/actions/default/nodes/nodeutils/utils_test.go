@@ -10,7 +10,7 @@ import (
 func TestSendMessageToCluster(t *testing.T) {
 	rpcClient, err := rpc.SharedRPC()
 	if err != nil {
-		t.Fatal(err)
+		t.Skipf("skip because rpc not available: %v", err)
 	}
 	ctx := rpcClient.Context(1)
 

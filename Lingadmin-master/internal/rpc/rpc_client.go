@@ -395,6 +395,18 @@ func (this *RPCClient) UserRPC() pb.UserServiceClient {
 	return pb.NewUserServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) UserTicketRPC() pb.UserTicketServiceClient {
+	return pb.NewUserTicketServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) UserTicketCategoryRPC() pb.UserTicketCategoryServiceClient {
+	return pb.NewUserTicketCategoryServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) UserTicketLogRPC() pb.UserTicketLogServiceClient {
+	return pb.NewUserTicketLogServiceClient(this.pickConn())
+}
+
 func (this *RPCClient) UserAccessKeyRPC() pb.UserAccessKeyServiceClient {
 	return pb.NewUserAccessKeyServiceClient(this.pickConn())
 }

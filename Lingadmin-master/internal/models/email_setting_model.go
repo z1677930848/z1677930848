@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
 	"github.com/iwind/TeaGo/dbs"
 )
@@ -18,7 +19,12 @@ type EmailSettingModel struct {
 }
 
 func (m *EmailSettingModel) Get() (*EmailSettingModel, error) {
-	one, err := dbs.Default().
+	db, err := dbs.Default()
+	if err != nil {
+		return nil, err
+	}
+	one, err := dbs.NewQuery(nil).
+		DB(db).
 		Table("email_settings").
 		Where("is_enabled=1").
 		Find()
@@ -32,10 +38,15 @@ func (m *EmailSettingModel) Get() (*EmailSettingModel, error) {
 }
 
 func (m *EmailSettingModel) Save() error {
-	_, err := dbs.Default().
+	db, err := dbs.Default()
+	if err != nil {
+		return err
+	}
+	_, err = dbs.NewQuery(nil).
+		DB(db).
 		Table("email_settings").
-		Where("id=?", m.Id).
-		Update(map[string]interface{}{
+		Where(fmt.Sprintf("id=%d", m.Id)).
+		Sets(map[string]any{
 			"smtp_host":     m.SmtpHost,
 			"smtp_port":     m.SmtpPort,
 			"smtp_username": m.SmtpUsername,
@@ -43,14 +54,20 @@ func (m *EmailSettingModel) Save() error {
 			"from_email":    m.FromEmail,
 			"from_name":     m.FromName,
 			"use_tls":       m.UseTLS,
-		})
+		}).
+		Update()
 	return err
 }
 
 func (m *EmailSettingModel) Create() error {
-	_, err := dbs.Default().
+	db, err := dbs.Default()
+	if err != nil {
+		return err
+	}
+	_, err = dbs.NewQuery(nil).
+		DB(db).
 		Table("email_settings").
-		Insert(map[string]interface{}{
+		Sets(map[string]any{
 			"smtp_host":     m.SmtpHost,
 			"smtp_port":     m.SmtpPort,
 			"smtp_username": m.SmtpUsername,
@@ -59,7 +76,8 @@ func (m *EmailSettingModel) Create() error {
 			"from_name":     m.FromName,
 			"use_tls":       m.UseTLS,
 			"is_enabled":    1,
-		})
+		}).
+		Insert()
 	return err
 }
 

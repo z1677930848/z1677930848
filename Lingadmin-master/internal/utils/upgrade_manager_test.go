@@ -4,11 +4,16 @@ package utils_test
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
+	"os/exec"
 	"testing"
 	"time"
 )
 
 func TestNewUpgradeManager(t *testing.T) {
+	if _, err := exec.LookPath("unzip"); err != nil {
+		t.Skipf("skip because unzip not available: %v", err)
+	}
+
 	var manager = utils.NewUpgradeManager("admin")
 
 	var ticker = time.NewTicker(2 * time.Second)

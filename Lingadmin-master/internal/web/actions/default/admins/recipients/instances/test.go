@@ -68,12 +68,12 @@ func (this *TestAction) RunPost(params struct {
 		Gt(0, "请选择正确的媒介")
 
 	resp, err := this.RPC().MessageTaskRPC().CreateMessageTask(this.AdminContext(), &pb.CreateMessageTaskRequest{
-		RecipientId: 0,
-		InstanceId:  params.InstanceId,
-		User:        params.User,
-		Subject:     params.Subject,
-		Body:        params.Body,
-		IsPrimary:   true,
+		MessageRecipientId:     0,
+		MessageMediaInstanceId: params.InstanceId,
+		User:                   params.User,
+		Subject:                params.Subject,
+		Body:                   params.Body,
+		IsPrimary:              true,
 	})
 	if err != nil {
 		this.ErrorPage(err)
