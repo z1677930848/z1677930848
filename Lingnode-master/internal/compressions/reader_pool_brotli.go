@@ -15,7 +15,6 @@ func init() {
 		return
 	}
 
-
 	sharedBrotliReaderPool = NewReaderPool(CalculatePoolSize(), func(reader io.Reader) (Reader, error) {
 		return newBrotliReader(reader)
 	})

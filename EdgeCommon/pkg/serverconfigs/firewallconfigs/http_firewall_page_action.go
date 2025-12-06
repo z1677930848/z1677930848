@@ -1,4 +1,4 @@
-﻿// Copyright 2024 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
+// Copyright 2024 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved. Official site: https://lingcdn.cloud .
 
 package firewallconfigs
 

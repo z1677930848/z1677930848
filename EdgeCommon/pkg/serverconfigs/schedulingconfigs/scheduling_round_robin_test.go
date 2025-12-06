@@ -28,7 +28,7 @@ func TestRoundRobinScheduling_Next(t *testing.T) {
 
 	t.Log(s.currentWeights)
 
-	for i := 0; i < 100; i ++ {
+	for i := 0; i < 100; i++ {
 		t.Log("===", "round", i, "===")
 		t.Log(s.Next(nil))
 		t.Log(s.currentWeights)
@@ -54,7 +54,7 @@ func TestRoundRobinScheduling_Two(t *testing.T) {
 
 	t.Log(s.currentWeights)
 
-	for i := 0; i < 100; i ++ {
+	for i := 0; i < 100; i++ {
 		t.Log("===", "round", i, "===")
 		t.Log(s.Next(nil))
 		t.Log(s.currentWeights)
@@ -92,9 +92,9 @@ func TestRoundRobinScheduling_NextPerformance(t *testing.T) {
 	for _, c := range s.Candidates {
 		hits[c.(*TestCandidate).Name] = 0
 	}
-	for i := 0; i < 100*10000; i ++ {
+	for i := 0; i < 100*10000; i++ {
 		c := s.Next(nil)
-		hits[c.(*TestCandidate).Name] ++
+		hits[c.(*TestCandidate).Name]++
 	}
 
 	t.Log(hits)

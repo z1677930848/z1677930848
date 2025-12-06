@@ -11,5 +11,3 @@ func TestUnicodeDecodeFilter_Do(t *testing.T) {
 	t.Logf("%x", "/dashboard")
 	t.Log(filter.Do("\x2f\x64\x61\x73\x68\x62\x6f\x61\x72\x64", nil))
 }
-
-

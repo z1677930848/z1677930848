@@ -1,4 +1,4 @@
-﻿// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
+// Copyright 2022 Lingcdn CDN Lingcdn.cdn@gmail.com. All rights reserved.
 
 package ddosconfigs
 

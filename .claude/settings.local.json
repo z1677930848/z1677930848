@@ -20,7 +20,9 @@
       "Bash(cat:*)",
       "Bash(find:*)",
       "Bash(git checkout:*)",
-      "Bash(ssh-keygen:*)"
+      "Bash(ssh-keygen:*)",
+      "Bash(bash:*)",
+      "Bash(pacman -S:*)"
     ],
     "deny": [],
     "ask": []

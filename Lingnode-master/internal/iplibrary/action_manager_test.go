@@ -38,10 +38,9 @@ func TestActionManager_UpdateActions(t *testing.T) {
 			},
 		},
 		{
-			Id:   2,
-			Type: "iptables",
-			Params: maps.Map{
-			},
+			Id:     2,
+			Type:   "iptables",
+			Params: maps.Map{},
 		},
 	})
 

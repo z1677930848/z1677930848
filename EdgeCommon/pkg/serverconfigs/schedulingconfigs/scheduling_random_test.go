@@ -52,7 +52,7 @@ func TestRandomScheduling_Next(t *testing.T) {
 	var locker sync.Mutex
 	var wg = sync.WaitGroup{}
 	wg.Add(100 * 10000)
-	for i := 0; i < 100*10000; i ++ {
+	for i := 0; i < 100*10000; i++ {
 		go func() {
 			defer wg.Done()
 
@@ -60,7 +60,7 @@ func TestRandomScheduling_Next(t *testing.T) {
 
 			locker.Lock()
 			defer locker.Unlock()
-			hits[c.(*TestCandidate).Name] ++
+			hits[c.(*TestCandidate).Name]++
 		}()
 	}
 	wg.Wait()

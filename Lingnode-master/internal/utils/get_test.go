@@ -4,9 +4,9 @@ import "testing"
 
 func TestGetStruct(t *testing.T) {
 	object := struct {
-		Name  string
-		Age   int
-		Books []string
+		Name   string
+		Age    int
+		Books  []string
 		Extend struct {
 			Location struct {
 				City string

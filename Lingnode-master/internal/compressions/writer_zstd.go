@@ -29,8 +29,8 @@ func newZSTDWriter(writer io.Writer) (Writer, error) {
 	}
 
 	return &ZSTDWriter{
-		writer:    zstdWriter,
-		level:     level,
+		writer: zstdWriter,
+		level:  level,
 	}, nil
 }
 

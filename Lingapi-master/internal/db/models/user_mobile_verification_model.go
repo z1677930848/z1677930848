@@ -3,7 +3,7 @@ package models
 import "github.com/iwind/TeaGo/dbs"
 
 const (
-	UserMobileVerificationField_Id dbs.FieldName = "id"         // ID
+	UserMobileVerificationField_Id         dbs.FieldName = "id"         // ID
 	UserMobileVerificationField_Mobile     dbs.FieldName = "mobile"     // 手机号码
 	UserMobileVerificationField_UserId     dbs.FieldName = "userId"     // 用户ID
 	UserMobileVerificationField_Code       dbs.FieldName = "code"       // 激活码

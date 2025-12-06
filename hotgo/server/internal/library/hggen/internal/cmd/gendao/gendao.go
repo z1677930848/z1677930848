@@ -147,7 +147,7 @@ func doGenDaoForArray(ctx context.Context, index int, in CGenDaoInput) {
 	if in.genItems == nil {
 		in.genItems = newCGenDaoInternalGenItems()
 	}
-	
+
 	var (
 		err error
 		db  gdb.DB

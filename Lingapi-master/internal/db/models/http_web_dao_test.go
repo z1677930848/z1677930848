@@ -141,4 +141,3 @@ func TestHTTPWebDAO_FindEnabledWebIdWithWebsocket(t *testing.T) {
 	}
 	t.Log("webId:", webId)
 }
-

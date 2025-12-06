@@ -244,8 +244,8 @@ func (s *sAdminMenu) LoginPermissions(ctx context.Context, memberId int64) (list
 	var (
 		allPermissions []*Permissions
 		mod            = dao.AdminMenu.Ctx(ctx).Fields(dao.AdminMenu.Columns().Permissions).
-			Where(dao.AdminMenu.Columns().Status, consts.StatusEnabled).
-			WhereNot(dao.AdminMenu.Columns().Permissions, "")
+				Where(dao.AdminMenu.Columns().Status, consts.StatusEnabled).
+				WhereNot(dao.AdminMenu.Columns().Permissions, "")
 	)
 
 	// 非超管验证允许的菜单列表

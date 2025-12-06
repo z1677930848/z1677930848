@@ -42,7 +42,6 @@ func TestLimitString(t *testing.T) {
 	a.IsTrue(utils.LimitString("中文测试", 3) == "中")
 }
 
-
 func TestSplitKeywordArgs(t *testing.T) {
 	{
 		var keyword = ""

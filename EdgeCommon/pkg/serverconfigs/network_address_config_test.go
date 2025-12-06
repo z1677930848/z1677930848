@@ -55,7 +55,6 @@ func TestNetworkAddressConfig_FullAddresses(t *testing.T) {
 		t.Log(addr.FullAddresses())
 	}
 
-
 	{
 		addr := &NetworkAddressConfig{
 			Protocol:  "http",

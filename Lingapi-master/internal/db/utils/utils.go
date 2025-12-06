@@ -201,7 +201,7 @@ func StartLocalMySQL() {
 			mysqldSafeFiles = append(mysqldSafeFiles, path)
 		}
 	}
-	
+
 	for _, mysqldSafeFile := range mysqldSafeFiles {
 		_, err := os.Stat(mysqldSafeFile)
 		if err == nil {

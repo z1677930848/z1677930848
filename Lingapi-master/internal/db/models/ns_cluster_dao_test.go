@@ -8,7 +8,6 @@ import (
 	"github.com/iwind/TeaGo/dbs"
 )
 
-
 func TestNSClusterDAO_DisableNodeCluster(t *testing.T) {
 	dbs.NotifyReady()
 

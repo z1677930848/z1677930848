@@ -54,16 +54,16 @@ func main() {
 	app.On("reset", func() {
 		err := configs.ResetAPIConfig()
 		if err != nil {
-		fmt.Println("[ERROR]reset failed: " + err.Error())
-		return
-	}
+			fmt.Println("[ERROR]reset failed: " + err.Error())
+			return
+		}
 
-	// reset local ap
-	var apiNodeExe = Tea.Root + "/sk-api/bin/sk-api"
-	_, err = os.Stat(apiNodeExe)
-	if err != nil && os.IsNotExist(err) {
-		//
-		apiNodeExe = Tea.Root + "/edge-api/bin/edge-api"
+		// reset local ap
+		var apiNodeExe = Tea.Root + "/sk-api/bin/sk-api"
+		_, err = os.Stat(apiNodeExe)
+		if err != nil && os.IsNotExist(err) {
+			//
+			apiNodeExe = Tea.Root + "/edge-api/bin/edge-api"
 			_, err = os.Stat(apiNodeExe)
 		}
 		if err == nil {

@@ -43,4 +43,3 @@ func (this *Node) handlePanic() {
 		logs.Println("NODE", "write to 'panic.log' failed: "+err.Error())
 	}
 }
-

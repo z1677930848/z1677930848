@@ -291,7 +291,6 @@ func TestUpgradeSQLData_v1_2_10(t *testing.T) {
 	t.Log("ok")
 }
 
-
 func TestUpgradeSQLData_v1_3_2(t *testing.T) {
 	db, err := dbs.NewInstanceFromConfig(&dbs.DBConfig{
 		Driver: "mysql",

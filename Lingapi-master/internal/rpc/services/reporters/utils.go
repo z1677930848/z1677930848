@@ -39,4 +39,3 @@ func validateClient(tx *dbs.Tx, nodeId int64, ctx context.Context) error {
 	}
 	return errors.New("client was not allowed")
 }
-

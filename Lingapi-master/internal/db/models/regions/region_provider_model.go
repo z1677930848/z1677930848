@@ -14,7 +14,7 @@ const (
 
 // RegionProvider 区域-运营商
 type RegionProvider struct {
-	Id1          uint32   `field:"id"`          // ID
+	Id1         uint32   `field:"id"`          // ID
 	ValueId     uint32   `field:"valueId"`     // 实际ID
 	Name        string   `field:"name"`        // 名称
 	Codes       dbs.JSON `field:"codes"`       // 代号

@@ -896,7 +896,7 @@ func (l *gCurd) generateSqlContent(ctx context.Context, in *CurdPreviewInput) (e
 			"menuTable":     config.Prefix + "admin_menu",
 			"mainComponent": "LAYOUT",
 		}
-		genFile     = new(sysin.GenFile)
+		genFile      = new(sysin.GenFile)
 		templateName = "source.sql.template"
 	)
 

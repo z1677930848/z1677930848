@@ -16,7 +16,7 @@ const (
 
 // RegionCity 区域-城市
 type RegionCity struct {
-	Id1          uint32   `field:"id"`          // ID
+	Id1         uint32   `field:"id"`          // ID
 	ValueId     uint32   `field:"valueId"`     // 实际ID
 	ProvinceId  uint32   `field:"provinceId"`  // 省份ID
 	Name        string   `field:"name"`        // 名称

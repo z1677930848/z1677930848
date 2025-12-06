@@ -120,7 +120,7 @@ func (this *DNSTaskService) DeleteDNSTask(ctx context.Context, req *pb.DeleteDNS
 }
 
 // DeleteAllDNSTasks 删除所有同步任务
-func (this *DNSTaskService)  DeleteAllDNSTasks(ctx context.Context, req *pb.DeleteAllDNSTasksRequest)  (*pb.RPCSuccess, error) {
+func (this *DNSTaskService) DeleteAllDNSTasks(ctx context.Context, req *pb.DeleteAllDNSTasksRequest) (*pb.RPCSuccess, error) {
 	_, err := this.ValidateAdmin(ctx)
 	if err != nil {
 		return nil, err

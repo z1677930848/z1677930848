@@ -7,8 +7,8 @@ package form
 
 // Sorter 排序器，兼容naiveUI
 type Sorter struct {
-	ColumnKey string `json:"columnKey"  dc:"排序字段"`
-	Order interface{} `json:"order"      dc:"排序方式 descend|ascend|false"`
+	ColumnKey string      `json:"columnKey"  dc:"排序字段"`
+	Order     interface{} `json:"order"      dc:"排序方式 descend|ascend|false"`
 }
 
 type Sorters struct {

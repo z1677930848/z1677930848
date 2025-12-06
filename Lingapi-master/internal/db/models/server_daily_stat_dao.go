@@ -140,7 +140,6 @@ func (this *ServerDailyStatDAO) SaveStats(tx *dbs.Tx, stats []*pb.ServerDailySta
 	return nil
 }
 
-
 // SumCurrentDailyStat 查找当前时刻的数据统计
 func (this *ServerDailyStatDAO) SumCurrentDailyStat(tx *dbs.Tx, serverId int64) (*ServerDailyStat, error) {
 	var day = timeutil.Format("Ymd")
