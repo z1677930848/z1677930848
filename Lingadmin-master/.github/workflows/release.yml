@@ -22,6 +22,11 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gcc
+
       - name: Get tag
         id: get_tag
         run: echo "RELEASE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT

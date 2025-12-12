@@ -8,19 +8,19 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 print_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    echo -e "${BLUE}[INFO]${NC} $1" >&2
 }
 
 print_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
+    echo -e "${GREEN}[SUCCESS]${NC} $1" >&2
 }
 
 print_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+    echo -e "${YELLOW}[WARNING]${NC} $1" >&2
 }
 
 print_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
+    echo -e "${RED}[ERROR]${NC} $1" >&2
 }
 
 handle_error() {
@@ -394,7 +394,12 @@ install_from_package() {
     mkdir -p "$install_path/bin"
 
     local binary
-    binary=$(find "$tmp_dir" -type f \( -name "ling-${component}" -o -name "edge-${component}" -o -name "sk-${component}" \) | head -1)
+    if [ "$component" = "admin" ]; then
+        # admin 组件可能使用 lingcdnadmin 或 ling-admin 作为二进制文件名
+        binary=$(find "$tmp_dir" -type f \( -name "lingcdnadmin" -o -name "ling-admin" -o -name "edge-admin" -o -name "sk-admin" \) | head -1)
+    else
+        binary=$(find "$tmp_dir" -type f \( -name "ling-${component}" -o -name "edge-${component}" -o -name "sk-${component}" \) | head -1)
+    fi
     if [ -z "$binary" ]; then
         print_error "unable to locate binary for ${component}"
         rm -rf "$tmp_dir"

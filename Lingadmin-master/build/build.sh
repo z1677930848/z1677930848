@@ -119,6 +119,13 @@ function build() {
 	echo "building ${NAME} ..."
 	env GOOS="$OS" GOARCH="$ARCH" CGO_ENABLED=1 go build -trimpath -tags $TAG -ldflags="-s -w" -o "$DIST"/bin/${NAME} "$ROOT"/../cmd/lingcdnadmin/main.go
 
+	# 检查二进制文件是否成功生成
+	if [ ! -f "$DIST"/bin/${NAME} ]; then
+		echo "error: failed to build ${NAME} binary"
+		exit 1
+	fi
+	echo "binary built successfully: $DIST/bin/${NAME}"
+
 	# delete hidden files
 	find "$DIST" -name ".DS_Store" -delete
 	find "$DIST" -name ".gitignore" -delete

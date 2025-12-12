@@ -42,7 +42,7 @@ jobs:
     - name: Install tools
       run: |
         sudo apt-get update
-        sudo apt-get install -y zip unzip
+        sudo apt-get install -y zip unzip build-essential gcc
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
