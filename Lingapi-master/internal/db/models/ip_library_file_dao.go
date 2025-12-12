@@ -364,7 +364,7 @@ func (this *IPLibraryFileDAO) GenerateIPLibrary(tx *dbs.Tx, libraryFileId int64)
 	}
 
 	// 城市
-	dbCities, err := regions.SharedRegionCityDAO.FindAllEnabledCities(tx)
+	dbCities, err := regions.SharedRegionCityDAO.FindAllEnabledCities(nil)
 	if err != nil {
 		return err
 	}
@@ -372,7 +372,7 @@ func (this *IPLibraryFileDAO) GenerateIPLibrary(tx *dbs.Tx, libraryFileId int64)
 	var cities = []*iplibrary.City{}
 	for _, city := range dbCities {
 		cities = append(cities, &iplibrary.City{
-			Id:    city.ValueId,
+			Id:    uint32(city.ValueId),
 			Name:  city.DisplayName(),
 			Codes: city.AllCodes(),
 		})

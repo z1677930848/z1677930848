@@ -1,63 +1,57 @@
 package posts
 
 import (
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/iwind/TeaGo/Tea"
-	"github.com/iwind/TeaGo/dbs"
+	"github.com/TeaOSLab/EdgeAPI/internal/infra/db"
+	"gorm.io/gorm"
 )
 
 const (
-	PostStateEnabled  = 1 // 已启用
-	PostStateDisabled = 0 // 已禁用
+	PostStateEnabled  = 1
+	PostStateDisabled = 0
 )
 
-type PostDAO dbs.DAO
+type PostDAO struct {
+	db    *gorm.DB
+	Table string
+}
 
-func NewPostDAO() *PostDAO {
-	return dbs.NewDAO(&PostDAO{
-		DAOObject: dbs.DAOObject{
-			DB:     Tea.Env,
-			Table:  "edgePosts",
-			Model:  new(Post),
-			PkName: "id",
-		},
-	}).(*PostDAO)
+func NewPostDAO() (*PostDAO, error) {
+	conn, err := db.DB()
+	if err != nil {
+		return nil, err
+	}
+	return &PostDAO{db: conn, Table: "edgePosts"}, nil
 }
 
 var SharedPostDAO *PostDAO
 
 func init() {
-	dbs.OnReady(func() {
-		SharedPostDAO = NewPostDAO()
-	})
+	dao, err := NewPostDAO()
+	if err == nil {
+		SharedPostDAO = dao
+	}
 }
 
-// EnablePost 启用条目
-func (this *PostDAO) EnablePost(tx *dbs.Tx, postId int64) error {
-	_, err := this.Query(tx).
-		Pk(postId).
-		Set("state", PostStateEnabled).
-		Update()
-	return err
+func (dao *PostDAO) EnablePost(postId int64) error {
+	return dao.db.Model(&Post{}).
+		Where("id=?", postId).
+		Update("state", PostStateEnabled).Error
 }
 
-// DisablePost 禁用条目
-func (this *PostDAO) DisablePost(tx *dbs.Tx, postId int64) error {
-	_, err := this.Query(tx).
-		Pk(postId).
-		Set("state", PostStateDisabled).
-		Update()
-	return err
+func (dao *PostDAO) DisablePost(postId int64) error {
+	return dao.db.Model(&Post{}).
+		Where("id=?", postId).
+		Update("state", PostStateDisabled).Error
 }
 
-// FindEnabledPost 查找启用中的条目
-func (this *PostDAO) FindEnabledPost(tx *dbs.Tx, postId int64) (*Post, error) {
-	result, err := this.Query(tx).
-		Pk(postId).
-		State(PostStateEnabled).
-		Find()
-	if result == nil {
+func (dao *PostDAO) FindEnabledPost(postId int64) (*Post, error) {
+	var p Post
+	err := dao.db.Where("id=? AND state=?", postId, PostStateEnabled).First(&p).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
 		return nil, err
 	}
-	return result.(*Post), err
+	return &p, nil
 }

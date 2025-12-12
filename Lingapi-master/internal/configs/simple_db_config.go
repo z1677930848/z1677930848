@@ -39,7 +39,7 @@ func (this *SimpleDBConfig) GenerateOldConfig() error {
 			Tea.Env: dbConfig,
 		},
 	}
-	config.Default.DB = Tea.Env
+	config.Default = &dbs.DefaultConfig{DB: Tea.Env}
 	config.Fields = map[string][]string{
 		"bool": this.BoolFields,
 	}

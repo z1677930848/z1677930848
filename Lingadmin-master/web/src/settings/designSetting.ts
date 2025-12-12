@@ -1,5 +1,6 @@
-// app theme preset color
+// App theme preset colors
 export const appThemeList: string[] = [
+  '#18a058', // HotGo 默认绿
   '#2d8cf0',
   '#0960bd',
   '#0084f4',
@@ -21,11 +22,11 @@ export const appThemeList: string[] = [
 ];
 
 const setting = {
-  //深色主题
+  // 深色主题开关
   darkTheme: false,
-  //系统主题色
-  appTheme: '#2d8cf0',
-  //系统内置主题色列表
+  // 系统主题色，默认使用 HotGo 常用绿
+  appTheme: '#18a058',
+  // 预置主题色列表
   appThemeList,
 };
 

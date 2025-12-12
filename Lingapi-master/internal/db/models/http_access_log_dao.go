@@ -70,6 +70,10 @@ func init() {
 
 	// 队列相关
 	dbs.OnReadyDone(func() {
+		if _, err := dbs.Default(); err != nil {
+			return
+		}
+
 		// 检查队列变化
 		goman.New(func() {
 			var ticker = time.NewTicker(60 * time.Second)

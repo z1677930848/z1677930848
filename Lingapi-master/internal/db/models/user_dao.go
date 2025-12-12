@@ -46,6 +46,11 @@ func init() {
 	})
 }
 
+// Exist checks whether a user with given id exists.
+func (this *UserDAO) Exist(tx *dbs.Tx, userId int64) (bool, error) {
+	return this.Query(tx).Pk(userId).Exist()
+}
+
 // EnableUser 启用条目
 func (this *UserDAO) EnableUser(tx *dbs.Tx, userId int64) error {
 	if userId <= 0 {

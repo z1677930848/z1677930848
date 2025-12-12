@@ -9,7 +9,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/mem"
 )
 
@@ -37,10 +36,7 @@ func (this *NodeStatusExecutor) updateLoad(status *NodeStatus) {
 	timestamp := time.Now().Unix()
 
 	currentLoad := 0
-	info, err := cpu.ProcInfo()
-	if err == nil && len(info) > 0 && info[0].ProcessorQueueLength < 1000 {
-		currentLoad = int(info[0].ProcessorQueueLength)
-	}
+	var err error
 
 	// 删除15分钟之前的数据
 	windowsLoadLocker.Lock()

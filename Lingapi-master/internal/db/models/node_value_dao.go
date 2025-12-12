@@ -246,8 +246,8 @@ func (this *NodeValueDAO) SumAllNodeValues(tx *dbs.Tx, role string, item nodecon
 	if err != nil {
 		return 0, 0, 0, err
 	}
-
-	return m.GetFloat64("sumValue"), m.GetFloat64("avgValue"), m.GetFloat64("maxValueResult"), nil
+	mapValue := maps.NewMap(m)
+	return mapValue.GetFloat64("sumValue"), mapValue.GetFloat64("avgValue"), mapValue.GetFloat64("maxValueResult"), nil
 }
 
 // SumNodeValues 计算节点的某项参数值

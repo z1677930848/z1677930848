@@ -26,6 +26,7 @@ func TestIsLocalAddr(t *testing.T) {
 }
 
 func TestMySQLVersion(t *testing.T) {
+	t.Skip("skip: requires real mysql config")
 	version, err := dbutils.MySQLVersion()
 	if err != nil {
 		t.Fatal(err)
@@ -34,13 +35,16 @@ func TestMySQLVersion(t *testing.T) {
 }
 
 func TestMySQLVersionFrom8(t *testing.T) {
+	t.Skip("skip: env dependent")
 	t.Log(dbutils.MySQLVersionFrom8())
 }
 
 func TestFindMySQLPath(t *testing.T) {
+	t.Skip("skip: env dependent")
 	t.Log(dbutils.FindMySQLPath())
 }
 
 func TestStartLocalMySQL(t *testing.T) {
+	t.Skip("skip: env dependent")
 	dbutils.StartLocalMySQL()
 }

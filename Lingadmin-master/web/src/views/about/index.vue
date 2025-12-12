@@ -2,10 +2,11 @@
   <div>
     <div class="n-layout-page-header">
       <n-card :bordered="false" title="关于">
-        {{ name }} 是 LingCDN 管理端的前端界面，基于 Vue3/Vite/TypeScript。
+        {{ name }} 是 lingcdn 管理端的前端界面，基于 HotGo 风格的 Vue3/Vite/TypeScript 模板。
         你可以在此完成系统配置、权限管理、监控与运营等工作。
       </n-card>
     </div>
+
     <n-card
       :bordered="false"
       title="项目信息"
@@ -15,7 +16,7 @@
     >
       <n-descriptions bordered label-placement="left" class="py-2">
         <n-descriptions-item label="版本">
-          <n-tag type="info"> {{ config?.version }}</n-tag>
+          <n-tag type="info"> {{ config?.version }} </n-tag>
         </n-descriptions-item>
         <n-descriptions-item label="最后编译时间">
           <n-tag type="info"> {{ lastBuildTime }} </n-tag>
@@ -27,8 +28,11 @@
         </n-descriptions-item>
         <n-descriptions-item label="官网">
           <div class="flex items-center">
-            <a href="https://lingcdn.cloud" class="py-2" target="_blank">LingCDN 官方网站</a>
+            <a href="https://lingcdn.cloud" class="py-2" target="_blank">lingcdn 官方网站</a>
           </div>
+        </n-descriptions-item>
+        <n-descriptions-item label="模板">
+          <n-tag type="success">HotGo 前端模板</n-tag>
         </n-descriptions-item>
       </n-descriptions>
     </n-card>

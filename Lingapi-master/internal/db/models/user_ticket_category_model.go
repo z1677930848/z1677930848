@@ -1,7 +1,5 @@
 package models
 
-import "github.com/iwind/TeaGo/dbs"
-
 // UserTicketCategory 工单分类
 type UserTicketCategory struct {
 	Id    uint32 `field:"id"`    // ID

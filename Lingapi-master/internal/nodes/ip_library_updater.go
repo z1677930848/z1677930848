@@ -19,6 +19,9 @@ import (
 
 func init() {
 	dbs.OnReady(func() {
+		if _, err := dbs.Default(); err != nil {
+			return
+		}
 		goman.New(func() {
 			iplibrary.NewUpdater(NewIPLibraryUpdater(), 10*time.Minute).Start()
 		})

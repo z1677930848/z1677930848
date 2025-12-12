@@ -62,7 +62,7 @@ func taskConsumer(wg *sync.WaitGroup) {
 
 			ok, errMsg := acme.SharedACMETaskDAO.RunTaskAndAutoBindServer(nil, int64(t.Id), t.DecodeDomains())
 			if !ok {
-				logs.Printf(errMsg)
+				logs.Error(errMsg)
 			}
 		}(task)
 	}

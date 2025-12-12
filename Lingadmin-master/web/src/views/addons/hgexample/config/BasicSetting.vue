@@ -39,7 +39,7 @@
   const message = useMessage();
 
   const formValue = ref({
-    basicTest: 'LingCDN',
+    basicTest: 'lingcdn',
   });
 
   function formSubmit() {

@@ -3,153 +3,120 @@ package regions
 import (
 	"encoding/json"
 	"sort"
-	"strconv"
 
+	"github.com/TeaOSLab/EdgeAPI/internal/infra/db"
 	"github.com/TeaOSLab/EdgeAPI/internal/utils"
 	"github.com/TeaOSLab/EdgeAPI/internal/utils/numberutils"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/iwind/TeaGo/Tea"
 	"github.com/iwind/TeaGo/dbs"
-	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/types"
+	"gorm.io/gorm"
 )
 
 const (
-	RegionCityStateEnabled  = 1 // 已启用
-	RegionCityStateDisabled = 0 // 已禁用
+	RegionCityStateEnabled  = 1
+	RegionCityStateDisabled = 0
 )
 
-type RegionCityDAO dbs.DAO
+type RegionCityDAO struct {
+	db    *gorm.DB
+	Table string
+}
 
-func NewRegionCityDAO() *RegionCityDAO {
-	return dbs.NewDAO(&RegionCityDAO{
-		DAOObject: dbs.DAOObject{
-			DB:     Tea.Env,
-			Table:  "edgeRegionCities",
-			Model:  new(RegionCity),
-			PkName: "id",
-		},
-	}).(*RegionCityDAO)
+func NewRegionCityDAO() (*RegionCityDAO, error) {
+	conn, err := db.DB()
+	if err != nil {
+		return nil, err
+	}
+	return &RegionCityDAO{db: conn, Table: "edgeRegionCities"}, nil
 }
 
 var SharedRegionCityDAO *RegionCityDAO
 
 func init() {
-	dbs.OnReady(func() {
-		SharedRegionCityDAO = NewRegionCityDAO()
-	})
+	dao, err := NewRegionCityDAO()
+	if err == nil {
+		SharedRegionCityDAO = dao
+	}
 }
 
-// EnableRegionCity 启用条目
-func (this *RegionCityDAO) EnableRegionCity(tx *dbs.Tx, id uint32) error {
-	_, err := this.Query(tx).
-		Attr("valueId", id).
-		Set("state", RegionCityStateEnabled).
-		Update()
-	return err
+func (dao *RegionCityDAO) EnableRegionCity(id uint32) error {
+	return dao.db.Model(&RegionCity{}).
+		Where("valueId = ?", id).
+		Update("state", RegionCityStateEnabled).Error
 }
 
-// DisableRegionCity 禁用条目
-func (this *RegionCityDAO) DisableRegionCity(tx *dbs.Tx, id uint32) error {
-	_, err := this.Query(tx).
-		Attr("valueId", id).
-		Set("state", RegionCityStateDisabled).
-		Update()
-	return err
+func (dao *RegionCityDAO) DisableRegionCity(id uint32) error {
+	return dao.db.Model(&RegionCity{}).
+		Where("valueId = ?", id).
+		Update("state", RegionCityStateDisabled).Error
 }
 
-// FindEnabledRegionCity 查找启用中的条目
-func (this *RegionCityDAO) FindEnabledRegionCity(tx *dbs.Tx, id int64) (*RegionCity, error) {
-	result, err := this.Query(tx).
-		Attr("valueId", id).
-		Attr("state", RegionCityStateEnabled).
-		Find()
-	if result == nil {
+func (dao *RegionCityDAO) FindEnabledRegionCity(_ *dbs.Tx, id int64) (*RegionCity, error) {
+	var city RegionCity
+	err := dao.db.Where("valueId=? AND state=?", id, RegionCityStateEnabled).First(&city).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
 		return nil, err
 	}
-	return result.(*RegionCity), err
+	return &city, nil
 }
 
-// FindRegionCityName 根据主键查找名称
-func (this *RegionCityDAO) FindRegionCityName(tx *dbs.Tx, id uint32) (string, error) {
-	return this.Query(tx).
-		Attr("valueId", id).
-		Result("name").
-		FindStringCol("")
+func (dao *RegionCityDAO) FindRegionCityName(id uint32) (string, error) {
+	var name string
+	err := dao.db.Model(&RegionCity{}).Where("valueId=?", id).Select("name").Scan(&name).Error
+	return name, err
 }
 
-// FindCityWithDataId 根据数据ID查找城市
-func (this *RegionCityDAO) FindCityWithDataId(tx *dbs.Tx, dataId string) (int64, error) {
-	return this.Query(tx).
-		Attr("dataId", dataId).
-		Result(RegionCityField_ValueId).
-		FindInt64Col(0)
+func (dao *RegionCityDAO) FindCityWithDataId(dataId string) (int64, error) {
+	var valueId int64
+	err := dao.db.Model(&RegionCity{}).Where("dataId=?", dataId).Select("valueId").Scan(&valueId).Error
+	return valueId, err
 }
 
-// CreateCity 创建城市
-func (this *RegionCityDAO) CreateCity(tx *dbs.Tx, provinceId int64, name string, dataId string) (int64, error) {
-	var op = NewRegionCityOperator()
-	op.ProvinceId = provinceId
-	op.Name = name
-	op.DataId = dataId
-	op.State = RegionCityStateEnabled
-
-	var codes = []string{name}
-	codesJSON, err := json.Marshal(codes)
+func (dao *RegionCityDAO) CreateCity(provinceId int64, name string, dataId string) (int64, error) {
+	codesJSON, err := json.Marshal([]string{name})
 	if err != nil {
 		return 0, err
 	}
-	op.Codes = codesJSON
-	err = this.Save(tx, op)
-	if err != nil {
+	city := &RegionCity{
+		ProvinceId: provinceId,
+		Name:       name,
+		DataId:     dataId,
+		State:      RegionCityStateEnabled,
+		Codes:      codesJSON,
+	}
+	if err := dao.db.Create(city).Error; err != nil {
 		return 0, err
 	}
-	var cityId = types.Int64(op.Id)
-
-	// value id
-	err = this.Query(tx).
-		Pk(cityId).
-		Set(RegionCityField_ValueId, cityId).
-		UpdateQuickly()
-	if err != nil {
-		return 0, err
-	}
-
-	return cityId, nil
+	// set valueId = id
+	_ = dao.db.Model(city).Update("valueId", city.Id).Error
+	return city.Id, nil
 }
 
-// FindCityIdWithName 根据城市名查找城市ID
-func (this *RegionCityDAO) FindCityIdWithName(tx *dbs.Tx, provinceId int64, cityName string) (int64, error) {
-	return this.Query(tx).
-		Attr("provinceId", provinceId).
-		Where("(name=:cityName OR customName=:cityName OR JSON_CONTAINS(codes, :cityNameJSON) OR JSON_CONTAINS(customCodes, :cityNameJSON))").
-		Param("cityName", cityName).
-		Param("cityNameJSON", strconv.Quote(cityName)). // 查询的需要是个JSON字符串，所以这里加双引号
-		Result(RegionCityField_ValueId).
-		FindInt64Col(0)
+func (dao *RegionCityDAO) FindCityIdWithName(_ *dbs.Tx, provinceId int64, cityName string) (int64, error) {
+	var valueId int64
+	err := dao.db.Model(&RegionCity{}).
+		Where("provinceId=? AND (name=? OR customName=?)", provinceId, cityName, cityName).
+		Select("valueId").
+		Scan(&valueId).Error
+	return valueId, err
 }
 
-// FindAllEnabledCities 获取所有城市信息
-func (this *RegionCityDAO) FindAllEnabledCities(tx *dbs.Tx) (result []*RegionCity, err error) {
-	_, err = this.Query(tx).
-		State(RegionCityStateEnabled).
-		Slice(&result).
-		FindAll()
-	return
+func (dao *RegionCityDAO) FindAllEnabledCities(_ *dbs.Tx) ([]*RegionCity, error) {
+	var result []*RegionCity
+	err := dao.db.Where("state=?", RegionCityStateEnabled).Find(&result).Error
+	return result, err
 }
 
-// FindAllEnabledCitiesWithProvinceId 获取某个省份下的所有城市
-func (this *RegionCityDAO) FindAllEnabledCitiesWithProvinceId(tx *dbs.Tx, provinceId int64) (result []*RegionCity, err error) {
-	_, err = this.Query(tx).
-		Attr("provinceId", provinceId).
-		State(RegionCityStateEnabled).
-		Slice(&result).
-		FindAll()
-	return
+func (dao *RegionCityDAO) FindAllEnabledCitiesWithProvinceId(_ *dbs.Tx, provinceId int64) ([]*RegionCity, error) {
+	var result []*RegionCity
+	err := dao.db.Where("provinceId=? AND state=?", provinceId, RegionCityStateEnabled).Find(&result).Error
+	return result, err
 }
 
-// UpdateCityCustom 自定义城市信息
-func (this *RegionCityDAO) UpdateCityCustom(tx *dbs.Tx, cityId int64, customName string, customCodes []string) error {
+func (dao *RegionCityDAO) UpdateCityCustom(_ *dbs.Tx, cityId int64, customName string, customCodes []string) error {
 	if customCodes == nil {
 		customCodes = []string{}
 	}
@@ -157,49 +124,58 @@ func (this *RegionCityDAO) UpdateCityCustom(tx *dbs.Tx, cityId int64, customName
 	if err != nil {
 		return err
 	}
-
-	return this.Query(tx).
-		Attr(RegionCityField_ValueId, cityId).
-		Set("customName", customName).
-		Set("customCodes", customCodesJSON).
-		UpdateQuickly()
+	return dao.db.Model(&RegionCity{}).
+		Where("valueId=?", cityId).
+		Updates(map[string]any{
+			"customName":  customName,
+			"customCodes": customCodesJSON,
+		}).Error
 }
 
-// FindSimilarCities 查找类似城市名
-func (this *RegionCityDAO) FindSimilarCities(cities []*RegionCity, cityName string, size int) (result []*RegionCity) {
+// Similarity helper
+func (dao *RegionCityDAO) FindSimilarCities(cities []*RegionCity, cityName string, size int) (result []*RegionCity) {
 	if len(cities) == 0 {
 		return
 	}
-
-	var similarResult = []maps.Map{}
-
+	type scoreCity struct {
+		score float32
+		city  *RegionCity
+	}
+	var scored []scoreCity
 	for _, city := range cities {
-		var similarityList = []float32{}
+		var similarityList []float32
 		for _, code := range city.AllCodes() {
-			var similarity = utils.Similar(cityName, code)
-			if similarity > 0 {
-				similarityList = append(similarityList, similarity)
+			sim := utils.Similar(cityName, code)
+			if sim > 0 {
+				similarityList = append(similarityList, sim)
 			}
 		}
 		if len(similarityList) > 0 {
-			similarResult = append(similarResult, maps.Map{
-				"similarity": numberutils.Max(similarityList...),
-				"city":       city,
+			scored = append(scored, scoreCity{
+				score: numberutils.Max(similarityList...),
+				city:  city,
 			})
 		}
 	}
-
-	sort.Slice(similarResult, func(i, j int) bool {
-		return similarResult[i].GetFloat32("similarity") > similarResult[j].GetFloat32("similarity")
+	sort.Slice(scored, func(i, j int) bool {
+		return scored[i].score > scored[j].score
 	})
-
-	if len(similarResult) > size {
-		similarResult = similarResult[:size]
+	if len(scored) > size {
+		scored = scored[:size]
 	}
-
-	for _, r := range similarResult {
-		result = append(result, r.Get("city").(*RegionCity))
+	for _, s := range scored {
+		result = append(result, s.city)
 	}
-
 	return
+}
+
+// Optional helper to match old signature
+func (dao *RegionCityDAO) FindEnabledRegionCityName(id int64) (string, error) {
+	name, err := dao.FindRegionCityName(uint32(id))
+	return name, err
+}
+
+// Converts string to int for previous calls expecting int param
+func parseInt(v int64) int {
+	return types.Int(v)
 }

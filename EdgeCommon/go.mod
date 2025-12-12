@@ -3,7 +3,7 @@ module github.com/TeaOSLab/EdgeCommon
 go 1.25
 
 require (
-	github.com/iwind/TeaGo v0.0.0-20240508072741-7647e70b7070
+	github.com/iwind/TeaGo v0.0.0
 	golang.org/x/net v0.26.0
 	google.golang.org/grpc v1.63.2
 	google.golang.org/protobuf v1.33.0
@@ -18,3 +18,5 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240415180920-8c6c420018be // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 )
+
+replace github.com/iwind/TeaGo => ./teago

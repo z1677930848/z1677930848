@@ -12,7 +12,7 @@ require (
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/go-acme/lego/v4 v4.17.3
 	github.com/go-sql-driver/mysql v1.8.1
-	github.com/iwind/TeaGo v0.0.0-20240508072741-7647e70b7070
+	github.com/iwind/TeaGo v0.0.0
 	github.com/iwind/gosock v0.0.0-20220505115348-f88412125a62
 	github.com/miekg/dns v1.1.59
 	github.com/mozillazg/go-pinyin v0.18.0
@@ -25,13 +25,19 @@ require (
 	golang.org/x/sys v0.21.0
 	google.golang.org/grpc v1.63.2
 	gopkg.in/yaml.v3 v3.0.1
+	gorm.io/driver/mysql v1.6.0
+	gorm.io/gorm v1.31.1
 )
+
+replace github.com/iwind/TeaGo => ../EdgeCommon/teago
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/go-jose/go-jose/v4 v4.0.1 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kr/fs v0.1.0 // indirect
@@ -46,10 +52,11 @@ require (
 	github.com/tklauser/numcpus v0.7.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	golang.org/x/mod v0.17.0 // indirect
-	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
+	golang.org/x/sync v0.9.0 // indirect
+	golang.org/x/text v0.20.0 // indirect
 	golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240415180920-8c6c420018be // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
+	gorm.io/datatypes v1.2.0 // indirect
 )

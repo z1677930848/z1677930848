@@ -275,7 +275,7 @@ func (this *NodeClusterDAO) CountAllEnabledClusters(tx *dbs.Tx, keyword string) 
 	query := this.Query(tx).
 		State(NodeClusterStateEnabled)
 	if len(keyword) > 0 {
-		query.Where("(name LIKE :keyword OR dnsName like :keyword OR (dnsDomainId > 0 AND dnsDomainId IN (SELECT id FROM "+dns.SharedDNSDomainDAO.Table+" WHERE name LIKE :keyword AND state=1)))").
+		query.Where("(name LIKE :keyword OR dnsName like :keyword OR (dnsDomainId > 0 AND dnsDomainId IN (SELECT id FROM "+dns.DNSDomainTableName+" WHERE name LIKE :keyword AND state=1)))").
 			Param("keyword", dbutils.QuoteLike(keyword))
 	}
 	return query.Count()
@@ -286,7 +286,7 @@ func (this *NodeClusterDAO) ListEnabledClusters(tx *dbs.Tx, keyword string, idDe
 	var query = this.Query(tx).
 		State(NodeClusterStateEnabled)
 	if len(keyword) > 0 {
-		query.Where("(name LIKE :keyword OR dnsName like :keyword OR (dnsDomainId > 0 AND dnsDomainId IN (SELECT id FROM "+dns.SharedDNSDomainDAO.Table+" WHERE name LIKE :keyword AND state=1)))").
+		query.Where("(name LIKE :keyword OR dnsName like :keyword OR (dnsDomainId > 0 AND dnsDomainId IN (SELECT id FROM "+dns.DNSDomainTableName+" WHERE name LIKE :keyword AND state=1)))").
 			Param("keyword", dbutils.QuoteLike(keyword))
 	}
 
@@ -439,7 +439,7 @@ func (this *NodeClusterDAO) FindAllEnabledClustersWithGrantId(tx *dbs.Tx, grantI
 func (this *NodeClusterDAO) CountAllEnabledClustersWithDNSProviderId(tx *dbs.Tx, dnsProviderId int64) (int64, error) {
 	return this.Query(tx).
 		State(NodeClusterStateEnabled).
-		Where("dnsDomainId IN (SELECT id FROM "+dns.SharedDNSDomainDAO.Table+" WHERE state=1 AND providerId=:providerId)").
+		Where("dnsDomainId IN (SELECT id FROM "+dns.DNSDomainTableName+" WHERE state=1 AND providerId=:providerId)").
 		Param("providerId", dnsProviderId).
 		Count()
 }
@@ -448,7 +448,7 @@ func (this *NodeClusterDAO) CountAllEnabledClustersWithDNSProviderId(tx *dbs.Tx,
 func (this *NodeClusterDAO) FindAllEnabledClustersWithDNSProviderId(tx *dbs.Tx, dnsProviderId int64) (result []*NodeCluster, err error) {
 	_, err = this.Query(tx).
 		State(NodeClusterStateEnabled).
-		Where("dnsDomainId IN (SELECT id FROM "+dns.SharedDNSDomainDAO.Table+" WHERE state=1 AND providerId=:providerId)").
+		Where("dnsDomainId IN (SELECT id FROM "+dns.DNSDomainTableName+" WHERE state=1 AND providerId=:providerId)").
 		Param("providerId", dnsProviderId).
 		Slice(&result).
 		DescPk().

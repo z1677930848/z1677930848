@@ -287,12 +287,13 @@ func (this *ServerDailyStatDAO) SumMinutelyStat(tx *dbs.Tx, serverId int64, minu
 		return
 	}
 
-	stat.Bytes = one.GetInt64("bytes")
-	stat.CachedBytes = one.GetInt64("cachedBytes")
-	stat.CountRequests = one.GetInt64("countRequests")
-	stat.CountCachedRequests = one.GetInt64("countCachedRequests")
-	stat.CountAttackRequests = one.GetInt64("countAttackRequests")
-	stat.AttackBytes = one.GetInt64("attackBytes")
+	oneMap := maps.NewMap(one)
+	stat.Bytes = oneMap.GetInt64("bytes")
+	stat.CachedBytes = oneMap.GetInt64("cachedBytes")
+	stat.CountRequests = oneMap.GetInt64("countRequests")
+	stat.CountCachedRequests = oneMap.GetInt64("countCachedRequests")
+	stat.CountAttackRequests = oneMap.GetInt64("countAttackRequests")
+	stat.AttackBytes = oneMap.GetInt64("attackBytes")
 	return
 }
 
@@ -320,12 +321,13 @@ func (this *ServerDailyStatDAO) SumHourlyStat(tx *dbs.Tx, serverId int64, hour s
 		return
 	}
 
-	stat.Bytes = one.GetInt64("bytes")
-	stat.CachedBytes = one.GetInt64("cachedBytes")
-	stat.CountRequests = one.GetInt64("countRequests")
-	stat.CountCachedRequests = one.GetInt64("countCachedRequests")
-	stat.CountAttackRequests = one.GetInt64("countAttackRequests")
-	stat.AttackBytes = one.GetInt64("attackBytes")
+	oneMap := maps.NewMap(one)
+	stat.Bytes = oneMap.GetInt64("bytes")
+	stat.CachedBytes = oneMap.GetInt64("cachedBytes")
+	stat.CountRequests = oneMap.GetInt64("countRequests")
+	stat.CountCachedRequests = oneMap.GetInt64("countCachedRequests")
+	stat.CountAttackRequests = oneMap.GetInt64("countAttackRequests")
+	stat.AttackBytes = oneMap.GetInt64("attackBytes")
 	return
 }
 
@@ -380,12 +382,13 @@ func (this *ServerDailyStatDAO) compatSumDailyStat(tx *dbs.Tx, userId int64, ser
 		return
 	}
 
-	stat.Bytes = one.GetInt64("bytes")
-	stat.CachedBytes = one.GetInt64("cachedBytes")
-	stat.CountRequests = one.GetInt64("countRequests")
-	stat.CountCachedRequests = one.GetInt64("countCachedRequests")
-	stat.CountAttackRequests = one.GetInt64("countAttackRequests")
-	stat.AttackBytes = one.GetInt64("attackBytes")
+	oneMap := maps.NewMap(one)
+	stat.Bytes = oneMap.GetInt64("bytes")
+	stat.CachedBytes = oneMap.GetInt64("cachedBytes")
+	stat.CountRequests = oneMap.GetInt64("countRequests")
+	stat.CountCachedRequests = oneMap.GetInt64("countCachedRequests")
+	stat.CountAttackRequests = oneMap.GetInt64("countAttackRequests")
+	stat.AttackBytes = oneMap.GetInt64("attackBytes")
 	return
 }
 
@@ -414,12 +417,13 @@ func (this *ServerDailyStatDAO) SumDailyStatBeforeMinute(tx *dbs.Tx, serverId in
 		return
 	}
 
-	stat.Bytes = one.GetInt64("bytes")
-	stat.CachedBytes = one.GetInt64("cachedBytes")
-	stat.CountRequests = one.GetInt64("countRequests")
-	stat.CountCachedRequests = one.GetInt64("countCachedRequests")
-	stat.CountAttackRequests = one.GetInt64("countAttackRequests")
-	stat.AttackBytes = one.GetInt64("attackBytes")
+	oneMap := maps.NewMap(one)
+	stat.Bytes = oneMap.GetInt64("bytes")
+	stat.CachedBytes = oneMap.GetInt64("cachedBytes")
+	stat.CountRequests = oneMap.GetInt64("countRequests")
+	stat.CountCachedRequests = oneMap.GetInt64("countCachedRequests")
+	stat.CountAttackRequests = oneMap.GetInt64("countAttackRequests")
+	stat.AttackBytes = oneMap.GetInt64("attackBytes")
 	return
 }
 
@@ -445,12 +449,13 @@ func (this *ServerDailyStatDAO) SumMonthlyStat(tx *dbs.Tx, serverId int64, month
 		return
 	}
 
-	stat.Bytes = one.GetInt64("bytes")
-	stat.CachedBytes = one.GetInt64("cachedBytes")
-	stat.CountRequests = one.GetInt64("countRequests")
-	stat.CountCachedRequests = one.GetInt64("countCachedRequests")
-	stat.CountAttackRequests = one.GetInt64("countAttackRequests")
-	stat.AttackBytes = one.GetInt64("attackBytes")
+	oneMap := maps.NewMap(one)
+	stat.Bytes = oneMap.GetInt64("bytes")
+	stat.CachedBytes = oneMap.GetInt64("cachedBytes")
+	stat.CountRequests = oneMap.GetInt64("countRequests")
+	stat.CountCachedRequests = oneMap.GetInt64("countCachedRequests")
+	stat.CountAttackRequests = oneMap.GetInt64("countAttackRequests")
+	stat.AttackBytes = oneMap.GetInt64("attackBytes")
 	return
 }
 

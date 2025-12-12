@@ -67,7 +67,7 @@ func (this *LogWriter) Init() {
 	}
 }
 
-func (this *LogWriter) Write(message string) {
+func (this *LogWriter) WriteString(message string) {
 	backgroundEnv, _ := os.LookupEnv("EdgeBackground")
 	if backgroundEnv != "on" {
 		// 文件和行号
@@ -92,6 +92,13 @@ func (this *LogWriter) Write(message string) {
 	this.c <- message
 }
 
+// Write implements io.Writer to integrate with log.SetOutput.
+func (this *LogWriter) Write(p []byte) (n int, err error) {
+	this.WriteString(string(p))
+	return len(p), nil
+}
+
+// Close stops log writer.
 func (this *LogWriter) Close() {
 	if this.fp != nil {
 		_ = this.fp.Close()

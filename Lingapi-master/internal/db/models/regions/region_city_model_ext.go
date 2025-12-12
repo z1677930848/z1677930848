@@ -4,33 +4,35 @@ import (
 	"encoding/json"
 
 	"github.com/TeaOSLab/EdgeAPI/internal/remotelogs"
-	"github.com/iwind/TeaGo/lists"
 )
 
+// DecodeCodes returns decoded codes slice.
 func (this *RegionCity) DecodeCodes() []string {
 	if len(this.Codes) == 0 {
 		return []string{}
 	}
-	var result = []string{}
-	err := json.Unmarshal(this.Codes, &result)
-	if err != nil {
+	var result []string
+	if err := json.Unmarshal(this.Codes, &result); err != nil {
 		remotelogs.Error("RegionCity.DecodeCodes", err.Error())
+		return []string{}
 	}
 	return result
 }
 
+// DecodeCustomCodes returns decoded custom codes slice.
 func (this *RegionCity) DecodeCustomCodes() []string {
 	if len(this.CustomCodes) == 0 {
 		return []string{}
 	}
-	var result = []string{}
-	err := json.Unmarshal(this.CustomCodes, &result)
-	if err != nil {
+	var result []string
+	if err := json.Unmarshal(this.CustomCodes, &result); err != nil {
 		remotelogs.Error("RegionCity.DecodeCustomCodes", err.Error())
+		return []string{}
 	}
 	return result
 }
 
+// DisplayName returns custom name if set, otherwise name.
 func (this *RegionCity) DisplayName() string {
 	if len(this.CustomName) > 0 {
 		return this.CustomName
@@ -38,21 +40,9 @@ func (this *RegionCity) DisplayName() string {
 	return this.Name
 }
 
+// AllCodes merges codes and custom codes.
 func (this *RegionCity) AllCodes() []string {
-	var codes = this.DecodeCodes()
-
-	if len(this.Name) > 0 && !lists.ContainsString(codes, this.Name) {
-		codes = append(codes, this.Name)
-	}
-
-	if len(this.CustomName) > 0 && !lists.ContainsString(codes, this.CustomName) {
-		codes = append(codes, this.CustomName)
-	}
-
-	for _, code := range this.DecodeCustomCodes() {
-		if !lists.ContainsString(codes, code) {
-			codes = append(codes, code)
-		}
-	}
-	return codes
+	codes := this.DecodeCodes()
+	custom := this.DecodeCustomCodes()
+	return append(codes, custom...)
 }

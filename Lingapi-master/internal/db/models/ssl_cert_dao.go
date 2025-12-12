@@ -45,6 +45,11 @@ func init() {
 	})
 }
 
+// Exist checks whether a cert with given id exists.
+func (this *SSLCertDAO) Exist(tx *dbs.Tx, certId int64) (bool, error) {
+	return this.Query(tx).Pk(certId).Exist()
+}
+
 // Init 初始化
 func (this *SSLCertDAO) Init() {
 	_ = this.DAOObject.Init()

@@ -71,7 +71,8 @@
   const dialog = useDialog();
 
   const formValue = ref({
-    basicName: 'LingCDN',
+    // 默认站点名称
+    basicName: 'lingcdn',
     basicLogo: '',
     basicDomain: '',
     basicWsAddr: '',

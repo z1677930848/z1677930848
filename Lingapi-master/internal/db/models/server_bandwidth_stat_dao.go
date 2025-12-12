@@ -753,13 +753,14 @@ func (this *ServerBandwidthStatDAO) SumDailyStat(tx *dbs.Tx, serverId int64, reg
 		return
 	}
 
-	stat.Bytes = one.GetInt64("totalBytes")
-	stat.CachedBytes = one.GetInt64("cachedBytes")
-	stat.CountRequests = one.GetInt64("countRequests")
-	stat.CountCachedRequests = one.GetInt64("countCachedRequests")
-	stat.CountAttackRequests = one.GetInt64("countAttackRequests")
-	stat.AttackBytes = one.GetInt64("attackBytes")
-	stat.CountIPs = one.GetInt64("countIPs")
+	oneMap := maps.NewMap(one)
+	stat.Bytes = oneMap.GetInt64("totalBytes")
+	stat.CachedBytes = oneMap.GetInt64("cachedBytes")
+	stat.CountRequests = oneMap.GetInt64("countRequests")
+	stat.CountCachedRequests = oneMap.GetInt64("countCachedRequests")
+	stat.CountAttackRequests = oneMap.GetInt64("countAttackRequests")
+	stat.AttackBytes = oneMap.GetInt64("attackBytes")
+	stat.CountIPs = oneMap.GetInt64("countIPs")
 	return
 }
 

@@ -11,8 +11,15 @@ import (
 )
 
 func TestDNSTaskDAO_CreateDNSTask(t *testing.T) {
+	if _, err := dbs.Default(); err != nil {
+		t.Skipf("skip: %v", err)
+	}
 	dbs.NotifyReady()
-	err := dns.SharedDNSTaskDAO.CreateDNSTask(nil, 1, 2, 3, 0, "cdn", "taskType")
+	dao, err := dns.NewDNSTaskDAO()
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = dao.CreateDNSTask(nil, 1, 2, 3, 0, "cdn", "taskType")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -20,9 +27,15 @@ func TestDNSTaskDAO_CreateDNSTask(t *testing.T) {
 }
 
 func TestDNSTaskDAO_UpdateClusterDNSTasksDone(t *testing.T) {
-	var dao = dns.NewDNSTaskDAO()
+	if _, err := dbs.Default(); err != nil {
+		t.Skipf("skip: %v", err)
+	}
+	dao, err := dns.NewDNSTaskDAO()
+	if err != nil {
+		t.Fatal(err)
+	}
 	var tx *dbs.Tx
-	err := dao.UpdateClusterDNSTasksDone(tx, 46, time.Now().UnixNano())
+	err = dao.UpdateClusterDNSTasksDone(tx, 46, time.Now().UnixNano())
 	if err != nil {
 		t.Fatal(err)
 	}

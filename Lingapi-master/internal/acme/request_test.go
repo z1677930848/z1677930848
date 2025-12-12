@@ -13,6 +13,7 @@ import (
 )
 
 func TestRequest_Run_DNS(t *testing.T) {
+	t.Skip("requires real DNS provider & DB config")
 	privateKey, err := ParsePrivateKeyFromBase64("MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgD3xxDXP4YVqHCfub21Yi3QL1Kvgow23J8CKJ7vU3L4+hRANCAARRl5ZKAlgGRc5RETSMYFCTXvjnePDgjALWgtgfClQGLB2rGyRecJvlesAM6Q7LQrDxVxvxdSQQmPGRqJGiBtjd")
 	if err != nil {
 		t.Fatal(err)
@@ -54,6 +55,7 @@ func TestRequest_Run_DNS(t *testing.T) {
 }
 
 func TestRequest_Run_HTTP(t *testing.T) {
+	t.Skip("requires real ACME HTTP challenge environment")
 	privateKey, err := ParsePrivateKeyFromBase64("MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgD3xxDXP4YVqHCfub21Yi3QL1Kvgow23J8CKJ7vU3L4+hRANCAARRl5ZKAlgGRc5RETSMYFCTXvjnePDgjALWgtgfClQGLB2rGyRecJvlesAM6Q7LQrDxVxvxdSQQmPGRqJGiBtjd")
 	if err != nil {
 		t.Fatal(err)

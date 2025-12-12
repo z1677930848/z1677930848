@@ -51,6 +51,7 @@ func (this *MyProvider) CleanUp(domain, token, keyAuth string) error {
 
 // 参考  https://go-acme.github.io/lego/usage/library/
 func TestGenerate(t *testing.T) {
+	t.Skip("requires real ACME server credentials")
 	acmelog.Logger = log.New(io.Discard, "", log.LstdFlags)
 
 	// 生成私钥
@@ -95,6 +96,7 @@ func TestGenerate(t *testing.T) {
 }
 
 func TestGenerate_EAB(t *testing.T) {
+	t.Skip("requires real ACME server EAB credentials")
 	acmelog.Logger = log.New(io.Discard, "", log.LstdFlags)
 
 	// 生成私钥

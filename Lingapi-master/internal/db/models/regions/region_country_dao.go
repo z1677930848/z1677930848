@@ -24,15 +24,19 @@ const (
 
 var regionCountryIdAndNameCacheMap = map[int64]string{} // country id => name
 
-type RegionCountryDAO dbs.DAO
+type RegionCountryDAO struct {
+	dbs.DAO
+}
 
 func NewRegionCountryDAO() *RegionCountryDAO {
 	return dbs.NewDAO(&RegionCountryDAO{
-		DAOObject: dbs.DAOObject{
-			DB:     Tea.Env,
-			Table:  "edgeRegionCountries",
-			Model:  new(RegionCountry),
-			PkName: "id",
+		DAO: dbs.DAO{
+			DAOObject: dbs.DAOObject{
+				DB:     Tea.Env,
+				Table:  "edgeRegionCountries",
+				Model:  new(RegionCountry),
+				PkName: "id",
+			},
 		},
 	}).(*RegionCountryDAO)
 }

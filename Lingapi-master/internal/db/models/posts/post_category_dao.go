@@ -1,71 +1,66 @@
 package posts
 
 import (
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/iwind/TeaGo/Tea"
-	"github.com/iwind/TeaGo/dbs"
+	"github.com/TeaOSLab/EdgeAPI/internal/infra/db"
+	"gorm.io/gorm"
 )
 
 const (
-	PostCategoryStateEnabled  = 1 // 已启用
-	PostCategoryStateDisabled = 0 // 已禁用
+	PostCategoryStateEnabled  = 1
+	PostCategoryStateDisabled = 0
 )
 
-type PostCategoryDAO dbs.DAO
+type PostCategoryDAO struct {
+	db    *gorm.DB
+	Table string
+}
 
-func NewPostCategoryDAO() *PostCategoryDAO {
-	return dbs.NewDAO(&PostCategoryDAO{
-		DAOObject: dbs.DAOObject{
-			DB:     Tea.Env,
-			Table:  "edgePostCategories",
-			Model:  new(PostCategory),
-			PkName: "id",
-		},
-	}).(*PostCategoryDAO)
+func NewPostCategoryDAO() (*PostCategoryDAO, error) {
+	conn, err := db.DB()
+	if err != nil {
+		return nil, err
+	}
+	return &PostCategoryDAO{db: conn, Table: "edgePostCategories"}, nil
 }
 
 var SharedPostCategoryDAO *PostCategoryDAO
 
 func init() {
-	dbs.OnReady(func() {
-		SharedPostCategoryDAO = NewPostCategoryDAO()
-	})
+	dao, err := NewPostCategoryDAO()
+	if err == nil {
+		SharedPostCategoryDAO = dao
+	}
 }
 
-// EnablePostCategory 启用条目
-func (this *PostCategoryDAO) EnablePostCategory(tx *dbs.Tx, categoryId int64) error {
-	_, err := this.Query(tx).
-		Pk(categoryId).
-		Set("state", PostCategoryStateEnabled).
-		Update()
-	return err
+func (dao *PostCategoryDAO) EnablePostCategory(categoryId int64) error {
+	return dao.db.Model(&PostCategory{}).
+		Where("id=?", categoryId).
+		Update("state", PostCategoryStateEnabled).Error
 }
 
-// DisablePostCategory 禁用条目
-func (this *PostCategoryDAO) DisablePostCategory(tx *dbs.Tx, categoryId int64) error {
-	_, err := this.Query(tx).
-		Pk(categoryId).
-		Set("state", PostCategoryStateDisabled).
-		Update()
-	return err
+func (dao *PostCategoryDAO) DisablePostCategory(categoryId int64) error {
+	return dao.db.Model(&PostCategory{}).
+		Where("id=?", categoryId).
+		Update("state", PostCategoryStateDisabled).Error
 }
 
-// FindEnabledPostCategory 查找启用中的条目
-func (this *PostCategoryDAO) FindEnabledPostCategory(tx *dbs.Tx, categoryId int64) (*PostCategory, error) {
-	result, err := this.Query(tx).
-		Pk(categoryId).
-		State(PostCategoryStateEnabled).
-		Find()
-	if result == nil {
+func (dao *PostCategoryDAO) FindEnabledPostCategory(categoryId int64) (*PostCategory, error) {
+	var cat PostCategory
+	err := dao.db.Where("id=? AND state=?", categoryId, PostCategoryStateEnabled).First(&cat).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
 		return nil, err
 	}
-	return result.(*PostCategory), err
+	return &cat, nil
 }
 
-// FindPostCategoryName 根据主键查找名称
-func (this *PostCategoryDAO) FindPostCategoryName(tx *dbs.Tx, categoryId int64) (string, error) {
-	return this.Query(tx).
-		Pk(categoryId).
-		Result("name").
-		FindStringCol("")
+func (dao *PostCategoryDAO) FindPostCategoryName(categoryId int64) (string, error) {
+	var name string
+	err := dao.db.Model(&PostCategory{}).
+		Where("id=?", categoryId).
+		Select("name").
+		Scan(&name).Error
+	return name, err
 }

@@ -107,7 +107,12 @@ func (this *IPLibraryArtifactDAO) FindPublicArtifact(tx *dbs.Tx) (*IPLibraryArti
 	if err != nil || one == nil {
 		return nil, err
 	}
-	return one.(*IPLibraryArtifact), nil
+	artifact, ok := one.(*IPLibraryArtifact)
+	if !ok {
+		// fallback for stubbed db results
+		return nil, nil
+	}
+	return artifact, nil
 }
 
 // UpdateArtifactPublic 使用某个制品

@@ -65,7 +65,7 @@ func (this *jsonUserType) Init() error {
 }
 
 func TestJSONDecodeConfig(t *testing.T) {
-	var data = []byte(`{ "name":"Lily", "age":20, "description": "Nice" }`)
+	var data = []byte(`{ "name":"LongUserName", "age":20, "description": "Nice" }`)
 
 	var u = &jsonUserType{}
 	newJSON, err := utils.JSONDecodeConfig(data, u)
@@ -76,7 +76,7 @@ func TestJSONDecodeConfig(t *testing.T) {
 }
 
 func TestJSONDecodeConfig_Validate(t *testing.T) {
-	var data = []byte(`{ "name":"Lily", "age":20, "description": "Nice" }`)
+	var data = []byte(`{ "name":"LongUserName", "age":20, "description": "Nice" }`)
 
 	var u = &jsonUserType{}
 

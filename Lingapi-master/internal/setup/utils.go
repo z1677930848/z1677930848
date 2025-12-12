@@ -21,7 +21,7 @@ func CompareVersion(version1 string, version2 string) int8 {
 		return 0
 	}
 
-	return stringutil.VersionCompare(fixVersion(version1), fixVersion(version2))
+	return int8(stringutil.VersionCompare(fixVersion(version1), fixVersion(version2)))
 }
 
 func fixVersion(version string) string {
