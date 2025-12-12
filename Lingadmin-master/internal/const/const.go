@@ -2,7 +2,7 @@ package teaconst
 
 const (
 	// 版本号：管理员端发布版本，每次发布需更新
-	Version = "1.1.8"
+	Version = "1.1.11"
 
 	// APINodeVersion：打包时用于校验 EdgeAPI / API 节点版本号，需要与 API 同步更新
 	APINodeVersion = "1.1.0"
