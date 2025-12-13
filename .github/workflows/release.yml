@@ -28,10 +28,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y zip unzip gcc g++ build-essential
 
-      - name: Clone EdgeCommon
-        run: |
-          git clone --depth=1 https://github.com/TeaOSLab/EdgeCommon.git EdgeCommon
-
       - name: Extract version from tag
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
@@ -121,10 +117,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y zip unzip gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
-
-      - name: Clone EdgeCommon
-        run: |
-          git clone --depth=1 https://github.com/TeaOSLab/EdgeCommon.git EdgeCommon
 
       - name: Extract version from tag
         id: version
