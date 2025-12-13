@@ -260,22 +260,43 @@ download_and_install() {
     # 复制二进制文件
     print_info "正在安装到 $install_path..."
 
-    # 优先查找ling-开头的文件，兼容sk-和edge-开头的文件
-    local binary_file=$(find "$tmp_dir" -name "ling-${component}" -type f | head -1)
-    if [ -z "$binary_file" ]; then
-        binary_file=$(find "$tmp_dir" -name "sk-${component}" -type f | head -1)
+    # 查找二进制文件，支持多种命名方式
+    local binary_file=""
+    local binary_names=()
+
+    # 根据组件类型定义可能的二进制文件名
+    if [ "$component" == "admin" ]; then
+        binary_names=("lingcdnadmin" "ling-admin" "sk-admin" "edge-admin")
+    elif [ "$component" == "api" ]; then
+        binary_names=("ling-api" "sk-api" "edge-api")
+    elif [ "$component" == "node" ]; then
+        binary_names=("ling-node" "sk-node" "edge-node")
+    else
+        binary_names=("ling-${component}" "sk-${component}" "edge-${component}")
     fi
-    if [ -z "$binary_file" ]; then
-        binary_file=$(find "$tmp_dir" -name "edge-${component}" -type f | head -1)
-    fi
+
+    # 查找二进制文件
+    for name in "${binary_names[@]}"; do
+        binary_file=$(find "$tmp_dir" -name "$name" -type f | head -1)
+        if [ -n "$binary_file" ]; then
+            print_info "找到二进制文件: $name"
+            break
+        fi
+    done
 
     if [ -n "$binary_file" ]; then
         # 统一使用 ling- 命名
-        cp "$binary_file" "${install_path}/bin/ling-${component}"
-        chmod +x "${install_path}/bin/ling-${component}"
+        local target_name="ling-${component}"
+        [ "$component" == "admin" ] && target_name="lingcdnadmin"
+
+        cp "$binary_file" "${install_path}/bin/${target_name}"
+        chmod +x "${install_path}/bin/${target_name}"
         print_success "二进制文件已安装"
     else
         print_error "未找到二进制文件"
+        print_info "查找的文件名: ${binary_names[*]}"
+        print_info "临时目录内容:"
+        find "$tmp_dir" -type f | head -20
         rm -rf "$tmp_dir"
         exit 1
     fi
@@ -372,18 +393,18 @@ configure_firewall() {
 setup_systemd() {
     print_info "配置 LingCDN Admin 系统服务..."
 
-    local service_file="/etc/systemd/system/ling-admin.service"
+    local service_file="/etc/systemd/system/lingcdnadmin.service"
 
     cat > "$service_file" << EOF
 [Unit]
-Description=Ling Admin
+Description=LingCDN Admin
 After=network.target
 
 [Service]
 Type=simple
 User=root
 WorkingDirectory=${INSTALL_DIR}
-ExecStart=${INSTALL_DIR}/bin/ling-admin
+ExecStart=${INSTALL_DIR}/bin/lingcdnadmin
 Restart=on-failure
 RestartSec=5s
 LimitNOFILE=65536
@@ -393,9 +414,9 @@ WantedBy=multi-user.target
 EOF
 
     systemctl daemon-reload
-    systemctl enable ling-admin
+    systemctl enable lingcdnadmin
 
-    print_success "Ling Admin 系统服务配置完成"
+    print_success "LingCDN Admin 系统服务配置完成"
 }
 
 # 检查并安装MySQL
@@ -587,26 +608,26 @@ EOF
 
 # 启动服务
 start_service() {
-    print_info "启动 Ling Admin 服务..."
+    print_info "启动 LingCDN Admin 服务..."
 
-    if systemctl start ling-admin; then
+    if systemctl start lingcdnadmin; then
         sleep 3
 
-        if systemctl is-active --quiet ling-admin; then
-            print_success "Ling Admin 服务启动成功"
+        if systemctl is-active --quiet lingcdnadmin; then
+            print_success "LingCDN Admin 服务启动成功"
 
             # 检查端口监听
             if netstat -tlnp 2>/dev/null | grep -q ":7788" || ss -tlnp 2>/dev/null | grep -q ":7788"; then
-                print_success "Ling Admin 服务运行正常 (端口 7788 已监听)"
+                print_success "LingCDN Admin 服务运行正常 (端口 7788 已监听)"
             else
                 print_warning "端口 7788 尚未监听，服务可能正在初始化"
             fi
         else
-            print_warning "服务状态异常，查看日志: journalctl -u ling-admin -f"
+            print_warning "服务状态异常，查看日志: journalctl -u lingcdnadmin -f"
         fi
     else
-        print_error "Ling Admin 服务启动失败"
-        print_info "查看日志: journalctl -u ling-admin -n 50"
+        print_error "LingCDN Admin 服务启动失败"
+        print_info "查看日志: journalctl -u lingcdnadmin -n 50"
         exit 1
     fi
 }
@@ -656,11 +677,11 @@ show_info() {
     echo ""
 
     echo "LingCDN Admin 服务管理:"
-    echo "  启动: systemctl start ling-admin"
-    echo "  停止: systemctl stop ling-admin"
-    echo "  重启: systemctl restart ling-admin"
-    echo "  状态: systemctl status ling-admin"
-    echo "  日志: journalctl -u ling-admin -f"
+    echo "  启动: systemctl start lingcdnadmin"
+    echo "  停止: systemctl stop lingcdnadmin"
+    echo "  重启: systemctl restart lingcdnadmin"
+    echo "  状态: systemctl status lingcdnadmin"
+    echo "  日志: journalctl -u lingcdnadmin -f"
     echo ""
 
     echo "重要提示:"
