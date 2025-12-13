@@ -117,7 +117,7 @@ function build() {
 
 	# build
 	echo "building ${NAME} ..."
-	env GOOS="$OS" GOARCH="$ARCH" CGO_ENABLED=1 go build -trimpath -tags $TAG -ldflags="-s -w" -o "$DIST"/bin/${NAME} "$ROOT"/../cmd/lingcdnadmin/main.go
+	env GOOS="$OS" GOARCH="$ARCH" CGO_ENABLED=0 go build -trimpath -tags $TAG -ldflags="-s -w" -o "$DIST"/bin/${NAME} "$ROOT"/../cmd/lingcdnadmin/main.go
 
 	# 检查二进制文件是否成功生成
 	if [ ! -f "$DIST"/bin/${NAME} ]; then
