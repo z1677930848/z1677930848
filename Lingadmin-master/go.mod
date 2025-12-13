@@ -6,11 +6,14 @@ go 1.25
 // git clone https://github.com/TeaOSLab/EdgeCommon.git ../EdgeCommon
 replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 
+// EdgeCommon 内部依赖 TeaGo，主项目需要显式 replace（依赖模块的 replace 不会传递）
+replace github.com/iwind/TeaGo v0.0.0 => github.com/iwind/TeaGo v0.0.0-20240508072741-7647e70b7070
+
 require (
 	github.com/TeaOSLab/EdgeCommon v0.0.0-00010101000000-000000000000
 	github.com/cespare/xxhash v1.1.0
 	github.com/go-sql-driver/mysql v1.5.0
-	github.com/iwind/TeaGo v0.0.0-20240508072741-7647e70b7070
+	github.com/iwind/TeaGo v0.0.0
 	github.com/iwind/gosock v0.0.0-20211103081026-ee4652210ca4
 	github.com/miekg/dns v1.1.61
 	github.com/shirou/gopsutil/v3 v3.22.5
