@@ -22,6 +22,11 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Clone sibling repos
+        run: |
+          git clone --depth=1 https://github.com/TeaOSLab/EdgeCommon.git ../EdgeCommon || true
+          git clone --depth=1 https://github.com/TeaOSLab/EdgeAPI.git ../EdgeAPI || true
+
       - name: Install build dependencies
         run: |
           sudo apt-get update
