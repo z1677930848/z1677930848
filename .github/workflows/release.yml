@@ -162,9 +162,7 @@ jobs:
           EDGENODE_PATH: ${{ github.workspace }}/Lingnode-master
           GOOS: linux
           GOARCH: arm64
-          CGO_ENABLED: 1
-          CC: aarch64-linux-gnu-gcc
-          CXX: aarch64-linux-gnu-g++
+          CGO_ENABLED: 0
         run: |
           chmod +x build.sh
           ./build.sh linux arm64 community
