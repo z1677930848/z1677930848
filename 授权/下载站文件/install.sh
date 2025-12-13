@@ -308,12 +308,19 @@ download_and_install() {
         # 查找web目录
         local web_dir=$(find "$tmp_dir" -type d -name "web" -path "*/web" | head -1)
 
-        if [ -n "$web_dir" ] && [ -d "$web_dir/views" ]; then
-            # 删除旧的web目录
-            rm -rf "${install_path}/web"
-            # 复制新的web目录
-            cp -r "$web_dir" "${install_path}/"
-            print_success "web 目录已安装"
+        if [ -n "$web_dir" ] && [ -d "$web_dir" ]; then
+            # 检查是否包含public目录（前端项目标志）或index.html
+            if [ -d "$web_dir/public" ] || [ -f "$web_dir/index.html" ]; then
+                # 删除旧的web目录
+                rm -rf "${install_path}/web"
+                # 复制新的web目录
+                cp -r "$web_dir" "${install_path}/"
+                print_success "web 目录已安装"
+            else
+                print_warning "web 目录结构异常，但仍继续安装"
+                rm -rf "${install_path}/web"
+                cp -r "$web_dir" "${install_path}/"
+            fi
         else
             print_error "安装包中未找到 web 目录"
             print_info "尝试的路径: $tmp_dir"
@@ -323,7 +330,7 @@ download_and_install() {
         fi
 
         # 验证 web 目录
-        if [ -d "${install_path}/web/views" ]; then
+        if [ -d "${install_path}/web" ]; then
             print_success "web 目录验证通过"
         else
             print_error "web 目录安装失败"
