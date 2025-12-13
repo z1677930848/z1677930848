@@ -69,7 +69,13 @@ function build() {
 
     # generate files (optional, may fail in CI environment)
 	echo "generating files ..."
-	go run -tags $TAG "$ROOT"/../cmd/lingcdnadmin/main.go generate || echo "warning: generate failed, using existing components.src.js"
+	go run -tags $TAG "$ROOT"/../cmd/lingcdnadmin/main.go generate 2>/dev/null || echo "warning: generate failed, using existing components.src.js"
+
+	# 确保 components.src.js 存在
+	if [ ! -f "${JS_ROOT}"/components.src.js ]; then
+		echo "error: components.src.js not found"
+		exit 1
+	fi
 
 	# prefer npm-based build if package.json exists in web/
 	JS_BUILD_SUCCESS=false
@@ -77,11 +83,9 @@ function build() {
 		echo "building web assets with npm (terser)..."
 		# 如未安装依赖，先安装，确保 terser 可用
 		if [ ! -d "$ROOT"/../web/node_modules ]; then
-			npm --prefix "$ROOT"/../web ci || npm --prefix "$ROOT"/../web install || true
+			npm --prefix "$ROOT"/../web ci 2>/dev/null || npm --prefix "$ROOT"/../web install 2>/dev/null || true
 		fi
-		if npm --prefix "$ROOT"/../web run build 2>/dev/null; then
-			JS_BUILD_SUCCESS=true
-		fi
+		npm --prefix "$ROOT"/../web run build 2>/dev/null && JS_BUILD_SUCCESS=true || true
 	fi
 
 	if [ "$JS_BUILD_SUCCESS" = false ]; then
