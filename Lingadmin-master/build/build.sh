@@ -121,6 +121,10 @@ function build() {
 
 	# build
 	echo "building ${NAME} ..."
+	# 确保 go.mod 是最新的
+	cd "$ROOT"/.. || exit
+	go mod tidy
+	cd - || exit
 	env GOOS="$OS" GOARCH="$ARCH" CGO_ENABLED=0 go build -trimpath -tags $TAG -ldflags="-s -w" -o "$DIST"/bin/${NAME} "$ROOT"/../cmd/lingcdnadmin/main.go
 
 	# 检查二进制文件是否成功生成

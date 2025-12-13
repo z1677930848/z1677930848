@@ -68,6 +68,10 @@ function build() {
 	fi
 
 	echo "building ..."
+	# 确保 go.mod 是最新的
+	cd "$ROOT"/.. || exit
+	go mod tidy
+	cd - || exit
 
 	CC_PATH=""
 	CXX_PATH=""

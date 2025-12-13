@@ -113,6 +113,11 @@ function build() {
 	rm -f "$DIST"/deploy/.gitignore
 	cp -R "$ROOT"/installers "$DIST"/
 
+	# 确保 go.mod 是最新的
+	cd "$ROOT"/.. || exit
+	go mod tidy
+	cd - || exit
+
 	# building edge installer
 	echo "building node installer ..."
 	architects=("amd64" "arm64")
@@ -144,10 +149,14 @@ function build() {
 		fi
 	fi
 	# building api node
-	if [ -f $CC_PATH ]; then
+	# 如果找到了 musl 交叉编译工具链，使用 CGO 进行静态链接
+	if [ -n "$CC_PATH" ] && [ -f "$CC_PATH" ]; then
+		echo "using musl toolchain for static linking: $CC_PATH"
 		env CC=$CC_PATH CXX=$CXX_PATH CGO_ENABLED=1 GOOS="$OS" GOARCH="$ARCH" go build -trimpath -tags $TAG --ldflags="-linkmode external -extldflags -static -s -w" -o "$DIST/bin/$NAME" "$ROOT"/../cmd/edge-api/main.go
 	else
-		env GOOS="$OS" GOARCH="$ARCH" CGO_ENABLED=1 go build -trimpath -tags $TAG --ldflags="-s -w" -o "$DIST/bin/$NAME" "$ROOT"/../cmd/edge-api/main.go
+		# 如果没有找到 musl 工具链，使用 CGO_ENABLED=0 进行纯 Go 编译
+		echo "musl toolchain not found, building without CGO"
+		env GOOS="$OS" GOARCH="$ARCH" CGO_ENABLED=0 go build -trimpath -tags $TAG --ldflags="-s -w" -o "$DIST/bin/$NAME" "$ROOT"/../cmd/edge-api/main.go
 	fi
 
 	if [ ! -f "${DIST}/bin/${NAME}" ]; then
