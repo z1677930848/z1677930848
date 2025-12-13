@@ -60,6 +60,71 @@ check_root() {
     fi
 }
 
+# 检查是否已安装
+check_installed() {
+    print_info "检查是否已安装 LingCDN..."
+
+    local is_installed=false
+    local install_indicators=()
+
+    # 检查安装目录
+    if [ -d "$INSTALL_DIR" ] && [ -f "$INSTALL_DIR/bin/lingcdnadmin" ]; then
+        is_installed=true
+        install_indicators+=("安装目录: $INSTALL_DIR")
+    fi
+
+    # 检查 systemd 服务
+    if systemctl list-unit-files | grep -q "lingcdnadmin.service"; then
+        is_installed=true
+        install_indicators+=("系统服务: lingcdnadmin.service")
+    fi
+
+    # 检查旧版本的服务名
+    if systemctl list-unit-files | grep -q "ling-admin.service"; then
+        is_installed=true
+        install_indicators+=("系统服务: ling-admin.service (旧版本)")
+    fi
+
+    if [ "$is_installed" = true ]; then
+        echo ""
+        print_warning "检测到 LingCDN 已经安装！"
+        echo ""
+        echo "已安装的组件:"
+        for indicator in "${install_indicators[@]}"; do
+            echo "  - $indicator"
+        done
+        echo ""
+        echo "如果您想要："
+        echo "  1. 更新到新版本，请使用更新脚本："
+        echo "     curl -sSL http://dl.lingcdn.cloud/update.sh | bash"
+        echo ""
+        echo "  2. 重新安装，请先卸载现有版本："
+        echo "     curl -sSL http://dl.lingcdn.cloud/uninstall.sh | bash"
+        echo ""
+
+        # 检查是否在交互模式下运行
+        if [ -t 0 ]; then
+            # 交互模式：询问用户是否继续
+            read -p "$(echo -e ${YELLOW}是否强制继续安装？这将覆盖现有安装 [y/N]: ${NC})" -n 1 -r
+            echo
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                print_info "安装已取消"
+                exit 0
+            fi
+
+            print_warning "继续安装将覆盖现有版本！"
+            sleep 2
+        else
+            # 非交互模式：直接退出
+            print_error "检测到已安装，安装已取消"
+            print_info "请使用更新脚本或先卸载现有版本"
+            exit 1
+        fi
+    else
+        print_success "未检测到已安装的 LingCDN"
+    fi
+}
+
 # 检测操作系统和架构
 detect_system() {
     print_info "检测系统信息..."
@@ -735,6 +800,7 @@ download_node_package() {
 main() {
     show_logo
     check_root
+    check_installed
     detect_system
     check_commands
 
