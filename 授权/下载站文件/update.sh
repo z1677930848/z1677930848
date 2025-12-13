@@ -34,7 +34,7 @@ trap 'handle_error $LINENO' ERR
 DOWNLOAD_HOST_DEFAULT="https://dl.lingcdn.cloud"
 DOWNLOAD_HOST="${LINGCDN_DOWNLOAD_HOST:-$DOWNLOAD_HOST_DEFAULT}"
 API_VERSION_URL="${LINGCDN_VERSION_API:-${DOWNLOAD_HOST}/api/boot/versions}"
-INSTALL_DIR="${LINGCDN_INSTALL_DIR:-/opt/lingcdn}"
+INSTALL_DIR="${LINGCDN_INSTALL_DIR:-/home/lingcdn}"
 BACKUP_DIR="${LINGCDN_BACKUP_DIR:-$INSTALL_DIR/backups}"
 CURL_OPTS=(--fail --silent --show-error --location --connect-timeout 10 --max-time 600)
 declare -A VERSION_PAYLOAD_CACHE

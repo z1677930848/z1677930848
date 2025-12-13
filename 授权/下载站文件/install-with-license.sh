@@ -4,7 +4,7 @@
 set -e
 
 LICENSE_SERVER="https://dl.lingcdn.cloud"
-INSTALL_DIR="/opt/lingcdn"
+INSTALL_DIR="/home/lingcdn"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'

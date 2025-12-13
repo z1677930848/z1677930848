@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # ==========================================
-# LingCDN 一键安装脚�?# 域名: dl.lingcdn.cloud
+# LingCDN 一键安装脚本
+# 域名: dl.lingcdn.cloud
 # 支持: LingCDN Admin 原生安装向导
 # ==========================================
 
@@ -17,7 +18,7 @@ NC='\033[0m' # No Color
 # 配置变量（允许通过环境变量覆盖，默认使用固定官方下载域名）
 DOWNLOAD_HOST="${DOWNLOAD_HOST:-https://dl.lingcdn.cloud}"
 API_VERSION_URL="${DOWNLOAD_HOST}/api/boot/versions"
-INSTALL_DIR="/opt/lingcdn"
+INSTALL_DIR="/home/lingcdn"
 
 # 打印带颜色的消息
 print_info() {
@@ -40,14 +41,20 @@ print_error() {
 show_logo() {
     cat << "EOF"
 
- ╔═══════════════════════════════════════�? �?                                      �? �?      LingCDN 一键安装脚�?            �? �?                                      �? �?      https://dl.lingcdn.cloud        �? �?                                      �? ╚═══════════════════════════════════════�?
+ ╔═══════════════════════════════════════╗
+ ║                                      ║
+ ║      LingCDN 一键安装脚本            ║
+ ║                                      ║
+ ║      https://dl.lingcdn.cloud        ║
+ ║                                      ║
+ ╚═══════════════════════════════════════╝
 EOF
 }
 
 # 检查是否为 root 用户
 check_root() {
     if [ "$EUID" -ne 0 ]; then
-        print_error "请使�?root 权限运行此脚�?
+        print_error "请使用 root 权限运行此脚本"
         print_info "使用命令: sudo $0"
         exit 1
     fi
@@ -55,7 +62,7 @@ check_root() {
 
 # 检测操作系统和架构
 detect_system() {
-    print_info "检测系统信�?.."
+    print_info "检测系统信息..."
 
     OS=$(uname -s | tr '[:upper:]' '[:lower:]')
     ARCH=$(uname -m)
@@ -110,9 +117,10 @@ check_commands() {
     print_success "所有必要工具已就绪"
 }
 
-# 获取最新版本信�?get_latest_version() {
+# 获取最新版本信息
+get_latest_version() {
     local component=$1
-    print_info "正在获取 ${component} 最新版本信�?.."
+    print_info "正在获取 ${component} 最新版本信息..."
 
     local url="${API_VERSION_URL}?os=${OS}&arch=${ARCH}"
     local response=$(curl -s "$url")
@@ -122,7 +130,8 @@ check_commands() {
         exit 1
     fi
 
-    # 保存响应到临时文件以便多次读�?    local tmp_json=$(mktemp)
+    # 保存响应到临时文件以便多次读取
+    local tmp_json=$(mktemp)
     echo "$response" > "$tmp_json"
 
     # 解析 JSON - 优先使用jq，其次使用awk
@@ -133,13 +142,17 @@ check_commands() {
         DOWNLOAD_URL="${DOWNLOAD_HOST}${path}"
         FILE_MD5=$(jq -r ".data.versions[] | select(.code==\"${component}\") | .md5" "$tmp_json")
     else
-        # 使用awk解析JSON（简单但可靠�?        # 将JSON转换为每行一个字段，然后提取对应组件的信�?        local in_target=0
+        # 使用awk解析JSON（简单但可靠）
+        # 将JSON转换为每行一个字段，然后提取对应组件的信息
+        local in_target=0
         while IFS= read -r line; do
-            # 检查是否找到目标组�?            if echo "$line" | grep -q "\"code\".*:.*\"${component}\""; then
+            # 检查是否找到目标组件
+            if echo "$line" | grep -q "\"code\".*:.*\"${component}\""; then
                 in_target=1
             fi
 
-            # 如果在目标组件内，提取字�?            if [ $in_target -eq 1 ]; then
+            # 如果在目标组件内，提取字段
+            if [ $in_target -eq 1 ]; then
                 if echo "$line" | grep -q "\"version\""; then
                     VERSION=$(echo "$line" | awk -F'"' '{print $4}')
                 elif echo "$line" | grep -q "\"url\""; then
@@ -149,7 +162,8 @@ check_commands() {
                     FILE_MD5=$(echo "$line" | awk -F'"' '{print $4}')
                 fi
 
-                # 遇到对象结束符号，停�?                if echo "$line" | grep -q "^[[:space:]]*}"; then
+                # 遇到对象结束符号，停止
+                if echo "$line" | grep -q "^[[:space:]]*}"; then
                     break
                 fi
             fi
@@ -160,24 +174,26 @@ check_commands() {
     rm -f "$tmp_json"
 
     if [ -z "$VERSION" ]; then
-        print_error "未找到适用的版�?
+        print_error "未找到适用的版本"
         exit 1
     fi
 
-    print_success "找到最新版�? $VERSION"
+    print_success "找到最新版本: $VERSION"
 }
 
-# 下载并安装组�?download_and_install() {
+# 下载并安装组件
+download_and_install() {
     local component=$1
     local component_name=$2
 
     get_latest_version "$component"
 
-    print_info "开始下�?${component_name} v${VERSION}..."
+    print_info "开始下载 ${component_name} v${VERSION}..."
 
     local tmp_dir=$(mktemp -d)
 
-    # 根据文件类型确定文件名和扩展�?    local file_ext=""
+    # 根据文件类型确定文件名和扩展名
+    local file_ext=""
     if [[ "$DOWNLOAD_URL" == *.tar.gz ]]; then
         file_ext=".tar.gz"
     elif [[ "$DOWNLOAD_URL" == *.zip ]]; then
@@ -200,10 +216,11 @@ check_commands() {
 
     print_success "下载完成"
 
-    # 验证 MD5（如果有�?    if [ -n "$FILE_MD5" ] && [ "$FILE_MD5" != "null" ]; then
+    # 验证 MD5（如果有的话）
+    if [ -n "$FILE_MD5" ] && [ "$FILE_MD5" != "null" ]; then
         local actual_md5=$(md5sum "$download_file" | awk '{print $1}')
         if [ "$actual_md5" != "$FILE_MD5" ]; then
-            print_warning "MD5 校验失败！预�? $FILE_MD5, 实际: $actual_md5"
+            print_warning "MD5 校验失败！预期: $FILE_MD5, 实际: $actual_md5"
             print_warning "继续安装可能存在风险"
         else
             print_success "MD5 校验通过"
@@ -222,8 +239,8 @@ check_commands() {
         fi
     else
         if ! unzip -q "$download_file" -d "$tmp_dir"; then
-            print_error "解压失败！请确保 unzip 工具已安�?
-            print_info "尝试手动安装: apt-get install unzip �?yum install unzip"
+            print_error "解压失败！请确保 unzip 工具已安装"
+            print_info "尝试手动安装: apt-get install unzip 或 yum install unzip"
             rm -rf "$tmp_dir"
             exit 1
         fi
@@ -240,7 +257,8 @@ check_commands() {
     mkdir -p "$install_path/bin"
     mkdir -p "$install_path/configs"
 
-    # 复制二进制文�?    print_info "正在安装�?$install_path..."
+    # 复制二进制文件
+    print_info "正在安装到 $install_path..."
 
     # 优先查找ling-开头的文件，兼容sk-和edge-开头的文件
     local binary_file=$(find "$tmp_dir" -name "ling-${component}" -type f | head -1)
@@ -262,7 +280,7 @@ check_commands() {
         exit 1
     fi
 
-    # 处理 web 目录 (LingCDN Admin 需�?
+    # 处理 web 目录 (LingCDN Admin 需要)
     if [ "$component" == "admin" ]; then
         print_info "正在安装 web 视图文件..."
 
@@ -274,10 +292,10 @@ check_commands() {
             rm -rf "${install_path}/web"
             # 复制新的web目录
             cp -r "$web_dir" "${install_path}/"
-            print_success "web 目录已安�?
+            print_success "web 目录已安装"
         else
-            print_error "安装包中未找�?web 目录"
-            print_info "尝试的路�? $tmp_dir"
+            print_error "安装包中未找到 web 目录"
+            print_info "尝试的路径: $tmp_dir"
             find "$tmp_dir" -type d -name "web" || true
             rm -rf "$tmp_dir"
             exit 1
@@ -327,26 +345,27 @@ EOF
     print_success "LingCDN Admin 服务配置完成"
 }
 
-# 配置防火�?configure_firewall() {
-    print_info "配置防火�?.."
+# 配置防火墙
+configure_firewall() {
+    print_info "配置防火墙..."
 
     local port="7788"
 
     if command -v firewall-cmd &> /dev/null && systemctl is-active --quiet firewalld; then
         firewall-cmd --permanent --add-port=${port}/tcp &>/dev/null || true
         firewall-cmd --reload &>/dev/null || true
-        print_success "firewalld 规则已添�?
+        print_success "firewalld 规则已添加"
     elif command -v ufw &> /dev/null; then
         ufw allow ${port}/tcp &>/dev/null || true
-        print_success "ufw 规则已添�?
+        print_success "ufw 规则已添加"
     elif command -v iptables &> /dev/null; then
         iptables -I INPUT -p tcp --dport ${port} -j ACCEPT 2>/dev/null || true
-        print_success "iptables 规则已添�?
+        print_success "iptables 规则已添加"
     else
-        print_warning "未检测到防火墙，请手动开放端�? ${port}"
+        print_warning "未检测到防火墙，请手动开放端口 ${port}"
     fi
 
-    print_info "如果使用云服务器，请在安全组中开放端�? ${port}"
+    print_info "如果使用云服务器，请在安全组中开放端口 ${port}"
 }
 
 # 配置 systemd 服务
@@ -381,12 +400,14 @@ EOF
 
 # 检查并安装MySQL
 install_mysql() {
-    print_info "检查MySQL数据�?.."
+    print_info "检查MySQL数据库..."
 
-    # 检查MySQL是否已安�?    if command -v mysql &> /dev/null; then
-        print_success "MySQL已安�?
+    # 检查MySQL是否已安装
+    if command -v mysql &> /dev/null; then
+        print_success "MySQL已安装"
 
-        # 尝试连接MySQL检查是否正常运�?        if systemctl is-active --quiet mysql || systemctl is-active --quiet mysqld; then
+        # 尝试连接MySQL检查是否正常运行
+        if systemctl is-active --quiet mysql || systemctl is-active --quiet mysqld; then
             print_success "MySQL服务正在运行"
             return 0
         else
@@ -397,7 +418,7 @@ install_mysql() {
     fi
 
     # 检查是否在非交互模式下运行
-    print_info "MySQL未安装，正在自动安装MySQL数据�?.."
+    print_info "MySQL未安装，正在自动安装MySQL数据库..."
     install_mysql_choice="y"
 
     print_info "开始安装MySQL..."
@@ -410,7 +431,8 @@ install_mysql() {
         export DEBIAN_FRONTEND=noninteractive
         apt-get update -qq
 
-        # 安装MySQL服务�?        apt-get install -y mysql-server mysql-client
+        # 安装MySQL服务器
+        apt-get install -y mysql-server mysql-client
 
         # 启动MySQL
         systemctl start mysql
@@ -420,7 +442,8 @@ install_mysql() {
         # CentOS/RHEL
         print_info "检测到 CentOS/RHEL 系统，安装MySQL..."
 
-        # 检测系统版�?        if [ -f /etc/redhat-release ]; then
+        # 检测系统版本
+        if [ -f /etc/redhat-release ]; then
             if grep -q "release 8" /etc/redhat-release; then
                 # CentOS 8 / RHEL 8
                 yum install -y mysql-server
@@ -450,10 +473,10 @@ install_mysql() {
 
     # 检查MySQL是否成功启动
     if systemctl is-active --quiet mysql || systemctl is-active --quiet mysqld; then
-        print_success "MySQL安装并启动成�?
+        print_success "MySQL安装并启动成功"
 
         # 创建数据库和用户
-        print_info "正在配置MySQL数据�?.."
+        print_info "正在配置MySQL数据库..."
 
         # 生成随机密码
         DB_PASSWORD=$(openssl rand -base64 12 2>/dev/null || cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1)
@@ -467,28 +490,30 @@ FLUSH PRIVILEGES;
 EOF
 
         if [ $? -eq 0 ]; then
-            print_success "MySQL数据库配置完�?
-            print_info "数据库信�?"
+            print_success "MySQL数据库配置完成"
+            print_info "数据库信息:"
             echo "  数据库名: lingcdn"
-            echo "  用户�? lingcdn"
+            echo "  用户名: lingcdn"
             echo "  密码: ${DB_PASSWORD}"
             echo ""
-            print_warning "请记录以上数据库信息，安装向导中需要使�?
+            print_warning "请记录以上数据库信息，安装向导中需要使用"
 
             # 保存数据库信息到临时文件
             cat > /tmp/lingcdn-db-info.txt << DBINFO
-LingCDN 数据库信�?================
-数据库主�? 127.0.0.1
-数据库端�? 3306
-数据库名�? lingcdn
-用户�? lingcdn
+LingCDN 数据库信息
+================
+数据库主机: 127.0.0.1
+数据库端口: 3306
+数据库名称: lingcdn
+用户名: lingcdn
 密码: ${DB_PASSWORD}
 
 请在安装向导中使用以上信息配置数据库连接
 DBINFO
-            print_info "数据库信息已保存�? /tmp/lingcdn-db-info.txt"
+            print_info "数据库信息已保存到 /tmp/lingcdn-db-info.txt"
 
-            # 只在交互模式下等待用户确�?            if [ -t 0 ]; then
+            # 只在交互模式下等待用户确认
+            if [ -t 0 ]; then
                 echo ""
                 echo -n "按回车键继续..."
                 read
@@ -497,11 +522,11 @@ DBINFO
                 sleep 2
             fi
         else
-            print_error "MySQL数据库配置失�?
+            print_error "MySQL数据库配置失败"
             print_warning "请在安装向导中手动配置数据库"
         fi
     else
-        print_error "MySQL启动失败，请检查系统日�?
+        print_error "MySQL启动失败，请检查系统日志"
         print_warning "您仍可以继续安装，但需要在安装向导中配置外部数据库"
     fi
 }
@@ -510,14 +535,16 @@ DBINFO
 auto_configure_api() {
     print_info "自动配置API节点..."
 
-    # 环境变量或自动生�?    ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+    # 环境变量或自动生成
+    ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
 
     if [ -z "$ADMIN_PASSWORD" ]; then
         ADMIN_PASSWORD=$(openssl rand -base64 12 2>/dev/null || cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1)
-        print_warning "自动生成管理员密�? ${ADMIN_PASSWORD}"
+        print_warning "自动生成管理员密码: ${ADMIN_PASSWORD}"
     fi
 
-    # 配置数据�?    cat > "${INSTALL_DIR}/ling-api/configs/db.yaml" << EOF
+    # 配置数据库
+    cat > "${INSTALL_DIR}/ling-api/configs/db.yaml" << EOF
 db:
   type: mysql
   dsn: lingcdn:${DB_PASSWORD}@tcp(127.0.0.1:3306)/lingcdn?charset=utf8mb4&timeout=30s
@@ -568,8 +595,9 @@ start_service() {
         if systemctl is-active --quiet ling-admin; then
             print_success "Ling Admin 服务启动成功"
 
-            # 检查端口监�?            if netstat -tlnp 2>/dev/null | grep -q ":7788" || ss -tlnp 2>/dev/null | grep -q ":7788"; then
-                print_success "Ling Admin 服务运行正常 (端口 7788 已监�?"
+            # 检查端口监听
+            if netstat -tlnp 2>/dev/null | grep -q ":7788" || ss -tlnp 2>/dev/null | grep -q ":7788"; then
+                print_success "Ling Admin 服务运行正常 (端口 7788 已监听)"
             else
                 print_warning "端口 7788 尚未监听，服务可能正在初始化"
             fi
@@ -598,7 +626,7 @@ report_install() {
 show_info() {
     echo ""
     echo "=========================================="
-    print_success "安装完成�?
+    print_success "安装完成!"
     echo "=========================================="
     echo ""
     echo "版本: $VERSION"
@@ -617,12 +645,12 @@ show_info() {
     fi
 
     echo ""
-    echo "管理员账�?"
-    echo "  用户�? ${ADMIN_USERNAME}"
+    echo "管理员账号:"
+    echo "  用户名: ${ADMIN_USERNAME}"
     echo "  密码: ${ADMIN_PASSWORD}"
     echo ""
-    echo "数据库信�?"
-    echo "  数据�? lingcdn"
+    echo "数据库信息:"
+    echo "  数据库: lingcdn"
     echo "  用户: lingcdn"
     echo "  密码: ${DB_PASSWORD}"
     echo ""
@@ -631,19 +659,20 @@ show_info() {
     echo "  启动: systemctl start ling-admin"
     echo "  停止: systemctl stop ling-admin"
     echo "  重启: systemctl restart ling-admin"
-    echo "  状�? systemctl status ling-admin"
+    echo "  状态: systemctl status ling-admin"
     echo "  日志: journalctl -u ling-admin -f"
     echo ""
 
     echo "重要提示:"
-    echo "  - 请确保云服务器安全组已开放端�?7788"
-    echo "  - 建议配置 HTTPS 以保障安�?
-    echo "  - 首次安装请立即修改默认密�?
+    echo "  - 请确保云服务器安全组已开放端口 7788"
+    echo "  - 建议配置 HTTPS 以保障安全"
+    echo "  - 首次安装请立即修改默认密码"
     echo ""
     echo "=========================================="
 }
 
-# 主函�?download_node_package() {
+# 下载节点安装包
+download_node_package() {
     local component="node"
     get_latest_version "$component"
 
@@ -658,7 +687,7 @@ show_info() {
 
     print_info "下载节点安装包到本地: ${target_file} ..."
     if ! curl -L -o "$target_file" "$DOWNLOAD_URL" --progress-bar; then
-        print_error "节点安装包下载失�?
+        print_error "节点安装包下载失败"
         exit 1
     fi
 
@@ -666,9 +695,9 @@ show_info() {
         local actual_md5
         actual_md5=$(md5sum "$target_file" | awk '{print $1}')
         if [ "$actual_md5" != "$FILE_MD5" ]; then
-            print_warning "节点安装�?MD5 校验失败，预�?${FILE_MD5} 实际 ${actual_md5}"
+            print_warning "节点安装包 MD5 校验失败，预期:${FILE_MD5} 实际:${actual_md5}"
         else
-            print_success "节点安装�?MD5 校验通过"
+            print_success "节点安装包 MD5 校验通过"
         fi
     fi
 
@@ -681,7 +710,7 @@ main() {
     detect_system
     check_commands
 
-    print_info "开始安�?LingCDN Admin + API..."
+    print_info "开始安装 LingCDN Admin + API..."
 
     # 检查并安装MySQL
     install_mysql
@@ -710,11 +739,12 @@ main() {
     show_info
 
     echo ""
-    print_success "感谢使用 LingCDN�?
+    print_success "感谢使用 LingCDN!"
     echo ""
 }
 
 # 错误处理
-trap 'print_error "安装过程中出现错�?; exit 1' ERR
+trap 'print_error "安装过程中出现错误"; exit 1' ERR
 
-# 执行主函�?main "$@"
+# 执行主函数
+main "$@"
