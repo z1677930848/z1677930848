@@ -77,16 +77,25 @@ func (this *InstallAction) RunPost(params struct {
 		//    bin/
 		//    ...
 
-		// 检查环境
-		var apiNodeDir = Tea.Root + "/ling-api"
-		// 兼容旧名称
-		_, err = os.Stat(apiNodeDir)
-		if err != nil && os.IsNotExist(err) {
-			apiNodeDir = Tea.Root + "/sk-api"
-			_, err = os.Stat(apiNodeDir)
-			if err != nil && os.IsNotExist(err) {
-				apiNodeDir = Tea.Root + "/edge-api"
+		// 检查环境（优先使用 ling-api，兼容 sk-api 和 edge-api）
+		var apiNodeDir = ""
+		for _, dirName := range []string{"ling-api", "sk-api", "edge-api"} {
+			var checkDir = Tea.Root + "/" + dirName
+			stat, statErr := os.Stat(checkDir)
+			if statErr == nil && stat.IsDir() {
+				apiNodeDir = checkDir
+				break
 			}
+		}
+		if len(apiNodeDir) == 0 {
+			apiNodeDir = Tea.Root + "/ling-api"
+		}
+
+		// 如果本地未部署 API，则自动下载并部署到当前目录
+		currentStatusText = "正在检查/部署 API 组件"
+		err = ensureLocalAPINodeInstalled(apiNodeDir)
+		if err != nil {
+			this.Fail("自动部署 API 组件失败：" + err.Error() + "\n\n你也可以选择「使用已安装节点」模式连接到远程 API 节点。")
 		}
 
 		for _, dirSuffix := range []string{"", "/configs", "/bin"} {
@@ -94,16 +103,12 @@ func (this *InstallAction) RunPost(params struct {
 			stat, err := os.Stat(checkDir)
 			if err != nil {
 				if os.IsNotExist(err) {
-					// 尝试自动创建configs目录
-					if dirSuffix == "/configs" {
-						err = os.MkdirAll(checkDir, 0755)
-						if err == nil {
-							continue
-						}
+					err = os.MkdirAll(checkDir, 0755)
+					if err == nil {
+						continue
 					}
-					this.Fail("在当前目录（" + Tea.Root + "）下找不到 " + checkDir + " 目录。\n\n请确保已正确部署API节点组件，或选择「使用已安装节点」模式连接到远程API节点。")
 				}
-				this.Fail("无法检查" + checkDir + "目录，发生错误：" + err.Error())
+				this.Fail("无法检查或创建 " + checkDir + " 目录，发生错误：" + err.Error())
 			}
 			if !stat.IsDir() {
 				this.Fail(checkDir + " 不是一个目录")

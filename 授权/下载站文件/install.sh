@@ -624,60 +624,6 @@ DBINFO
     fi
 }
 
-# 自动配置API节点
-auto_configure_api() {
-    print_info "自动配置API节点..."
-
-    # 环境变量或自动生成
-    ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
-
-    if [ -z "$ADMIN_PASSWORD" ]; then
-        ADMIN_PASSWORD=$(openssl rand -base64 12 2>/dev/null || cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1)
-        print_warning "自动生成管理员密码: ${ADMIN_PASSWORD}"
-    fi
-
-    # 配置数据库
-    cat > "${INSTALL_DIR}/ling-api/configs/db.yaml" << EOF
-db:
-  type: mysql
-  dsn: lingcdn:${DB_PASSWORD}@tcp(127.0.0.1:3306)/lingcdn?charset=utf8mb4&timeout=30s
-  prefix: edge
-EOF
-
-    # 初始化数据库
-    print_info "初始化数据库..."
-    cd "${INSTALL_DIR}/ling-api"
-    ./bin/ling-api setup << SETUP_INPUT
-y
-${DB_PASSWORD}
-${ADMIN_USERNAME}
-admin@lingcdn.cloud
-${ADMIN_PASSWORD}
-${ADMIN_PASSWORD}
-SETUP_INPUT
-
-    [ $? -eq 0 ] && print_success "API节点配置完成" || print_error "配置失败"
-}
-
-# 自动配置Admin节点
-auto_configure_admin() {
-    print_info "自动配置Admin节点..."
-
-    local node_id=$(openssl rand -hex 16)
-    local node_secret=$(openssl rand -base64 24)
-
-    cat > "${INSTALL_DIR}/configs/api.yaml" << EOF
-rpc:
-    endpoints:
-        - http://127.0.0.1:8001
-    disableUpdate: false
-nodeId: ${node_id}
-secret: ${node_secret}
-EOF
-
-    print_success "Admin节点配置完成"
-}
-
 # 启动服务
 start_service() {
     print_info "启动 LingCDN Admin 服务..."
@@ -738,11 +684,14 @@ show_info() {
     fi
 
     echo ""
-    echo "管理员账号:"
-    echo "  用户名: ${ADMIN_USERNAME}"
-    echo "  密码: ${ADMIN_PASSWORD}"
+    echo "下一步："
+    echo "  1) 打开上述地址进入安装向导"
+    echo "  2) 使用 /tmp/lingcdn-db-info.txt 填写数据库信息"
+    echo "  3) 按向导完成 API 部署与初始化"
     echo ""
-    echo "数据库信息:"
+    echo "数据库信息（已保存到 /tmp/lingcdn-db-info.txt）:"
+    echo "  主机: 127.0.0.1"
+    echo "  端口: 3306"
     echo "  数据库: lingcdn"
     echo "  用户: lingcdn"
     echo "  密码: ${DB_PASSWORD}"
@@ -759,7 +708,7 @@ show_info() {
     echo "重要提示:"
     echo "  - 请确保云服务器安全组已开放端口 7788"
     echo "  - 建议配置 HTTPS 以保障安全"
-    echo "  - 首次安装请立即修改默认密码"
+    echo "  - 首次登录请及时完善安全配置（例如修改密码、启用更严格的访问控制）"
     echo ""
     echo "=========================================="
 }
@@ -804,7 +753,7 @@ main() {
     detect_system
     check_commands
 
-    print_info "开始安装 LingCDN Admin + API..."
+    print_info "开始安装 LingCDN Admin（后续通过 Web 向导初始化）..."
 
     # 检查并安装MySQL
     install_mysql
@@ -812,14 +761,8 @@ main() {
     # 安装 LingCDN Admin
     download_and_install "admin" "LingCDN Admin"
 
-    # 安装 LingCDN API
-    download_and_install "api" "LingCDN API"
-    download_node_package
-
     # 配置
     configure_edge_admin
-    auto_configure_api
-    auto_configure_admin
     configure_firewall
     setup_systemd
 
